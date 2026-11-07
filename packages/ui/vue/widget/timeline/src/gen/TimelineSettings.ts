@@ -18,7 +18,7 @@
  * @generated
  */
 
-import type { EObject } from '@emfts/core';
+import type { EObject, EList } from '@emfts/core';
 import type { RelativeTimeConfig } from './RelativeTimeConfig.js';
 
 /**
@@ -43,5 +43,7 @@ export interface TimelineSettings extends EObject {
   showControls?: boolean;
   rangeStripColor?: string;
   showTimeInfo?: boolean;
+  coverageDatasourceIds: EList<string>;
+  coverageColor?: string;
 
 }

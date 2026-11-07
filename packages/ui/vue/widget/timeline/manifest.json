@@ -6,6 +6,7 @@
   "entry": "/bundles/ui.vue.widget.timeline/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.datasource",
     "lib.api.events",
     "lib.api.variable",
     "lib.api.widget",
@@ -30,6 +31,10 @@
     {
       "id": "vue-router",
       "versionRange": "^5.0.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
+      "versionRange": ">=0.0.1-0"
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.api.events",

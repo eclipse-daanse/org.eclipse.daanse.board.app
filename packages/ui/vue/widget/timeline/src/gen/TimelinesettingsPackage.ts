@@ -68,6 +68,8 @@ export class TimelinesettingsPackage extends BasicEPackage {
     TIMELINE_SETTINGS__SHOW_CONTROLS: null as unknown as EAttribute | EReference,
     TIMELINE_SETTINGS__RANGE_STRIP_COLOR: null as unknown as EAttribute | EReference,
     TIMELINE_SETTINGS__SHOW_TIME_INFO: null as unknown as EAttribute | EReference,
+    TIMELINE_SETTINGS__COVERAGE_DATASOURCE_IDS: null as unknown as EAttribute | EReference,
+    TIMELINE_SETTINGS__COVERAGE_COLOR: null as unknown as EAttribute | EReference,
   };
 
   private constructor() {
@@ -276,6 +278,22 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_showTimeInfo);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO = timelineSettings_showTimeInfo;
 
+    // Create coverageDatasourceIds feature
+    const timelineSettings_coverageDatasourceIds = new BasicEAttribute();
+    timelineSettings_coverageDatasourceIds.setName('coverageDatasourceIds');
+    timelineSettings_coverageDatasourceIds.setLowerBound(0);
+    timelineSettings_coverageDatasourceIds.setUpperBound(-1);
+    timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_coverageDatasourceIds);
+    TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_DATASOURCE_IDS = timelineSettings_coverageDatasourceIds;
+
+    // Create coverageColor feature
+    const timelineSettings_coverageColor = new BasicEAttribute();
+    timelineSettings_coverageColor.setName('coverageColor');
+    timelineSettings_coverageColor.setLowerBound(0);
+    timelineSettings_coverageColor.setUpperBound(1);
+    timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_coverageColor);
+    TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_COLOR = timelineSettings_coverageColor;
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -306,6 +324,8 @@ export class TimelinesettingsPackage extends BasicEPackage {
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_DATASOURCE_IDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__COVERAGE_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)

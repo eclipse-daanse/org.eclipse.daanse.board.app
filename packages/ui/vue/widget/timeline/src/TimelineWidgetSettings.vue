@@ -152,10 +152,36 @@ Contributors:
     </div>
   </section>
 
+  <!--
+    Which data sources the rail shows coverage of (#1279). A list of ids
+    picked from the workspace, which no field of the form can offer.
+  -->
+  <section class="settings-section" data-section-id="coverage" :data-section="t('Settings.coverage.section')">
+    <div class="settings-container">
+      <div class="setting-group">
+        <DSelect
+          v-model="coverageSelection"
+          :options="coverageSources"
+          :label="t('Settings.coverage.sources')"
+          :hint="coverageSources.length ? t('Settings.coverage.hint') : t('Settings.coverage.none')"
+          label-key="name"
+          value-key="uid"
+          multiple
+          stacked
+        />
+      </div>
+    </div>
+  </section>
+
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted, inject, type Ref } from 'vue';
+import {
+  identifier as datasourceIdentifier,
+  TIME_COVERAGE,
+  type DatasourceRepository
+} from 'org.eclipse.daanse.board.app.lib.api.datasource';
 import { VariableWrapper, plainSettings, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
   identifier as variableIdentifier,
@@ -197,6 +223,8 @@ interface TimelineSettings {
   fixStartKnob?: boolean;
   showTimeInfo?: boolean;
   showControls?: boolean;
+  coverageDatasourceIds?: string[];
+  coverageColor?: string;
 }
 
 const widgetSettings = defineModel<TimelineSettings>({ required: true });
@@ -286,6 +314,42 @@ const timelineMinDateText = dateText(timelineMinDate);
 const timelineMinTimeText = timeText(timelineMinTime);
 const timelineMaxDateText = dateText(timelineMaxDate);
 const timelineMaxTimeText = timeText(timelineMaxTime);
+
+/*
+ * Coverage sources (#1279): the workspace's sources that say they answer
+ * 'TimeCoverage'. Written straight into the list the settings hold, so it
+ * stays the modelled list and is not swapped for a plain array.
+ */
+const datasourceRepository = inject<DatasourceRepository | undefined>(datasourceIdentifier, undefined);
+const coverageSources = computed(() => {
+  if (!datasourceRepository) return [];
+  return datasourceRepository.getDatasources()
+    .filter((source) => {
+      try {
+        return !!source.type && !!datasourceRepository.getDatasourceIdentifiers(source.type)?.answers?.includes(TIME_COVERAGE);
+      } catch {
+        return false;
+      }
+    })
+    .map((source) => ({ uid: source.uid, name: source.name || source.uid }));
+});
+const coverageTick = ref(0);
+const coverageSelection = computed<string[]>({
+  get: () => {
+    void coverageTick.value;
+    return [...((widgetSettings.value as TimelineSettings).coverageDatasourceIds ?? [])];
+  },
+  set: (ids) => {
+    const target = widgetSettings.value as unknown as { coverageDatasourceIds?: string[] };
+    const list = target.coverageDatasourceIds;
+    if (list) {
+      list.splice(0, list.length, ...ids);
+    } else {
+      target.coverageDatasourceIds = [...ids];
+    }
+    coverageTick.value++;
+  },
+});
 
 // Variable Support
 const variableRepository = ref<VariableRepository | null>(null);

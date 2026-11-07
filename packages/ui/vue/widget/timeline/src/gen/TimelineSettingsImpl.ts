@@ -19,7 +19,8 @@
  */
 
 import { BasicEObject } from '@emfts/core';
-import type { EClass, EStructuralFeature } from '@emfts/core';
+import { createBasicEList } from '@emfts/core';
+import type { EClass, EStructuralFeature, EList } from '@emfts/core';
 import type { RelativeTimeConfig } from './RelativeTimeConfig.js';
 import type { TimelineSettings } from './TimelineSettings.js';
 import { TimelinesettingsPackage } from './TimelinesettingsPackage.js';
@@ -47,6 +48,8 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
   static readonly SHOW_CONTROLS: number = 14;
   static readonly RANGE_STRIP_COLOR: number = 15;
   static readonly SHOW_TIME_INFO: number = 16;
+  static readonly COVERAGE_DATASOURCE_IDS: number = 17;
+  static readonly COVERAGE_COLOR: number = 18;
 
   // Private fields
   private _timelineMin?: string;
@@ -66,6 +69,8 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
   private _showControls: boolean = true;
   private _rangeStripColor?: string;
   private _showTimeInfo: boolean = true;
+  private _coverageDatasourceIds!: EList<string>;
+  private _coverageColor?: string;
 
   /**
    * Returns the EClass of this object
@@ -493,6 +498,37 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
     }
   }
 
+  get coverageDatasourceIds(): EList<string> {
+    if (!this._coverageDatasourceIds) {
+      this._coverageDatasourceIds = createBasicEList<any>(this, this.eClass().getEStructuralFeature('coverageDatasourceIds')!);
+    }
+    return this._coverageDatasourceIds;
+  }
+
+  get coverageColor(): string {
+    return this._coverageColor!;
+  }
+
+  set coverageColor(value: string) {
+    const oldValue = this._coverageColor;
+    this._coverageColor = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(TimelineSettingsImpl.COVERAGE_COLOR),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => TimelineSettingsImpl.COVERAGE_COLOR,
+        merge: () => false
+      });
+    }
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -559,6 +595,10 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
         return this.rangeStripColor;
       case TimelineSettingsImpl.SHOW_TIME_INFO:
         return this.showTimeInfo;
+      case TimelineSettingsImpl.COVERAGE_DATASOURCE_IDS:
+        return this.coverageDatasourceIds;
+      case TimelineSettingsImpl.COVERAGE_COLOR:
+        return this.coverageColor;
       default:
         return super.eGet(feature);
     }
@@ -638,6 +678,15 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
         this.showTimeInfo = newValue as boolean;
         super.eSet(feature, newValue);
         break;
+      case TimelineSettingsImpl.COVERAGE_DATASOURCE_IDS:
+        this.coverageDatasourceIds.clear();
+        this.coverageDatasourceIds.addAll(newValue as any[]);
+        super.eSet(feature, newValue);
+        break;
+      case TimelineSettingsImpl.COVERAGE_COLOR:
+        this.coverageColor = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -683,6 +732,10 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
         return this._rangeStripColor !== undefined;
       case TimelineSettingsImpl.SHOW_TIME_INFO:
         return this._showTimeInfo !== true;
+      case TimelineSettingsImpl.COVERAGE_DATASOURCE_IDS:
+        return this._coverageDatasourceIds !== undefined && !this._coverageDatasourceIds.isEmpty();
+      case TimelineSettingsImpl.COVERAGE_COLOR:
+        return this._coverageColor !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -746,6 +799,12 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
       case TimelineSettingsImpl.SHOW_TIME_INFO:
         this._showTimeInfo = true;
         return;
+      case TimelineSettingsImpl.COVERAGE_DATASOURCE_IDS:
+        if (this._coverageDatasourceIds) this._coverageDatasourceIds.clear();
+        return;
+      case TimelineSettingsImpl.COVERAGE_COLOR:
+        this._coverageColor = undefined;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -778,6 +837,8 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
       showControls: this.showControls,
       rangeStripColor: this.rangeStripColor,
       showTimeInfo: this.showTimeInfo,
+      coverageDatasourceIds: this.coverageDatasourceIds?.toArray?.() ?? this.coverageDatasourceIds,
+      coverageColor: this.coverageColor,
     };
   }
 }
