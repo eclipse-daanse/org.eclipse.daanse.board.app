@@ -18,7 +18,7 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { TopLevelSpec } from 'vega-lite'
-import { drawChart, fitTo, refusingLoader, replaceData, restoreSignals, signalsOf, UrlRefusedError } from '../embedChart'
+import { drawChart, drawnSize, fitTo, refusingLoader, replaceData, restoreSignals, signalsOf, UrlRefusedError } from '../embedChart'
 import { compileRecipe } from '../recipe'
 import { sampleDatasets, withDatasets } from '../sample'
 import { modelledSettings } from '../settingsModel'
@@ -163,6 +163,39 @@ describe('fitTo', () => {
     } finally {
       chart.finalize()
     }
+  })
+
+  it('lays a chart that stayed larger than its frame out once more, from a pixel smaller (#1305)', async () => {
+    /* A view as far as fitTo uses it, whose first layout stays 10 px too tall. */
+    const sizes: Array<[number, number]> = []
+    let tall = true
+    const view = {
+      w: 0,
+      h: 0,
+      width(w: number) { this.w = w; return this },
+      height(h: number) { this.h = h; sizes.push([this.w, h]); if (h !== 437) tall = false; return this },
+      resize() { return this },
+      async runAsync() { return this },
+      padding: () => ({ top: 5, bottom: 5, left: 5, right: 5 }),
+      scenegraph() { return { root: { bounds: { x1: 0, x2: 874, y1: 0, y2: tall ? 437 : 427 } } } },
+    }
+    await fitTo(view as never, 884, 437)
+    expect(sizes).toEqual([[884, 437], [883, 436], [884, 437]])
+    expect(drawnSize(view as never)).toEqual({ width: 884, height: 437 })
+  })
+
+  it('leaves a chart that fits after one layout alone', async () => {
+    const sizes: number[] = []
+    const view = {
+      width(w: number) { sizes.push(w); return this },
+      height() { return this },
+      resize() { return this },
+      async runAsync() { return this },
+      padding: () => ({ top: 5, bottom: 5, left: 5, right: 5 }),
+      scenegraph: () => ({ root: { bounds: { x1: 0, x2: 870, y1: 0, y2: 420 } } }),
+    }
+    await fitTo(view as never, 884, 437)
+    expect(sizes).toEqual([884])
   })
 
   it('lays the chart out again at the size it has - for text that changed, not the frame', async () => {
