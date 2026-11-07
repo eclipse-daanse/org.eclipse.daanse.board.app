@@ -20,7 +20,9 @@
     "datasetsHint": "None: the chart draws the data source of the widget as the dataset table.",
     "paramsHint": "No selection: marks are not picked.",
     "starter": "Start from a chart",
-    "independentScales": "Own scale per layer for"
+    "independentScales": "Own scale per layer for",
+    "references": "Reference lines and bands",
+    "referencesHint": "None: no constant lines or bands."
   },
   "Options": {
     "legendPosition": {
@@ -166,6 +168,19 @@
       "right": "Right",
       "top": "Top",
       "bottom": "Bottom"
+    },
+    "referenceKind": {
+      "line": "Line",
+      "band": "Band"
+    },
+    "referenceChannel": {
+      "y": "Across, at a value of y",
+      "x": "Upright, at a value of x"
+    },
+    "labelAt": {
+      "start": "Start",
+      "middle": "Middle",
+      "end": "End"
     }
   },
   "FormLayer": {
@@ -243,7 +258,8 @@
       "params": "Selections and values the chart holds: what is picked or brushed, and values other settings refer to by name.",
       "datasets": "The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one.",
       "starter": "Replaces the layers, selections and small multiples with this chart, filled with columns of the data. Then the choice is empty again; \"Discard\" brings the chart back.",
-      "independentScales": "The channels whose scale each layer has for itself: y gives every layer its own y axis - a temperature on the left, a precipitation on the right. Only read with more than one layer or with small multiples."
+      "independentScales": "The channels whose scale each layer has for itself: y gives every layer its own y axis - a temperature on the left, a precipitation on the right. Only read with more than one layer or with small multiples.",
+      "references": "Constant lines and bands drawn with the chart: limits, targets, zones, a date. They belong to the whole chart and share its scales, so a band from 0 to 1.8 lies where 0 and 1.8 are on the axis. Not drawn in small multiples."
     },
     "DatasetBinding": {
       "name": "The name layers use for this dataset. table is the data source of the widget.",
@@ -309,6 +325,18 @@
     "ScaleEntry": {
       "value": "The value of the field, as it appears in the data. A number may be written as text.",
       "output": "What the value is drawn as: a CSS colour for colour, a shape name (circle, square, triangle-up, ...) for shape, a number for size and opacity."
+    },
+    "Reference": {
+      "kind": "A line at one value, or a band between two.",
+      "channel": "y draws it across the chart at a value of the y axis; x draws it upright at a value of the x axis.",
+      "type": "What the values are: numbers, or points in time on a time axis.",
+      "from": "The value of the line; for a band its lower end. A point in time is written as ISO 8601 text (2026-11-07T12:00:00Z).",
+      "to": "Band: the upper end.",
+      "color": "A CSS colour, with transparency for a band (#E5393514). Empty: the colour of the theme.",
+      "label": "Text drawn at the line or band. Empty: none.",
+      "labelAt": "Where along the line or band the label stands.",
+      "behind": "Whether it is drawn behind the layers of the chart, or in front of them.",
+      "dash": "Line: the dash pattern in pixels, comma-separated (4,2). Empty: solid."
     }
   },
   "SpecTab": {
@@ -326,5 +354,17 @@
   "FormScaleEntry": {
     "value": "Value",
     "output": "Drawn as (colour, shape, size)"
+  },
+  "FormReference": {
+    "kind": "Kind",
+    "channel": "Across or upright",
+    "type": "The values are",
+    "from": "Value (band: from)",
+    "to": "To",
+    "color": "Colour",
+    "label": "Label",
+    "labelAt": "Label at",
+    "behind": "Behind the layers",
+    "dash": "Dash pattern (e.g. 4,2)"
   }
 }

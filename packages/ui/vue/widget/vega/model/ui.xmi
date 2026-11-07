@@ -68,6 +68,11 @@ small multiples and the selections follow.
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/params"
         label="vega:Form.params"
         placeholder="vega:Form.paramsHint"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="references"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/references"
+        label="vega:Form.references"
+        placeholder="vega:Form.referencesHint"/>
     <fields xsi:type="uimodel:SelectWidget"
         name="independentScales"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/independentScales"

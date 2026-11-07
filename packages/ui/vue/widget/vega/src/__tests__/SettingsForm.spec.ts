@@ -36,6 +36,7 @@ import paramFormXmi from '../../model/ui-param.xmi?raw'
 import facetFormXmi from '../../model/ui-facet.xmi?raw'
 import datasetFormXmi from '../../model/ui-dataset.xmi?raw'
 import scaleEntryFormXmi from '../../model/ui-scale-entry.xmi?raw'
+import referenceFormXmi from '../../model/ui-reference.xmi?raw'
 import columnTypeFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-column-type.xmi?raw'
 import settingsEcore from '../../model/model.ecore?raw'
 import en from '../i18n/en.json'
@@ -67,6 +68,7 @@ async function settingsForm(settings: VegaWidgetSettings, suggest?: (owner: unkn
         { xmi: facetFormXmi, uri: '/vega-facet.ui.xmi' },
         { xmi: datasetFormXmi, uri: '/vega-dataset.ui.xmi' },
         { xmi: scaleEntryFormXmi, uri: '/vega-scale-entry.ui.xmi' },
+        { xmi: referenceFormXmi, uri: '/vega-reference.ui.xmi' },
         { xmi: columnTypeFormXmi, uri: '/vega-column-type.ui.xmi' },
       ],
       ecore: settingsEcore,
@@ -226,5 +228,23 @@ describe('the chart settings form', () => {
     const two = await settingsForm(settings)
     expect(labels(two).has(en.Form.independentScales)).toBe(true)
     two.unmount()
+  })
+
+  it('edits a reference: the upper end only for a band, the dash only for a line (#1304)', async () => {
+    const settings = CHARTS.bar.settings()
+    const reference = VegawidgetFactory.eINSTANCE.createReference()
+    reference.kind = 'line'
+    reference.from = '3'
+    settings.references.add(reference)
+    const view = await settingsForm(settings)
+    expect(labels(view).has(en.Form.references)).toBe(true)
+    const exactly = (text: string) => view.findAll('label').some((label) => label.text() === text)
+    expect(labels(view).has(en.FormReference.dash)).toBe(true)
+    expect(exactly(en.FormReference.to)).toBe(false)
+    reference.kind = 'band'
+    await flushPromises()
+    expect(exactly(en.FormReference.to)).toBe(true)
+    expect(labels(view).has(en.FormReference.dash)).toBe(false)
+    view.unmount()
   })
 })

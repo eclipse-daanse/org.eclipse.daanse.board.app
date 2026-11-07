@@ -20,7 +20,9 @@
     "datasetsHint": "Keiner: das Diagramm zeichnet die Datenquelle des Widgets als Datensatz table.",
     "paramsHint": "Keine Auswahl: Marken werden nicht ausgewählt.",
     "starter": "Mit einem Diagramm beginnen",
-    "independentScales": "Eigene Skala je Ebene für"
+    "independentScales": "Eigene Skala je Ebene für",
+    "references": "Referenzlinien und -bänder",
+    "referencesHint": "Keine: keine festen Linien oder Bänder."
   },
   "Options": {
     "legendPosition": {
@@ -166,6 +168,19 @@
       "right": "Rechts",
       "top": "Oben",
       "bottom": "Unten"
+    },
+    "referenceKind": {
+      "line": "Linie",
+      "band": "Band"
+    },
+    "referenceChannel": {
+      "y": "Quer, bei einem Wert von y",
+      "x": "Senkrecht, bei einem Wert von x"
+    },
+    "labelAt": {
+      "start": "Anfang",
+      "middle": "Mitte",
+      "end": "Ende"
     }
   },
   "FormLayer": {
@@ -243,7 +258,8 @@
       "params": "Auswahlen und Werte, die das Diagramm hält: was ausgewählt oder aufgezogen ist, und Werte, auf die andere Einstellungen mit ihrem Namen verweisen.",
       "datasets": "Die Daten, die das Diagramm zeichnet, nach Namen. Ohne Eintrag ist die Datenquelle des Widgets der Datensatz table; ein Eintrag namens table ohne eigene Quelle sagt, wie diese gelesen wird.",
       "starter": "Ersetzt Ebenen, Auswahlen und kleine Vielfache durch dieses Diagramm, gefüllt mit Spalten der Daten. Danach ist die Wahl wieder leer; „Verwerfen“ holt das Diagramm zurück.",
-      "independentScales": "Die Kanäle, deren Skala jede Ebene für sich hat: y gibt jeder Ebene ihre eigene y-Achse - eine Temperatur links, einen Niederschlag rechts. Nur mit mehr als einer Ebene oder mit kleinen Vielfachen gelesen."
+      "independentScales": "Die Kanäle, deren Skala jede Ebene für sich hat: y gibt jeder Ebene ihre eigene y-Achse - eine Temperatur links, einen Niederschlag rechts. Nur mit mehr als einer Ebene oder mit kleinen Vielfachen gelesen.",
+      "references": "Feste Linien und Bänder, die mit dem Diagramm gezeichnet werden: Grenzwerte, Ziele, Zonen, ein Datum. Sie gehören zum ganzen Diagramm und teilen seine Skalen, ein Band von 0 bis 1,8 liegt also dort, wo 0 und 1,8 auf der Achse sind. In kleinen Vielfachen nicht gezeichnet."
     },
     "DatasetBinding": {
       "name": "Der Name, unter dem Ebenen diesen Datensatz zeichnen. table ist die Datenquelle des Widgets.",
@@ -309,6 +325,18 @@
     "ScaleEntry": {
       "value": "Der Wert des Felds, wie er in den Daten steht. Eine Zahl darf als Text stehen.",
       "output": "Als was der Wert gezeichnet wird: eine CSS-Farbe für Farbe, ein Formname (circle, square, triangle-up, ...) für Form, eine Zahl für Größe und Deckkraft."
+    },
+    "Reference": {
+      "kind": "Eine Linie bei einem Wert oder ein Band zwischen zweien.",
+      "channel": "y zeichnet sie quer durch das Diagramm bei einem Wert der y-Achse; x zeichnet sie senkrecht bei einem Wert der x-Achse.",
+      "type": "Was die Werte sind: Zahlen oder Zeitpunkte auf einer Zeitachse.",
+      "from": "Der Wert der Linie; bei einem Band sein unteres Ende. Ein Zeitpunkt steht als ISO-8601-Text (2026-11-07T12:00:00Z).",
+      "to": "Band: das obere Ende.",
+      "color": "Eine CSS-Farbe, bei einem Band mit Transparenz (#E5393514). Leer: die Farbe des Themes.",
+      "label": "Text an der Linie oder am Band. Leer: keiner.",
+      "labelAt": "Wo entlang der Linie oder des Bands die Beschriftung steht.",
+      "behind": "Ob sie hinter den Ebenen des Diagramms gezeichnet wird oder davor.",
+      "dash": "Linie: das Strichmuster in Pixeln, mit Komma getrennt (4,2). Leer: durchgezogen."
     }
   },
   "SpecTab": {
@@ -326,5 +354,17 @@
   "FormScaleEntry": {
     "value": "Wert",
     "output": "Gezeichnet als (Farbe, Form, Größe)"
+  },
+  "FormReference": {
+    "kind": "Art",
+    "channel": "Quer oder senkrecht",
+    "type": "Die Werte sind",
+    "from": "Wert (Band: von)",
+    "to": "Bis",
+    "color": "Farbe",
+    "label": "Beschriftung",
+    "labelAt": "Beschriftung am",
+    "behind": "Hinter den Ebenen",
+    "dash": "Strichmuster (z. B. 4,2)"
   }
 }

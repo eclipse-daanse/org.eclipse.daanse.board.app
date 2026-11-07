@@ -41,6 +41,8 @@ import { ParamPayload } from './ParamPayload.js';
 import { ParamPayloadImpl } from './ParamPayloadImpl.js';
 import { ScaleEntry } from './ScaleEntry.js';
 import { ScaleEntryImpl } from './ScaleEntryImpl.js';
+import { Reference } from './Reference.js';
+import { ReferenceImpl } from './ReferenceImpl.js';
 
 /**
  * Factory for creating Vegawidget model objects
@@ -133,6 +135,13 @@ export class VegawidgetFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new Reference instance
+   */
+  createReference(): Reference {
+    return new ReferenceImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
@@ -157,6 +166,8 @@ export class VegawidgetFactory extends BasicEFactory {
         return this.createParamPayload();
       case 'ScaleEntry':
         return this.createScaleEntry();
+      case 'Reference':
+        return this.createReference();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

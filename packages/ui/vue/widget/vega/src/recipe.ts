@@ -32,6 +32,7 @@ import type { Layer } from './gen/Layer'
 import type { Encoding } from './gen/Encoding'
 import type { Transform } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import type { Param } from './gen/Param'
+import type { Reference } from './gen/Reference'
 
 /** The dataset a layer draws when it names none: the widget's own source. */
 export const DEFAULT_DATASET = 'table'
@@ -125,9 +126,24 @@ export function compileRecipe(settings: VegaWidgetSettings): TopLevelSpec {
     return { ...top, data: { name: [...datasets][0] }, ...facet, spec: inner } as unknown as TopLevelSpec
   }
 
-  const body: Json = units.length === 1 ? { ...units[0] } : { layer: units }
+  /*
+   * Constant lines and bands (#1304) join the first layer: behind it or in
+   * front of it, on its scales. With scales of their own per layer they
+   * stay with that layer, in a layer of their own, rather than getting a
+   * scale - and an axis - each.
+   */
+  const references = items(settings.references).map((reference) => ({ behind: reference.behind !== false, layers: referenceLayers(reference) }))
+  const behind = references.filter((r) => r.behind).flatMap((r) => r.layers)
+  const front = references.filter((r) => !r.behind).flatMap((r) => r.layers)
+  let views: Json[] = units
+  if (behind.length || front.length) {
+    if (top.resolve) views = [{ layer: [...behind, units[0], ...front] }, ...units.slice(1)]
+    else views = [...behind, ...units, ...front]
+  }
+
+  const body: Json = views.length === 1 ? { ...views[0] } : { layer: views }
   /* One view holds its selections and the chart's values in one list - spread over each other, the selections replaced the values. */
-  if (units.length === 1 && values.length && body.params) body.params = [...values, ...(body.params as Json[])]
+  if (views.length === 1 && values.length && body.params) body.params = [...values, ...(body.params as Json[])]
   return {
     ...top,
     /* The board frame sizes the chart, not the spec. */
@@ -136,6 +152,79 @@ export function compileRecipe(settings: VegaWidgetSettings): TopLevelSpec {
     autosize: { type: 'fit', contains: 'padding' },
     ...body,
   } as TopLevelSpec
+}
+
+/** A point in time as Vega-Lite takes it for a constant: a DateTime, in UTC. */
+function dateTimeOf(value: string): Json | string {
+  const at = new Date(value)
+  if (Number.isNaN(at.getTime())) return value
+  return {
+    utc: true,
+    year: at.getUTCFullYear(),
+    month: at.getUTCMonth() + 1,
+    date: at.getUTCDate(),
+    hours: at.getUTCHours(),
+    minutes: at.getUTCMinutes(),
+    seconds: at.getUTCSeconds(),
+  }
+}
+
+/**
+ * The layers of a constant line or band (#1304): a rule or a rect at
+ * constant values, and its label - each on one empty row the recipe writes
+ * itself, since a constant has no data of the board.
+ */
+export function referenceLayers(reference: Reference): Json[] {
+  const from = text(reference.from)
+  if (!from) return []
+  const band = reference.kind === 'band'
+  const to = text(reference.to)
+  if (band && !to) return []
+  const along = reference.channel === 'x' ? 'x' : 'y'
+  const across = along === 'x' ? 'y' : 'x'
+  const temporal = reference.type === 'temporal'
+  const type = temporal ? 'temporal' : 'quantitative'
+  const datum = (raw: string) => (temporal ? dateTimeOf(raw) : scalar(raw))
+  const color = text(reference.color)
+  const data = { values: [{}] }
+
+  const layers: Json[] = []
+  const mark: Json = { type: band ? 'rect' : 'rule' }
+  if (color) mark.color = color
+  const dash = text(reference.dash).split(',').map((each) => Number(each.trim())).filter((n) => Number.isFinite(n) && n > 0)
+  if (!band && dash.length) mark.strokeDash = dash
+  const encoding: Json = { [along]: { datum: datum(from), type } }
+  if (band) {
+    encoding[`${along}2`] = { datum: datum(to) }
+    encoding[across] = { value: 0 }
+    encoding[`${across}2`] = { value: along === 'x' ? 'height' : 'width' }
+  }
+  layers.push({ data, mark, encoding })
+
+  const label = text(reference.label)
+  if (label) {
+    const at = reference.labelAt ?? 'start'
+    /* Along the line or band: at its start, its middle or its end. */
+    const place = along === 'y'
+      ? { start: { value: 4 }, middle: { value: { expr: 'width / 2' } }, end: { value: { expr: 'width - 4' } } }[at]
+      : { start: { value: { expr: 'height - 4' } }, middle: { value: { expr: 'height / 2' } }, end: { value: 4 } }[at]
+    const align = along === 'y' ? { start: 'left', middle: 'center', end: 'right' }[at] : 'left'
+    const middle = band && !temporal && typeof scalar(from) === 'number' && typeof scalar(to) === 'number'
+      ? ((scalar(from) as number) + (scalar(to) as number)) / 2
+      : undefined
+    const textMark: Json = { type: 'text', align, baseline: band ? 'middle' : 'bottom', dx: along === 'x' ? 4 : 0, dy: band ? 0 : -2 }
+    if (color && !band) textMark.color = color
+    layers.push({
+      data,
+      mark: textMark,
+      encoding: {
+        [along]: { datum: middle ?? datum(from), type },
+        [across]: place,
+        text: { value: label },
+      },
+    })
+  }
+  return layers
 }
 
 function withoutData(unit: Json): Json {

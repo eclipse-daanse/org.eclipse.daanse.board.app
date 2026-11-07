@@ -37,6 +37,8 @@ import { ParamBind } from './ParamBind.js';
 import { StarterChart } from './StarterChart.js';
 import { DatasetShape } from './DatasetShape.js';
 import { AxisOrient } from './AxisOrient.js';
+import { ReferenceKind } from './ReferenceKind.js';
+import { LabelPosition } from './LabelPosition.js';
 
 /**
  * Resolve a dependency package from the registry, failing with an actionable
@@ -86,6 +88,7 @@ export class VegawidgetPackage extends BasicEPackage {
     VEGA_WIDGET_SETTINGS__SPEC_OVERLAY: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__STARTER: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__REFERENCES: null as unknown as EAttribute | EReference,
     DATASET_BINDING: null as unknown as EClass,
     DATASET_BINDING__NAME: null as unknown as EAttribute | EReference,
     DATASET_BINDING__DATASOURCE_ID: null as unknown as EAttribute | EReference,
@@ -156,6 +159,17 @@ export class VegawidgetPackage extends BasicEPackage {
     SCALE_ENTRY: null as unknown as EClass,
     SCALE_ENTRY__VALUE: null as unknown as EAttribute | EReference,
     SCALE_ENTRY__OUTPUT: null as unknown as EAttribute | EReference,
+    REFERENCE: null as unknown as EClass,
+    REFERENCE__KIND: null as unknown as EAttribute | EReference,
+    REFERENCE__CHANNEL: null as unknown as EAttribute | EReference,
+    REFERENCE__TYPE: null as unknown as EAttribute | EReference,
+    REFERENCE__FROM: null as unknown as EAttribute | EReference,
+    REFERENCE__TO: null as unknown as EAttribute | EReference,
+    REFERENCE__COLOR: null as unknown as EAttribute | EReference,
+    REFERENCE__LABEL: null as unknown as EAttribute | EReference,
+    REFERENCE__LABEL_AT: null as unknown as EAttribute | EReference,
+    REFERENCE__BEHIND: null as unknown as EAttribute | EReference,
+    REFERENCE__DASH: null as unknown as EAttribute | EReference,
     VEGA_RENDERER: null as unknown as EEnum,
     LEGEND_POSITION: null as unknown as EEnum,
     MARK_TYPE: null as unknown as EEnum,
@@ -172,6 +186,8 @@ export class VegawidgetPackage extends BasicEPackage {
     STARTER_CHART: null as unknown as EEnum,
     DATASET_SHAPE: null as unknown as EEnum,
     AXIS_ORIENT: null as unknown as EEnum,
+    REFERENCE_KIND: null as unknown as EEnum,
+    LABEL_POSITION: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -298,6 +314,15 @@ export class VegawidgetPackage extends BasicEPackage {
     vegaWidgetSettings_independentScales.setUpperBound(-1);
     vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_independentScales);
     VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES = vegaWidgetSettings_independentScales;
+
+    // Create references feature
+    const vegaWidgetSettings_references = new BasicEReference();
+    vegaWidgetSettings_references.setContainment(true);
+    vegaWidgetSettings_references.setName('references');
+    vegaWidgetSettings_references.setLowerBound(0);
+    vegaWidgetSettings_references.setUpperBound(-1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_references);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__REFERENCES = vegaWidgetSettings_references;
 
     // Create DatasetBinding class
     const datasetBindingClass = new BasicEClass();
@@ -919,6 +944,105 @@ export class VegawidgetPackage extends BasicEPackage {
     scaleEntry_output.setDefaultValueLiteral("");
     scaleEntryClass.getEStructuralFeatures().push(scaleEntry_output);
     VegawidgetPackage.Literals.SCALE_ENTRY__OUTPUT = scaleEntry_output;
+
+    // Create Reference class
+    const referenceClass = new BasicEClass();
+    referenceClass.setName('Reference');
+    referenceClass.setAbstract(false);
+    referenceClass.setInterface(false);
+    this.getEClassifiers().push(referenceClass);
+    referenceClass.setEPackage(this);
+    VegawidgetPackage.Literals.REFERENCE = referenceClass;
+
+    // Create kind feature
+    const reference_kind = new BasicEAttribute();
+    reference_kind.setName('kind');
+    reference_kind.setLowerBound(0);
+    reference_kind.setUpperBound(1);
+    reference_kind.setDefaultValueLiteral("line");
+    referenceClass.getEStructuralFeatures().push(reference_kind);
+    VegawidgetPackage.Literals.REFERENCE__KIND = reference_kind;
+
+    // Create channel feature
+    const reference_channel = new BasicEAttribute();
+    reference_channel.setName('channel');
+    reference_channel.setLowerBound(0);
+    reference_channel.setUpperBound(1);
+    reference_channel.setDefaultValueLiteral("y");
+    referenceClass.getEStructuralFeatures().push(reference_channel);
+    VegawidgetPackage.Literals.REFERENCE__CHANNEL = reference_channel;
+
+    // Create type feature
+    const reference_type = new BasicEAttribute();
+    reference_type.setName('type');
+    reference_type.setLowerBound(0);
+    reference_type.setUpperBound(1);
+    reference_type.setDefaultValueLiteral("quantitative");
+    referenceClass.getEStructuralFeatures().push(reference_type);
+    VegawidgetPackage.Literals.REFERENCE__TYPE = reference_type;
+
+    // Create from feature
+    const reference_from = new BasicEAttribute();
+    reference_from.setName('from');
+    reference_from.setLowerBound(0);
+    reference_from.setUpperBound(1);
+    reference_from.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_from);
+    VegawidgetPackage.Literals.REFERENCE__FROM = reference_from;
+
+    // Create to feature
+    const reference_to = new BasicEAttribute();
+    reference_to.setName('to');
+    reference_to.setLowerBound(0);
+    reference_to.setUpperBound(1);
+    reference_to.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_to);
+    VegawidgetPackage.Literals.REFERENCE__TO = reference_to;
+
+    // Create color feature
+    const reference_color = new BasicEAttribute();
+    reference_color.setName('color');
+    reference_color.setLowerBound(0);
+    reference_color.setUpperBound(1);
+    reference_color.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_color);
+    VegawidgetPackage.Literals.REFERENCE__COLOR = reference_color;
+
+    // Create label feature
+    const reference_label = new BasicEAttribute();
+    reference_label.setName('label');
+    reference_label.setLowerBound(0);
+    reference_label.setUpperBound(1);
+    reference_label.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_label);
+    VegawidgetPackage.Literals.REFERENCE__LABEL = reference_label;
+
+    // Create labelAt feature
+    const reference_labelAt = new BasicEAttribute();
+    reference_labelAt.setName('labelAt');
+    reference_labelAt.setLowerBound(0);
+    reference_labelAt.setUpperBound(1);
+    reference_labelAt.setDefaultValueLiteral("start");
+    referenceClass.getEStructuralFeatures().push(reference_labelAt);
+    VegawidgetPackage.Literals.REFERENCE__LABEL_AT = reference_labelAt;
+
+    // Create behind feature
+    const reference_behind = new BasicEAttribute();
+    reference_behind.setName('behind');
+    reference_behind.setLowerBound(0);
+    reference_behind.setUpperBound(1);
+    reference_behind.setDefaultValueLiteral("true");
+    referenceClass.getEStructuralFeatures().push(reference_behind);
+    VegawidgetPackage.Literals.REFERENCE__BEHIND = reference_behind;
+
+    // Create dash feature
+    const reference_dash = new BasicEAttribute();
+    reference_dash.setName('dash');
+    reference_dash.setLowerBound(0);
+    reference_dash.setUpperBound(1);
+    reference_dash.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_dash);
+    VegawidgetPackage.Literals.REFERENCE__DASH = reference_dash;
 
     // Create VegaRenderer enum
     const vegaRendererEnumType = new BasicEEnum();
@@ -2192,6 +2316,80 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.AXIS_ORIENT = axisOrientEnumType;
     this.getEClassifiers().push(axisOrientEnumType);
 
+    // Create ReferenceKind enum
+    const referenceKindEnumType = new BasicEEnum();
+    referenceKindEnumType.setName('ReferenceKind');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("line");
+      literal.setValue(0);
+      literal.setLiteral("line");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ReferenceKind.line);
+      referenceKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("band");
+      literal.setValue(1);
+      literal.setLiteral("band");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ReferenceKind.band);
+      referenceKindEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "A line at one value, or a band between two.");
+      referenceKindEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.REFERENCE_KIND = referenceKindEnumType;
+    this.getEClassifiers().push(referenceKindEnumType);
+
+    // Create LabelPosition enum
+    const labelPositionEnumType = new BasicEEnum();
+    labelPositionEnumType.setName('LabelPosition');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("start");
+      literal.setValue(0);
+      literal.setLiteral("start");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LabelPosition.start);
+      labelPositionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("middle");
+      literal.setValue(1);
+      literal.setLiteral("middle");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LabelPosition.middle);
+      labelPositionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("end");
+      literal.setValue(2);
+      literal.setLiteral("end");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LabelPosition.end);
+      labelPositionEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Where along the line or band its label stands.");
+      labelPositionEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.LABEL_POSITION = labelPositionEnumType;
+    this.getEClassifiers().push(labelPositionEnumType);
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -2217,6 +2415,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__SPEC_OVERLAY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__STARTER as BasicEAttribute).setEType(VegawidgetPackage.Literals.STARTER_CHART);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__REFERENCES as BasicEReference).setEType(VegawidgetPackage.Literals.REFERENCE);
     (VegawidgetPackage.Literals.DATASET_BINDING__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__SHAPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.DATASET_SHAPE);
@@ -2277,6 +2476,16 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.PARAM_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (VegawidgetPackage.Literals.SCALE_ENTRY__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.SCALE_ENTRY__OUTPUT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__KIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.REFERENCE_KIND);
+    (VegawidgetPackage.Literals.REFERENCE__CHANNEL as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
+    (VegawidgetPackage.Literals.REFERENCE__TYPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.FIELD_TYPE);
+    (VegawidgetPackage.Literals.REFERENCE__FROM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__TO as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__LABEL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__LABEL_AT as BasicEAttribute).setEType(VegawidgetPackage.Literals.LABEL_POSITION);
+    (VegawidgetPackage.Literals.REFERENCE__BEHIND as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.REFERENCE__DASH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)
