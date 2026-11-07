@@ -112,6 +112,34 @@ describe('replaceData', () => {
   })
 })
 
+describe('replaceData and the size', () => {
+  it('fits the chart into its size again when the new rows need more room', async () => {
+    const spec = {
+      width: 400,
+      height: 240,
+      autosize: { type: 'fit', contains: 'padding' },
+      datasets: { table: [] },
+      data: { name: 'table' },
+      mark: 'bar',
+      encoding: {
+        x: { field: 'f', type: 'nominal', axis: { labelAngle: -30 } },
+        y: { field: 's', type: 'quantitative' },
+        color: { field: 'z', type: 'nominal' },
+      },
+    } as unknown as TopLevelSpec
+    const chart = await drawChart(host(), spec, { renderer: 'svg' })
+    try {
+      const rows = Array.from({ length: 12 }, (_, i) => ({ f: `Area with a long name ${i}`, s: i, z: i % 2 ? 'dry stress' : 'moist' }))
+      await replaceData(chart.view, 'table', rows)
+      const bounds = (chart.view.scenegraph() as unknown as { root: { bounds: { x1: number; x2: number; y1: number; y2: number } } }).root.bounds
+      expect(bounds.x2 - bounds.x1).toBeLessThanOrEqual(400)
+      expect(bounds.y2 - bounds.y1).toBeLessThanOrEqual(240)
+    } finally {
+      chart.finalize()
+    }
+  })
+})
+
 describe('signalsOf and restoreSignals', () => {
   it('carry what a reader set over to a chart drawn anew', async () => {
     const spec = withDatasets(
