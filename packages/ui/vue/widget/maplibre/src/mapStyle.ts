@@ -21,6 +21,7 @@
  * and removes it again before it applies a changed setting.
  */
 
+import { PIN_PREFIX } from './pin'
 import type {
   ExpressionSpecification,
   LayerSpecification,
@@ -61,6 +62,10 @@ export interface FeatureLook {
   /** Height of a block in metres, as an expression on the feature. */
   height: ExpressionSpecification | number
   selectionColor: string
+  /** circle, or pin: a marker standing on the place (#1273). */
+  pointStyle?: string
+  /** Size of a pin, 1 is 24 by 32 pixels. */
+  markerSize?: number
 }
 
 export const PREFIX = 'daanse:'
@@ -284,21 +289,72 @@ export function featureLayersOf(source: string, look: FeatureLook): LayerSpecifi
         'line-width': ['case', ['boolean', ['get', 'selected'], false], 3, 1.5],
       },
     },
+  )
+  layers.push(...(look.pointStyle === 'pin' ? pinLayersOf(source, look) : [circleLayerOf(source, look, color)]))
+  return layers
+}
+
+function circleLayerOf(source: string, look: FeatureLook, color: ExpressionSpecification): LayerSpecification {
+  return {
+    id: `${source}:circle`,
+    type: 'circle',
+    source,
+    filter: POINT,
+    paint: {
+      'circle-color': color,
+      'circle-radius': look.pointRadius,
+      'circle-stroke-color': look.outlineColor,
+      'circle-stroke-width': 1.5,
+      'circle-pitch-alignment': 'map',
+    },
+  }
+}
+
+/**
+ * Points as pins (#1273): a ring on the ground under a selected one, and the
+ * pin itself, standing on the place, upright however the map is tilted. The
+ * image is named by its colour (pinImageOf makes it when asked); a selected
+ * pin is larger, in the selection colour, and drawn over the others.
+ */
+function pinLayersOf(source: string, look: FeatureLook): LayerSpecification[] {
+  const selected: ExpressionSpecification = ['boolean', ['get', 'selected'], false]
+  const size = number(look.markerSize, 1)
+  return [
     {
-      id: `${source}:circle`,
+      id: `${source}:halo`,
       type: 'circle',
       source,
-      filter: POINT,
+      filter: ['all', POINT, selected],
       paint: {
-        'circle-color': color,
-        'circle-radius': look.pointRadius,
-        'circle-stroke-color': look.outlineColor,
-        'circle-stroke-width': 1.5,
+        'circle-radius': 14 * size,
+        'circle-color': look.selectionColor,
+        'circle-opacity': 0.35,
+        'circle-stroke-color': look.selectionColor,
+        'circle-stroke-width': 2,
         'circle-pitch-alignment': 'map',
       },
     },
-  )
-  return layers
+    {
+      id: `${source}:pin`,
+      type: 'symbol',
+      source,
+      filter: POINT,
+      layout: {
+        'icon-image': [
+          'case',
+          selected,
+          `${PIN_PREFIX}${look.selectionColor}`,
+          ['concat', PIN_PREFIX, ['coalesce', ['get', 'color'], look.color]],
+        ],
+        'icon-anchor': 'bottom',
+        'icon-size': ['case', selected, 1.35 * size, size],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+        'icon-pitch-alignment': 'viewport',
+        'symbol-sort-key': ['case', selected, 1, 0],
+      },
+    },
+  ]
 }
 
 /**
@@ -310,7 +366,8 @@ export function featureLayersOf(source: string, look: FeatureLook): LayerSpecifi
  * stays on top and meets the buildings in the 3D pass.
  */
 export function beforeIdOf(layer: Pick<LayerSpecification, 'type'>, buildingsShown: boolean): string | undefined {
-  return buildingsShown && layer.type !== 'fill-extrusion' ? BUILDINGS_ID : undefined
+  // A pin stands up from the ground: the buildings must not hide it either.
+  return buildingsShown && layer.type !== 'fill-extrusion' && layer.type !== 'symbol' ? BUILDINGS_ID : undefined
 }
 
 /** The source id a data layer draws from. */
@@ -318,16 +375,26 @@ export const sourceIdOf = (kind: 'things' | 'geojson', id: string | undefined) =
 
 /** The data layer a rendered layer id belongs to, or null for one of the base. */
 export function dataLayerOf(layerId: string): { kind: 'things' | 'geojson'; id: string } | null {
-  const match = /^daanse:(things|geojson):(.*):(fill|extrusion|line|circle)$/.exec(layerId)
+  const match = /^daanse:(things|geojson):(.*):(fill|extrusion|line|circle|halo|pin)$/.exec(layerId)
   return match ? { kind: match[1] as 'things' | 'geojson', id: match[2] } : null
 }
 
 /** How an OGC STA layer looks: colour and height are worked out per thing. */
 export function thingLookOf(
-  layer: { fillColor?: string; fillOpacity?: number; outlineColor?: string; pointRadius?: number; extrude?: boolean },
+  layer: {
+    fillColor?: string
+    fillOpacity?: number
+    outlineColor?: string
+    pointRadius?: number
+    extrude?: boolean
+    pointStyle?: string
+    markerSize?: number
+  },
   selectionColor: string,
 ): FeatureLook {
   return {
+    pointStyle: layer.pointStyle === 'pin' ? 'pin' : 'circle',
+    markerSize: number(layer.markerSize, 1),
     color: text(layer.fillColor) || '#3388ff',
     opacity: number(layer.fillOpacity, 0.6),
     outlineColor: text(layer.outlineColor) || '#1f2937',

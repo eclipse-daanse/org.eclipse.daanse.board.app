@@ -43,6 +43,11 @@ vi.mock('maplibre-gl', () => {
     jumpTo = vi.fn()
     flyTo = vi.fn()
     fitBounds = vi.fn()
+    images = new globalThis.Map<string, any>()
+    hasImage(id: string) {
+      return this.images.has(id)
+    }
+    addImage = vi.fn((id: string, image: any) => this.images.set(id, image))
     getBearing = () => -20
     getPitch = () => 55
     setStyle = vi.fn()
@@ -329,6 +334,20 @@ describe('the actions after a change of page (#1272)', () => {
     expect(map.fitBounds).toHaveBeenCalledTimes(1)
     const source = map.sources['daanse:things:areas']
     expect(source.setData.mock.calls.at(-1)[0].features[0].properties.selected).toBe(true)
+  })
+})
+
+describe('the pins of a layer (#1273)', () => {
+  it('are drawn in a colour when the map first asks for it, once', async () => {
+    const { map } = await mountWidget(stored())
+    map.handlers.styleimagemissing({ id: 'daanse-pin:#E53935' })
+    map.handlers.styleimagemissing({ id: 'daanse-pin:#E53935' })
+    map.handlers.styleimagemissing({ id: 'other-image' })
+    expect(map.addImage).toHaveBeenCalledTimes(1)
+    const [id, image, options] = map.addImage.mock.calls[0]
+    expect(id).toBe('daanse-pin:#E53935')
+    expect([image.width, image.height]).toEqual([48, 64])
+    expect(options).toEqual({ pixelRatio: 2 })
   })
 })
 

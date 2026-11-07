@@ -37,6 +37,8 @@ export interface ThingLayer extends EObject {
   fillOpacity?: number;
   outlineColor?: string;
   pointRadius?: number;
+  pointStyle?: string;
+  markerSize?: number;
   extrude?: boolean;
   heightSuffix?: string;
   heightFactor?: number;
