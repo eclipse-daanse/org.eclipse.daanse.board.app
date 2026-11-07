@@ -60,6 +60,25 @@ describe('the WFS settings', () => {
     expect(wrapper.findAll('option').map((o) => o.text())).toContain('Bäume (Bäume)')
   })
 
+  it('read the column types of the feature type from DescribeFeatureType (#1295)', async () => {
+    createServiceWFS.mockResolvedValue({ getFeatureTypes: () => [{ name: 'baumbestand:strassenbaeume' }] })
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(
+      '<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"><xsd:complexType name="t"><xsd:sequence>' +
+      '<xsd:element name="baumhoehe" type="xsd:double"/><xsd:element name="art" type="xsd:string"/>' +
+      '</xsd:sequence></xsd:complexType></xsd:schema>',
+    )))
+    const config = reactive<any>({ connection: 'berlin', url: '', typeName: 'baumbestand:strassenbaeume', columnTypes: [{ column: 'baumhoehe', type: 'string', unit: 'm' }] })
+    const wrapper = mount(Settings, { props: { config, connections } })
+    await flushPromises()
+    await wrapper.find('.wfs-settings__head button').trigger('click')
+    await flushPromises()
+    expect(config.columnTypes).toEqual([
+      { column: 'baumhoehe', type: 'number', unit: 'm', label: '' },
+      { column: 'art', type: 'string', unit: '', label: '' },
+    ])
+    expect(wrapper.findAll('.wfs-settings__column')).toHaveLength(2)
+  })
+
   it('say why there are none in the service words', async () => {
     createServiceWFS.mockRejectedValue(new Error('Not a valid WFS GetCapabilities response'))
     vi.stubGlobal('fetch', vi.fn(async () => new Response(

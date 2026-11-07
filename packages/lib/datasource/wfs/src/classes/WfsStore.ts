@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { injectable, inject } from '@eclipse-daanse/tsm'
-import { type ConfigurationOf, BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { type ConfigurationOf, BaseDatasource, typed } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY, type IConnection, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import type { FeatureCollection } from 'geojson'
 import type { IWfsStoreConfiguration } from '../gen/IWfsStoreConfiguration'
@@ -36,6 +36,7 @@ export class WfsStore extends BaseDatasource {
   private connection = ''
   private request: WfsRequest & FeatureInfoRequest = {}
   private mode = 'wfs'
+  private columnTypes: unknown = []
   private reading?: Promise<FeatureCollection>
   /** Why the last read failed, if it did. */
   lastFailure?: WfsFailure
@@ -63,6 +64,7 @@ export class WfsStore extends BaseDatasource {
       pointTolerance: configuration.pointTolerance,
     }
     this.mode = configuration.mode === 'getFeatureInfo' ? 'getFeatureInfo' : 'wfs'
+    this.columnTypes = configuration.columnTypes ?? []
     if (this.pollingEnabled) this.startPolling(this.pollingInterval)
   }
 
@@ -81,14 +83,15 @@ export class WfsStore extends BaseDatasource {
       if (!response.ok) throw Object.assign(new Error(answer.slice(0, 200) || response.statusText), { status: response.status })
       return featuresOf(answer, response.headers.get('content-type') ?? '', this.request.srsName)
     })()
-    this.reading = reading
-    void reading
+    this.reading = reading.then((collection) => this.typedCollection(collection))
+    const typedReading = this.reading
+    void typedReading
       .then(() => (this.lastFailure = undefined))
       .catch((e: Error & { status?: number }) => (this.lastFailure = { status: e.status, message: e.message }))
       .finally(() => {
-        if (this.reading === reading) this.reading = undefined
+        if (this.reading === typedReading) this.reading = undefined
       })
-    return reading
+    return typedReading
   }
 
   /**
@@ -109,6 +112,13 @@ export class WfsStore extends BaseDatasource {
       }),
     )
     return mergedOf(answers)
+  }
+
+  /** The features with their properties read by the column types (#1295). */
+  private typedCollection(collection: FeatureCollection): FeatureCollection {
+    const properties = typed(collection.features.map((feature) => (feature.properties ?? {}) as Record<string, unknown>), this.columnTypes)
+    if (properties.every((each, index) => each === collection.features[index].properties)) return collection
+    return { ...collection, features: collection.features.map((feature, index) => ({ ...feature, properties: properties[index] })) }
   }
 
   async getOriginalData(): Promise<unknown> {

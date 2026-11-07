@@ -185,3 +185,45 @@ export function tableOf(collection: FeatureCollection) {
   const items = collection.features.map((feature) => ({ ...(feature.properties ?? {}) }))
   return { items, headers, rows: items.map((item) => headers.map((header) => (item as Record<string, unknown>)[header])) }
 }
+
+/** The DescribeFeatureType request of the feature type, on the same path (#1295). */
+export function describeFeatureTypePath(request: WfsRequest): string {
+  const version = text(request.version) === '1.1.0' ? '1.1.0' : '2.0.0'
+  const params = new URLSearchParams({
+    service: 'WFS',
+    version,
+    request: 'DescribeFeatureType',
+    [version === '2.0.0' ? 'typeNames' : 'typeName']: text(request.typeName),
+  })
+  const path = text(request.url)
+  return `${path}${path.includes('?') ? '&' : '?'}${params.toString()}`
+}
+
+const XSD_TYPES: Record<string, 'number' | 'date' | 'boolean' | 'string'> = {
+  double: 'number', float: 'number', decimal: 'number', int: 'number', integer: 'number', long: 'number', short: 'number', byte: 'number',
+  nonNegativeInteger: 'number', positiveInteger: 'number', unsignedInt: 'number', unsignedLong: 'number',
+  date: 'date', dateTime: 'date',
+  boolean: 'boolean',
+  string: 'string',
+}
+
+/**
+ * The column types of a feature type from its DescribeFeatureType schema:
+ * each xsd:element of a simple type, numbers, dates and flags as such;
+ * the geometry (a gml type) is left out.
+ */
+export function columnTypesOfSchema(schema: string): { column: string; type: 'number' | 'date' | 'boolean' | 'string' }[] {
+  const doc = new DOMParser().parseFromString(schema, 'text/xml')
+  const out: { column: string; type: 'number' | 'date' | 'boolean' | 'string' }[] = []
+  for (const element of Array.from(doc.getElementsByTagNameNS('*', 'element'))) {
+    const name = element.getAttribute('name')
+    let type = element.getAttribute('type') ?? ''
+    if (!type) type = element.getElementsByTagNameNS('*', 'restriction')[0]?.getAttribute('base') ?? ''
+    const local = type.split(':').pop() ?? ''
+    if (!name || type.startsWith('gml:') || !(local in XSD_TYPES)) continue
+    // The feature type itself is an element too; it has a complex type of its own.
+    if (element.parentElement?.localName === 'schema') continue
+    out.push({ column: name, type: XSD_TYPES[local] })
+  }
+  return out
+}

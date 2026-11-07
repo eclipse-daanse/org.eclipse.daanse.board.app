@@ -11,7 +11,10 @@
     "filter": "CQL-Filter",
     "mode": "Lesen über",
     "tileSize": "Kachelkante (Grad Breite)",
-    "pointTolerance": "Toleranz (px)"
+    "pointTolerance": "Toleranz (px)",
+    "column": "Spalte",
+    "type": "Typ",
+    "unit": "Einheit"
   },
   "Hints": {
     "connection": "Eine REST-Verbindung, deren Adresse der Dienst ist, z. B. https://gdi.berlin.de/services/wfs/baumbestand",
@@ -31,6 +34,17 @@
     "modes": {
       "wfs": "WFS GetFeature",
       "getFeatureInfo": "WMS GetFeatureInfo (in Kacheln)"
+    },
+    "columnTypes": "Spaltentypen",
+    "readColumns": "Spaltentypen vom Dienst lesen (DescribeFeatureType)",
+    "addColumn": "Spaltentyp hinzufügen",
+    "removeColumn": "Entfernen",
+    "noColumns": "Der Dienst beschreibt keine Spalten dieses Feature-Typs.",
+    "valueTypes": {
+      "string": "Text",
+      "number": "Zahl",
+      "date": "Datum",
+      "boolean": "Ja/Nein"
     }
   },
   "Preview": {

@@ -19,7 +19,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { boxOf, exceptionOf, featuresOf, getCapabilitiesPath, getFeaturePath, tableOf } from '../src/wfs'
+import { boxOf, columnTypesOfSchema, describeFeatureTypePath, exceptionOf, featuresOf, getCapabilitiesPath, getFeaturePath, tableOf } from '../src/wfs'
 import { WfsStore } from '../src/classes/WfsStore'
 
 const fixture = (name: string) => readFileSync(join(__dirname, 'fixtures', name), 'utf-8')
@@ -117,5 +117,31 @@ describe('the WFS store', () => {
     expect(await store.getData('geojson')).toEqual({ type: 'FeatureCollection', features: [] })
     await Promise.resolve()
     expect(store.lastFailure?.message).toBe('Service unknown or not permitted')
+  })
+})
+
+describe('the column types of a feature type (#1295)', () => {
+  it('come from DescribeFeatureType: numbers, dates and text; the geometry is left out', () => {
+    expect(describeFeatureTypePath({ typeName: 'baumbestand:strassenbaeume' })).toBe(
+      '?service=WFS&version=2.0.0&request=DescribeFeatureType&typeNames=baumbestand%3Astrassenbaeume',
+    )
+    expect(columnTypesOfSchema(fixture('strassenbaeume.xsd'))).toEqual([
+      { column: 'gattung_deutsch', type: 'string' },
+      { column: 'pflanzjahr', type: 'number' },
+      { column: 'baumhoehe', type: 'number' },
+      { column: 'erfasst', type: 'date' },
+    ])
+  })
+
+  it('read the values of the features before the store answers', async () => {
+    const store = new WfsStore()
+    const fetch = vi.fn(async () => new Response(JSON.stringify({
+      type: 'FeatureCollection',
+      features: [{ type: 'Feature', geometry: null, properties: { baumhoehe: '15', name: 'Linde' } }],
+    }), { headers: { 'content-type': 'application/json' } }))
+    ;(store as any).connectionRepository = { getConnection: () => ({ fetch }) }
+    store.init({ connection: 'c', typeName: 't', columnTypes: [{ column: 'baumhoehe', type: 'number', unit: 'm' }] } as any)
+    const collection = (await store.getData('geojson')) as any
+    expect(collection.features[0].properties).toEqual({ baumhoehe: 15, name: 'Linde' })
   })
 })
