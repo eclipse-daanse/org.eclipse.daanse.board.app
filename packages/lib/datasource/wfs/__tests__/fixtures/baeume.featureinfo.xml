@@ -1,21 +1,21 @@
 <!-- A QGIS Server GetFeatureInfo answer in text/xml, in the form the Jena portal gives for the layer "Bäume"; the values are made up. -->
 <GetFeatureInfoResponse>
- <Layer title="Bäume" name="Bäume">
-  <Feature id="101">
-   <Attribute value=" 1" name="Baumnummer" />
-   <Attribute value="Tilia cordata, Winterlinde" name="Baumart" />
-   <Attribute value="14" name="Baumhöhe" />
-   <Attribute value="9" name="Kronendurchmesser" />
-   <BoundingBox maxx="11.6150" minx="11.6150" maxy="50.9580" miny="50.9580" CRS="EPSG:4326" />
-  </Feature>
-  <Feature id="102">
-   <Attribute value="Acer platanoides, Spitzahorn" name="Baumart" />
-   <Attribute value="" name="Baumhöhe" />
-   <Attribute value="6" name="Kronendurchmesser" />
-   <BoundingBox maxx="11.6160" minx="11.6160" maxy="50.9585" miny="50.9585" CRS="EPSG:4326" />
-  </Feature>
-  <Feature id="103">
-   <Attribute value="Quercus robur, Stieleiche" name="Baumart" />
-  </Feature>
- </Layer>
+  <Layer title="Bäume" name="Bäume">
+    <Feature id="101">
+      <Attribute value=" 1" name="Baumnummer" />
+      <Attribute value="Tilia cordata, Winterlinde" name="Baumart" />
+      <Attribute value="14" name="Baumhöhe" />
+      <Attribute value="9" name="Kronendurchmesser" />
+      <BoundingBox maxx="11.6150" minx="11.6150" maxy="50.9580" miny="50.9580" CRS="EPSG:4326" />
+    </Feature>
+    <Feature id="102">
+      <Attribute value="Acer platanoides, Spitzahorn" name="Baumart" />
+      <Attribute value="" name="Baumhöhe" />
+      <Attribute value="6" name="Kronendurchmesser" />
+      <BoundingBox maxx="11.6160" minx="11.6160" maxy="50.9585" miny="50.9585" CRS="EPSG:4326" />
+    </Feature>
+    <Feature id="103">
+      <Attribute value="Quercus robur, Stieleiche" name="Baumart" />
+    </Feature>
+  </Layer>
 </GetFeatureInfoResponse>
