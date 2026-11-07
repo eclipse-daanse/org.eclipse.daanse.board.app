@@ -39,6 +39,8 @@ export type { Transform } from './gen/Transform'
 export { TransformImpl } from './gen/TransformImpl'
 export { TransformKind } from './gen/TransformKind'
 export { FilterOp } from './gen/FilterOp'
+export { applyTransforms, columnTypesOf, extracted, fieldsAddedBy, readAs, typed } from './data'
+export type { ColumnTypeLike, DataRow, TransformLike, ValueType } from './data'
 
 import type { EObject } from '@emfts/core'
 import type { IBaseConnectionConfiguration } from './gen/IBaseConnectionConfiguration'
