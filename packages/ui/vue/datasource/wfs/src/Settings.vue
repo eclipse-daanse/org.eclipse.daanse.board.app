@@ -79,6 +79,13 @@ const modes = computed(() => [
 ])
 watch([serviceUrl, featureInfo], () => void readCapabilities(), { immediate: true })
 
+/* Which area is read (#1297): the box, or the tiles the maps on the source show. */
+const viewport = computed(() => config.extent === 'viewport')
+const extents = computed(() => [
+  { value: 'fixed', label: t('Settings.extents.fixed') },
+  { value: 'viewport', label: t('Settings.extents.viewport') },
+])
+
 /* ------------------------------------------------ column types (#1295) */
 
 /*
@@ -152,11 +159,15 @@ function setNumber(name: string, value: unknown, fallback: number) {
       <DInput v-model="config.srsName" :label="t('Fields.srsName')" placeholder="EPSG:4326" />
     </template>
     <template v-else>
-      <DInput type="number" :model-value="config.tileSize" :label="t('Fields.tileSize')" :hint="t('Hints.tileSize')" :step="0.005"
-        @update:model-value="(v) => setNumber('tileSize', v, 0.01)" />
       <DInput type="number" :model-value="config.pointTolerance" :label="t('Fields.pointTolerance')"
         @update:model-value="(v) => setNumber('pointTolerance', v, 70)" />
     </template>
+    <DSelect :model-value="config.extent || 'fixed'" :options="extents" value-key="value" label-key="label" :label="t('Fields.extent')"
+      :hint="t('Hints.extent')" @update:model-value="(v) => (config.extent = v)" />
+    <DInput v-if="featureInfo || viewport" type="number" :model-value="config.tileSize" :label="t('Fields.tileSize')" :hint="t('Hints.tileSize')"
+      :step="0.005" @update:model-value="(v) => setNumber('tileSize', v, 0.01)" />
+    <DInput v-if="viewport" type="number" :model-value="config.minZoom" :label="t('Fields.minZoom')" :hint="t('Hints.minZoom')"
+      @update:model-value="(v) => setNumber('minZoom', v, 14)" />
     <DInput type="number" :model-value="config.maxFeatures" :label="t('Fields.maxFeatures')" :hint="t('Hints.maxFeatures')"
       @update:model-value="(v) => setNumber('maxFeatures', v, 1000)" />
     <DInput v-model="config.bbox" :label="t('Fields.bbox')" placeholder="13.44,52.44,13.46,52.45" :hint="t('Hints.bbox')" />

@@ -11,7 +11,9 @@
     "filter": "CQL-Filter",
     "mode": "Lesen über",
     "tileSize": "Kachelkante (Grad Breite)",
-    "pointTolerance": "Toleranz (px)"
+    "pointTolerance": "Toleranz (px)",
+    "extent": "Gelesenes Gebiet",
+    "minZoom": "Ab Zoomstufe"
   },
   "Hints": {
     "connection": "Eine REST-Verbindung, deren Adresse der Dienst ist, z. B. https://gdi.berlin.de/services/wfs/baumbestand",
@@ -21,7 +23,9 @@
     "bbox": "West,Süd,Ost,Nord in Grad. Leer: überall.",
     "filter": "Wo der Dienst CQL kennt. Leer: kein Filter.",
     "mode": "WMS GetFeatureInfo ist für einen QGIS Server, der den Layer nur als WMS anbietet; es braucht ein Rechteck und liest es in Kacheln.",
-    "tileSize": "Eine Anfrage je Kachel; 0,01 ist etwa 1 km."
+    "tileSize": "Die Kante einer Kachel in Grad Breite (Länge im Verhältnis); eine Anfrage je Kachel.",
+    "extent": "Was die Karte zeigt: Eine Karte auf dieser Quelle sendet ihren Ausschnitt, und es werden nur die Kacheln darin gelesen, jede einmal. Ohne Karte: das Rechteck unten.",
+    "minZoom": "Weiter herausgezoomt wird nichts gelesen; der Ausschnitt hätte zu viele Kacheln."
   },
   "Settings": {
     "reload": "Feature-Typen neu lesen",
@@ -34,7 +38,11 @@
     },
     "columnTypes": "Spaltentypen",
     "readColumns": "Spaltentypen vom Dienst lesen (DescribeFeatureType)",
-    "noColumns": "Der Dienst beschreibt keine Spalten dieses Feature-Typs."
+    "noColumns": "Der Dienst beschreibt keine Spalten dieses Feature-Typs.",
+    "extents": {
+      "fixed": "Das Rechteck unten",
+      "viewport": "Was die Karte zeigt (in Kacheln)"
+    }
   },
   "Preview": {
     "count": "{{count}} Features",

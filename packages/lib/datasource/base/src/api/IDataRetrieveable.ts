@@ -12,6 +12,8 @@ export interface IDataRetrieveable {
   getData(type: string, options?: any): Promise<any>
   getOriginalData(): any
   callEvent: (event: string, params: any, shouldUpdate?: boolean) => Promise<void> | void
+  /** The events this source takes (#1297); none where it is missing. */
+  acceptedEvents?: () => readonly string[]
   /**
    * Registers a subscriber and hands back the way to remove it again.
    *

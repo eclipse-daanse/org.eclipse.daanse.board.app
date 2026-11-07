@@ -41,6 +41,8 @@ export { TransformKind } from './gen/TransformKind'
 export { FilterOp } from './gen/FilterOp'
 export { applyTransforms, columnTypesOf, extracted, fieldsAddedBy, readAs, typed } from './data'
 export type { ColumnTypeLike, DataRow, TransformLike, ValueType } from './data'
+export { VIEWPORT_EVENT, MAX_GRID_TILES, Viewports, acceptsEvent, gridTileBox, gridTilesOf, viewportOf } from './viewport'
+export type { Box, Viewport } from './viewport'
 
 import type { EObject } from '@emfts/core'
 import type { IBaseConnectionConfiguration } from './gen/IBaseConnectionConfiguration'
@@ -158,6 +160,15 @@ export abstract class BaseDatasource extends UsesComputedVariable implements IDa
   abstract getData(type: string, options?: any): Promise<any>
   abstract getOriginalData(): any
   abstract callEvent(event: string, params: any, shouldUpdate?: boolean): Promise<void> | void
+
+  /**
+   * The events this source takes, e.g. VIEWPORT_EVENT (#1297). A widget
+   * sends an event that is not a source's own filter only where it is
+   * named here; most sources take none.
+   */
+  acceptedEvents(): readonly string[] {
+    return []
+  }
 
   abstract destroy(): void
 }
