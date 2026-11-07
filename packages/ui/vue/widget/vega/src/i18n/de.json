@@ -18,7 +18,8 @@
     "renderer": "Gezeichnet als",
     "layersHint": "Noch keine Ebene: füge eine hinzu, um Marken zu zeichnen.",
     "datasetsHint": "Keiner: das Diagramm zeichnet die Datenquelle des Widgets als Datensatz table.",
-    "paramsHint": "Keine Auswahl: Marken werden nicht ausgewählt."
+    "paramsHint": "Keine Auswahl: Marken werden nicht ausgewählt.",
+    "starter": "Mit einem Diagramm beginnen"
   },
   "Options": {
     "legendPosition": {
@@ -143,6 +144,20 @@
       "table": "Tabelle (Zeilen mit Überschriften)",
       "object": "JSON mit einer Liste von Zeilen",
       "geojson": "GeoJSON-Features"
+    },
+    "starter": {
+      "none": "—",
+      "bar": "Balken",
+      "stackedBar": "Gestapelte Balken",
+      "groupedBar": "Gruppierte Balken",
+      "line": "Linie",
+      "area": "Gestapelte Flächen",
+      "scatter": "Streudiagramm",
+      "heatmap": "Heatmap",
+      "histogram": "Histogramm",
+      "boxplot": "Boxplot",
+      "donut": "Ring",
+      "brush": "Aufziehen und hervorheben"
     }
   },
   "FormLayer": {
@@ -215,7 +230,8 @@
       "layers": "Die Ebenen des Diagramms, in dieser Reihenfolge gezeichnet – die erste ganz unten. Eine Ebene ist ein einfaches Diagramm; eine zweite fügt etwa Punkte auf einer Linie oder eine Linie über Balken hinzu.",
       "facet": "Teilt das Diagramm in kleine Vielfache, eines je Wert eines Felds. Leer zeichnet ein einziges Diagramm.",
       "params": "Auswahlen und Werte, die das Diagramm hält: was ausgewählt oder aufgezogen ist, und Werte, auf die andere Einstellungen mit ihrem Namen verweisen.",
-      "datasets": "Die Daten, die das Diagramm zeichnet, nach Namen. Ohne Eintrag ist die Datenquelle des Widgets der Datensatz table; ein Eintrag namens table ohne eigene Quelle sagt, wie diese gelesen wird."
+      "datasets": "Die Daten, die das Diagramm zeichnet, nach Namen. Ohne Eintrag ist die Datenquelle des Widgets der Datensatz table; ein Eintrag namens table ohne eigene Quelle sagt, wie diese gelesen wird.",
+      "starter": "Ersetzt Ebenen, Auswahlen und kleine Vielfache durch dieses Diagramm, gefüllt mit Spalten der Daten. Danach ist die Wahl wieder leer; „Verwerfen“ holt das Diagramm zurück."
     },
     "DatasetBinding": {
       "name": "Der Name, unter dem Ebenen diesen Datensatz zeichnen. table ist die Datenquelle des Widgets.",

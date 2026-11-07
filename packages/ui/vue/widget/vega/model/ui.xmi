@@ -27,6 +27,24 @@ small multiples and the selections follow.
   <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings"/>
 
   <components xsi:type="uimodel:FormView" name="VegaWidgetSettingsFormView">
+    <fields xsi:type="uimodel:SelectWidget"
+        name="starter"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/starter"
+        label="vega:Form.starter">
+      <values>none</values>
+      <values>bar</values>
+      <values>stackedBar</values>
+      <values>groupedBar</values>
+      <values>line</values>
+      <values>area</values>
+      <values>scatter</values>
+      <values>heatmap</values>
+      <values>histogram</values>
+      <values>boxplot</values>
+      <values>donut</values>
+      <values>brush</values>
+      <optionLabel language="JS" body="({ none: 'vega:Options.starter.none', bar: 'vega:Options.starter.bar', stackedBar: 'vega:Options.starter.stackedBar', groupedBar: 'vega:Options.starter.groupedBar', line: 'vega:Options.starter.line', area: 'vega:Options.starter.area', scatter: 'vega:Options.starter.scatter', heatmap: 'vega:Options.starter.heatmap', histogram: 'vega:Options.starter.histogram', boxplot: 'vega:Options.starter.boxplot', donut: 'vega:Options.starter.donut', brush: 'vega:Options.starter.brush' })[option] ?? option"/>
+    </fields>
     <fields xsi:type="uimodel:InputWidget"
         name="title"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/title"

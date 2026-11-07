@@ -34,6 +34,7 @@ import { StackMode } from './StackMode.js';
 import { ScaleType } from './ScaleType.js';
 import { ParamKind } from './ParamKind.js';
 import { ParamBind } from './ParamBind.js';
+import { StarterChart } from './StarterChart.js';
 import { DatasetShape } from './DatasetShape.js';
 
 /**
@@ -82,6 +83,7 @@ export class VegawidgetPackage extends BasicEPackage {
     VEGA_WIDGET_SETTINGS__PARAMS: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__DATASETS: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__SPEC_OVERLAY: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__STARTER: null as unknown as EAttribute | EReference,
     DATASET_BINDING: null as unknown as EClass,
     DATASET_BINDING__NAME: null as unknown as EAttribute | EReference,
     DATASET_BINDING__DATASOURCE_ID: null as unknown as EAttribute | EReference,
@@ -160,6 +162,7 @@ export class VegawidgetPackage extends BasicEPackage {
     SCALE_TYPE: null as unknown as EEnum,
     PARAM_KIND: null as unknown as EEnum,
     PARAM_BIND: null as unknown as EEnum,
+    STARTER_CHART: null as unknown as EEnum,
     DATASET_SHAPE: null as unknown as EEnum,
   };
 
@@ -270,6 +273,15 @@ export class VegawidgetPackage extends BasicEPackage {
     vegaWidgetSettings_specOverlay.setDefaultValueLiteral("");
     vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_specOverlay);
     VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__SPEC_OVERLAY = vegaWidgetSettings_specOverlay;
+
+    // Create starter feature
+    const vegaWidgetSettings_starter = new BasicEAttribute();
+    vegaWidgetSettings_starter.setName('starter');
+    vegaWidgetSettings_starter.setLowerBound(0);
+    vegaWidgetSettings_starter.setUpperBound(1);
+    vegaWidgetSettings_starter.setDefaultValueLiteral("none");
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_starter);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__STARTER = vegaWidgetSettings_starter;
 
     // Create DatasetBinding class
     const datasetBindingClass = new BasicEClass();
@@ -1883,6 +1895,138 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.PARAM_BIND = paramBindEnumType;
     this.getEClassifiers().push(paramBindEnumType);
 
+    // Create StarterChart enum
+    const starterChartEnumType = new BasicEEnum();
+    starterChartEnumType.setName('StarterChart');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("none");
+      literal.setValue(0);
+      literal.setLiteral("none");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.none);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("bar");
+      literal.setValue(1);
+      literal.setLiteral("bar");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.bar);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("stackedBar");
+      literal.setValue(2);
+      literal.setLiteral("stackedBar");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.stackedBar);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("groupedBar");
+      literal.setValue(3);
+      literal.setLiteral("groupedBar");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.groupedBar);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("line");
+      literal.setValue(4);
+      literal.setLiteral("line");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.line);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("area");
+      literal.setValue(5);
+      literal.setLiteral("area");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.area);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("scatter");
+      literal.setValue(6);
+      literal.setLiteral("scatter");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.scatter);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("heatmap");
+      literal.setValue(7);
+      literal.setLiteral("heatmap");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.heatmap);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("histogram");
+      literal.setValue(8);
+      literal.setLiteral("histogram");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.histogram);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("boxplot");
+      literal.setValue(9);
+      literal.setLiteral("boxplot");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.boxplot);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("donut");
+      literal.setValue(10);
+      literal.setLiteral("donut");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.donut);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("brush");
+      literal.setValue(11);
+      literal.setLiteral("brush");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.brush);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "A chart to start from (#1292): a recipe of layers, encodings and selections filled with columns of the data the chart reads - the first text, number and date columns it finds. The fields can be changed afterwards like any other.");
+      starterChartEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.STARTER_CHART = starterChartEnumType;
+    this.getEClassifiers().push(starterChartEnumType);
+
     // Create DatasetShape enum
     const datasetShapeEnumType = new BasicEEnum();
     datasetShapeEnumType.setName('DatasetShape');
@@ -1948,6 +2092,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__PARAMS as BasicEReference).setEType(VegawidgetPackage.Literals.PARAM);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__DATASETS as BasicEReference).setEType(VegawidgetPackage.Literals.DATASET_BINDING);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__SPEC_OVERLAY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__STARTER as BasicEAttribute).setEType(VegawidgetPackage.Literals.STARTER_CHART);
     (VegawidgetPackage.Literals.DATASET_BINDING__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.DATASET_BINDING__SHAPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.DATASET_SHAPE);

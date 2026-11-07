@@ -25,6 +25,7 @@ import type { Layer } from './Layer.js';
 import type { Facet } from './Facet.js';
 import type { Param } from './Param.js';
 import type { DatasetBinding } from './DatasetBinding.js';
+import type { StarterChart } from './StarterChart.js';
 
 /**
  * VegaWidgetSettings
@@ -40,5 +41,6 @@ export interface VegaWidgetSettings extends EObject {
   params: EList<Param>;
   datasets: EList<DatasetBinding>;
   specOverlay?: string;
+  starter?: StarterChart;
 
 }
