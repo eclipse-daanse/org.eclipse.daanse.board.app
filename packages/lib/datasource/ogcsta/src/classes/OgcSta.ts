@@ -54,6 +54,40 @@ import { LOGGER_FACTORY, LoggerFactory,
   identifier as loggerIdentifier,
   type ILogger } from 'org.eclipse.daanse.board.app.lib.api.logger'
 
+/** Count requests in flight at once for one datastream's buckets (#1280). */
+const BUCKET_REQUESTS_AT_ONCE = 6
+/** Counts of buckets that have ended, by server, datastream and bucket. */
+const closedBucketCounts = new Map<string, number>()
+const CLOSED_BUCKETS_KEPT = 20000
+
+function rememberClosedBucket(key: string, count: number): void {
+  if (closedBucketCounts.size >= CLOSED_BUCKETS_KEPT) {
+    // The oldest entry goes first; a Map keeps the order of insertion
+    const oldest = closedBucketCounts.keys().next().value
+    if (oldest !== undefined) closedBucketCounts.delete(oldest)
+  }
+  closedBucketCounts.set(key, count)
+}
+
+/** Forgets the bucket counts; for tests. */
+export function clearBucketCounts(): void {
+  closedBucketCounts.clear()
+}
+
+/** Maps items through an async function with at most `limit` calls at once, keeping the order. */
+async function runLimited<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const results = new Array<R>(items.length)
+  let next = 0
+  const worker = async () => {
+    while (next < items.length) {
+      const index = next++
+      results[index] = await fn(items[index])
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker))
+  return results
+}
+
 @injectable()
 export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   @inject(CONNECTION_REPOSITORY)
@@ -559,6 +593,44 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     }
     const [first, last] = await Promise.all([edge('asc'), edge('desc')])
     return { name: datastream.name, start: first || undefined, end: last || first || undefined }
+  }
+
+  /**
+   * How many observations of one datastream fall into each bucket, in the
+   * buckets' order (#1280). One count request per bucket - `$top=1` with
+   * `$count=true`, as servers refuse `$top=0` and ignore `$top` together
+   * with `$select`.
+   *
+   * A bucket that has ended is kept: its count no longer changes, and the
+   * timeline asks for the same buckets again whenever it is drawn. The
+   * bucket that holds now is always asked again.
+   */
+  async countDatastreamBuckets(
+    datastreamId: string,
+    buckets: { start: string; end: string }[],
+    signal?: AbortSignal,
+  ): Promise<number[]> {
+    const configuration = this.api()
+    const api = new DatastreamsApi(configuration)
+    const now = Date.now()
+    const keyOf = (bucket: { start: string; end: string }) =>
+      `${configuration.basePath}|${datastreamId}|${bucket.start}|${bucket.end}`
+
+    return runLimited(buckets, BUCKET_REQUESTS_AT_ONCE, async (bucket) => {
+      const key = keyOf(bucket)
+      const known = closedBucketCounts.get(key)
+      if (known !== undefined) return known
+      if (signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+      const page = await api.v11DatastreamsEntityIdObservationsGet({
+        entityId: datastreamId,
+        $top: 1,
+        $count: true,
+        $filter: `phenomenonTime ge ${bucket.start} and phenomenonTime lt ${bucket.end}`,
+      })
+      const count = page.iotCount ?? page.value?.length ?? 0
+      if (Date.parse(bucket.end) < now) rememberClosedBucket(key, count)
+      return count
+    })
   }
 
   /**

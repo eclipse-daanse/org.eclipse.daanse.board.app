@@ -316,17 +316,20 @@ const timelineMaxDateText = dateText(timelineMaxDate);
 const timelineMaxTimeText = timeText(timelineMaxTime);
 
 /*
- * Coverage sources (#1279): the workspace's sources that say they answer
- * 'TimeCoverage'. Written straight into the list the settings hold, so it
+ * Coverage sources (#1279, #1280): the workspace's sources that answer
+ * 'TimeCoverage', a chart or a table. Written straight into the list the settings hold, so it
  * stays the modelled list and is not swapped for a plain array.
  */
 const datasourceRepository = inject<DatasourceRepository | undefined>(datasourceIdentifier, undefined);
+/* A table needs the time column set in the form below; a chart and a coverage do not (#1280). */
+const COVERAGE_SHAPES = [TIME_COVERAGE, 'ChartData', 'DataTable'];
 const coverageSources = computed(() => {
   if (!datasourceRepository) return [];
   return datasourceRepository.getDatasources()
     .filter((source) => {
       try {
-        return !!source.type && !!datasourceRepository.getDatasourceIdentifiers(source.type)?.answers?.includes(TIME_COVERAGE);
+        const answers = source.type ? datasourceRepository.getDatasourceIdentifiers(source.type)?.answers ?? [] : [];
+        return COVERAGE_SHAPES.some((shape) => answers.includes(shape));
       } catch {
         return false;
       }

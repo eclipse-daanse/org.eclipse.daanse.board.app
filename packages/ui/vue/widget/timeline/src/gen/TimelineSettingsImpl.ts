@@ -50,6 +50,9 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
   static readonly SHOW_TIME_INFO: number = 16;
   static readonly COVERAGE_DATASOURCE_IDS: number = 17;
   static readonly COVERAGE_COLOR: number = 18;
+  static readonly COVERAGE_STYLE: number = 19;
+  static readonly COVERAGE_LANE_PER_SERIES: number = 20;
+  static readonly COVERAGE_TIME_FIELD: number = 21;
 
   // Private fields
   private _timelineMin?: string;
@@ -71,6 +74,9 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
   private _showTimeInfo: boolean = true;
   private _coverageDatasourceIds!: EList<string>;
   private _coverageColor?: string;
+  private _coverageStyle: string = "bands";
+  private _coverageLanePerSeries: boolean = false;
+  private _coverageTimeField?: string;
 
   /**
    * Returns the EClass of this object
@@ -529,6 +535,78 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
     }
   }
 
+  get coverageStyle(): string {
+    return this._coverageStyle!;
+  }
+
+  set coverageStyle(value: string) {
+    const oldValue = this._coverageStyle;
+    this._coverageStyle = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(TimelineSettingsImpl.COVERAGE_STYLE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => TimelineSettingsImpl.COVERAGE_STYLE,
+        merge: () => false
+      });
+    }
+  }
+
+  get coverageLanePerSeries(): boolean {
+    return this._coverageLanePerSeries!;
+  }
+
+  set coverageLanePerSeries(value: boolean) {
+    const oldValue = this._coverageLanePerSeries;
+    this._coverageLanePerSeries = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(TimelineSettingsImpl.COVERAGE_LANE_PER_SERIES),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => TimelineSettingsImpl.COVERAGE_LANE_PER_SERIES,
+        merge: () => false
+      });
+    }
+  }
+
+  get coverageTimeField(): string {
+    return this._coverageTimeField!;
+  }
+
+  set coverageTimeField(value: string) {
+    const oldValue = this._coverageTimeField;
+    this._coverageTimeField = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(TimelineSettingsImpl.COVERAGE_TIME_FIELD),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => TimelineSettingsImpl.COVERAGE_TIME_FIELD,
+        merge: () => false
+      });
+    }
+  }
+
   /**
    * Remove a value from its previous container before it is contained here,
    * like Java EMF's eInverseRemove on the old container (#61)
@@ -599,6 +677,12 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
         return this.coverageDatasourceIds;
       case TimelineSettingsImpl.COVERAGE_COLOR:
         return this.coverageColor;
+      case TimelineSettingsImpl.COVERAGE_STYLE:
+        return this.coverageStyle;
+      case TimelineSettingsImpl.COVERAGE_LANE_PER_SERIES:
+        return this.coverageLanePerSeries;
+      case TimelineSettingsImpl.COVERAGE_TIME_FIELD:
+        return this.coverageTimeField;
       default:
         return super.eGet(feature);
     }
@@ -687,6 +771,18 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
         this.coverageColor = newValue as string;
         super.eSet(feature, newValue);
         break;
+      case TimelineSettingsImpl.COVERAGE_STYLE:
+        this.coverageStyle = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case TimelineSettingsImpl.COVERAGE_LANE_PER_SERIES:
+        this.coverageLanePerSeries = newValue as boolean;
+        super.eSet(feature, newValue);
+        break;
+      case TimelineSettingsImpl.COVERAGE_TIME_FIELD:
+        this.coverageTimeField = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -736,6 +832,12 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
         return this._coverageDatasourceIds !== undefined && !this._coverageDatasourceIds.isEmpty();
       case TimelineSettingsImpl.COVERAGE_COLOR:
         return this._coverageColor !== undefined;
+      case TimelineSettingsImpl.COVERAGE_STYLE:
+        return this._coverageStyle !== "bands";
+      case TimelineSettingsImpl.COVERAGE_LANE_PER_SERIES:
+        return this._coverageLanePerSeries !== false;
+      case TimelineSettingsImpl.COVERAGE_TIME_FIELD:
+        return this._coverageTimeField !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -805,6 +907,15 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
       case TimelineSettingsImpl.COVERAGE_COLOR:
         this._coverageColor = undefined;
         return;
+      case TimelineSettingsImpl.COVERAGE_STYLE:
+        this._coverageStyle = "bands";
+        return;
+      case TimelineSettingsImpl.COVERAGE_LANE_PER_SERIES:
+        this._coverageLanePerSeries = false;
+        return;
+      case TimelineSettingsImpl.COVERAGE_TIME_FIELD:
+        this._coverageTimeField = undefined;
+        return;
       default:
         super.eUnset(feature);
     }
@@ -839,6 +950,9 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
       showTimeInfo: this.showTimeInfo,
       coverageDatasourceIds: this.coverageDatasourceIds?.toArray?.() ?? this.coverageDatasourceIds,
       coverageColor: this.coverageColor,
+      coverageStyle: this.coverageStyle,
+      coverageLanePerSeries: this.coverageLanePerSeries,
+      coverageTimeField: this.coverageTimeField,
     };
   }
 }

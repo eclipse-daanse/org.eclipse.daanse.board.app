@@ -45,5 +45,8 @@ export interface TimelineSettings extends EObject {
   showTimeInfo?: boolean;
   coverageDatasourceIds: EList<string>;
   coverageColor?: string;
+  coverageStyle?: string;
+  coverageLanePerSeries?: boolean;
+  coverageTimeField?: string;
 
 }

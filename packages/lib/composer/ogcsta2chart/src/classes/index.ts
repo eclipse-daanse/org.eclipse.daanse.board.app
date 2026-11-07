@@ -17,6 +17,7 @@ import {
   DatasourceRepository,
   TIME_COVERAGE,
   type TimeCoverage,
+  type TimeCoverageRequest,
   type TimeCoverageSeries
 } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { DatastreamSelection, OGCSTAToChartData } from '../interfaces/OGCSTAToChartData'
@@ -41,6 +42,7 @@ interface DatastreamWindowSource {
 
 interface DatastreamCoverageSource {
   loadDatastreamCoverage(datastreamId: string): Promise<{ name?: string; start?: string; end?: string }>
+  countDatastreamBuckets?(datastreamId: string, buckets: { start: string; end: string }[], signal?: AbortSignal): Promise<number[]>
 }
 
 export interface IOGCSTAToChartComposerConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
@@ -189,7 +191,7 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       throw new Error('DatasourceRepository is not provided to DataSource Classes')
     }
 
-    if (type === TIME_COVERAGE) return this.loadCoverage()
+    if (type === TIME_COVERAGE) return this.loadCoverage(options)
 
     /*
      * Each configured datastream is loaded directly, with its window, all at
@@ -243,8 +245,12 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
    * Asks each source for the interval of the datastream only - not for its
    * observations, which the chart loads cut to the selected window and
    * which therefore cannot say where data exists outside of it.
+   *
+   * With buckets in the request each datastream is also counted per
+   * bucket, so gaps show (#1280).
    */
-  private async loadCoverage(): Promise<TimeCoverage> {
+  private async loadCoverage(request?: TimeCoverageRequest): Promise<TimeCoverage> {
+    const buckets = request?.buckets ?? []
     const sources = this.connectedDatasources
       .filter((datasourceId) => datasourceId)
       .map((datasourceId) => this.datasourceRepository.getDatasource(datasourceId) as unknown as Partial<DatastreamCoverageSource>)
@@ -256,11 +262,15 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
           try {
             const coverage = await source.loadDatastreamCoverage!(selection.datastreamId)
             if (coverage.start && coverage.end) {
+              const bins = buckets.length > 0 && typeof source.countDatastreamBuckets === 'function'
+                ? await source.countDatastreamBuckets(selection.datastreamId, buckets, request?.signal)
+                : undefined
               return {
                 id: selection.datastreamId,
                 label: selection.label || coverage.name,
                 color: selection.color,
                 intervals: [{ start: coverage.start, end: coverage.end }],
+                ...(bins ? { bins } : {}),
               }
             }
           } catch (error) {

@@ -65,6 +65,16 @@ them the words. The speed is a factor, so its labels are the factors.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showTimeInfo" label="timeline:Form.showTimeInfo"/>
       <fields xsi:type="uimodel:InputWidget" name="coverageColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/coverageColor" label="timeline:Form.coverageColor"/>
+      <fields xsi:type="uimodel:SelectWidget" name="coverageStyle"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/coverageStyle" label="timeline:Form.coverageStyle">
+        <values>bands</values>
+        <values>density</values>
+        <optionLabel language="JS" body="({ bands: 'timeline:Options.coverage.bands', density: 'timeline:Options.coverage.density' })[option] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:CheckboxWidget" name="coverageLanePerSeries"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/coverageLanePerSeries" label="timeline:Form.coverageLanePerSeries"/>
+      <fields xsi:type="uimodel:InputWidget" name="coverageTimeField"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/coverageTimeField" label="timeline:Form.coverageTimeField"/>
     </fields>
 
   </components>

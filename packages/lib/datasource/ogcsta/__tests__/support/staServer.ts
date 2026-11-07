@@ -88,9 +88,10 @@ function filterOf(expr: string | null): (item: Record<string, any>) => boolean {
 
 function timeWindow(expr: string | null) {
   const after = expr?.match(/phenomenonTime gt (\S+)/)?.[1]
+  const from = expr?.match(/phenomenonTime ge (\S+)/)?.[1]
   const before = expr?.match(/phenomenonTime lt (\S+)/)?.[1]
   return (o: { phenomenonTime: string }) =>
-    (!after || o.phenomenonTime > after) && (!before || o.phenomenonTime < before)
+    (!after || o.phenomenonTime > after) && (!from || o.phenomenonTime >= from) && (!before || o.phenomenonTime < before)
 }
 
 export function staServer(fixture: StaFixture, base: string = STA_BASE) {
@@ -136,13 +137,17 @@ export function staServer(fixture: StaFixture, base: string = STA_BASE) {
     if ((m = path.match(/^Datastreams\((.+?)\)\/Observations$/))) {
       let rows = observationsOf(quote(decodeURIComponent(m[1]))).filter(timeWindow(q.get('$filter')))
       if (q.get('$orderby') === 'phenomenonTime asc') rows = [...rows].reverse()
+      // Counted before $top, as the server does; it refuses $top=0
+      const count = rows.length
       const top = q.get('$top')
+      if (top === '0') throw new BadRequest()
       if (top) rows = rows.slice(0, Number(top))
       const size = top ? Infinity : fixture.observationPageSize ?? Infinity
       const skip = Number(q.get('$skip') ?? 0)
       const result: Record<string, unknown> = {
         value: rows.slice(skip, skip + size).map((r) => (select ? project(r, select, []) : r)),
       }
+      if (q.get('$count') === 'true') result['@iot.count'] = count
       if (skip + size < rows.length) {
         const next = new URLSearchParams(q)
         next.set('$skip', String(skip + size))
