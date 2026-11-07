@@ -23,6 +23,7 @@
  * others get the same instance.
  */
 
+import './referencedPackages'
 import { toRaw } from 'vue'
 import { adopt, isModelled } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { MaplibreFactory } from './gen/MaplibreFactory'
@@ -52,7 +53,7 @@ export function modelledSettings(given: unknown): MapLibreSettings {
   if (isModelled(stored)) return stored as unknown as MapLibreSettings
   const held = adopted.get(stored)
   if (held) return held
-  const made = migrated(adopt(factory().createMapLibreSettings(), stored))
+  const made = migrated(adopt(factory().createMapLibreSettings(), withSymbolLayers(stored as Record<string, unknown>)))
   adopted.set(stored, made)
   return made
 }
@@ -154,4 +155,94 @@ export function newModelLayer(name: string): ModelLayer {
   layer.id = layerId('models')
   layer.name = name
   return layer
+}
+
+/* ------------------------------------------------ symbol layers (#1296) */
+
+const text = (value: unknown) => String(value ?? '').trim()
+
+/** A glob of a rule from before #1296 ("Tilia*", "*x", "*x*", "x") as a pattern with one group. */
+function patternOfGlob(glob: string): string {
+  const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const lead = glob.startsWith('*')
+  const trail = glob.length > 1 && glob.endsWith('*')
+  const core = escape(glob.slice(lead ? 1 : 0, trail ? -1 : undefined))
+  return `${lead ? '' : '^'}(${core})${trail ? '' : '$'}`
+}
+
+/**
+ * A model layer as a board stored it before #1296 - heightProperty,
+ * widthProperty, defaultHeight, rules (a property and a glob, giving colour
+ * and model), color and trunkColor - in the form of the encodings. Rules on
+ * one property with globs that are first words ("Tilia*", the genus of a
+ * species) become an extract of the first word and a colour per word; other
+ * globs an extract per pattern. trunkColor becomes the part of the meshes
+ * named as the trunk used to be found. A layer in the new form is kept.
+ */
+export function migratedModelLayer(stored: Record<string, unknown>): Record<string, unknown> {
+  const old = ['heightProperty', 'widthProperty', 'defaultHeight', 'rules', 'trunkColor'].some((key) => key in stored) || typeof stored.color === 'string'
+  if (!old) return stored
+  const {
+    heightProperty,
+    widthProperty,
+    defaultHeight,
+    rules,
+    color,
+    trunkColor,
+    ...rest
+  } = stored as Record<string, any>
+  const layer: Record<string, any> = { ...rest }
+  const size: Record<string, any> = {}
+  if (text(heightProperty) || Number(defaultHeight) > 0) {
+    size.height = { field: text(heightProperty), unit: 'm', scaleType: 'identity', value: Number(defaultHeight) > 0 ? Number(defaultHeight) : 0 }
+  }
+  if (text(widthProperty)) size.width = { field: text(widthProperty), unit: 'm', scaleType: 'identity', value: 0 }
+  if (Object.keys(size).length) layer.size = size
+
+  const transforms: Record<string, any>[] = Array.isArray(rest.transforms) ? [...rest.transforms] : []
+  const colorMappings: { code: string; color: string }[] = []
+  const modelMappings: { code: string; url: string }[] = []
+  let colorField = ''
+  const list = (Array.isArray(rules) ? rules : []).filter((r: any) => text(r?.property) && text(r?.value))
+  const byProperty = new Map<string, any[]>()
+  for (const rule of list) byProperty.set(text(rule.property), [...(byProperty.get(text(rule.property)) ?? []), rule])
+  for (const [property, group] of byProperty) {
+    const firstWords = group.every((r: any) => /^[^*\s]+\*$/.test(text(r.value)))
+    if (firstWords) {
+      const as = `${property} (first word)`
+      transforms.push({ kind: 'extract', field: property, pattern: '^(\\S+)', as })
+      colorField = colorField || as
+      for (const r of group) {
+        const code = text(r.value).slice(0, -1)
+        if (text(r.color)) colorMappings.push({ code, color: text(r.color) })
+        if (text(r.url)) modelMappings.push({ code, url: text(r.url) })
+      }
+    } else {
+      group.forEach((r: any, index: number) => {
+        const as = `${property} (${index + 1})`
+        transforms.push({ kind: 'extract', field: property, pattern: patternOfGlob(text(r.value)), as })
+        colorField = colorField || as
+        const code = text(r.value).replace(/\*/g, '')
+        if (text(r.color)) colorMappings.push({ code, color: text(r.color) })
+        if (text(r.url)) modelMappings.push({ code, url: text(r.url) })
+      })
+    }
+  }
+  if (transforms.length) layer.transforms = transforms
+  if (colorMappings.length || text(color)) {
+    layer.color = { field: colorMappings.length ? colorField : '', type: 'nominal', mappings: colorMappings, color: text(color) }
+  } else {
+    delete layer.color
+  }
+  if (modelMappings.length) layer.modelBy = { field: colorField, mappings: modelMappings }
+  if (text(trunkColor)) {
+    layer.parts = [...(Array.isArray(rest.parts) ? rest.parts : []), { mesh: 'trunk|stem|bark|cylinder|stamm|rinde', color: { color: text(trunkColor) } }]
+  }
+  return layer
+}
+
+/** The stored settings with their model layers in the form of #1296. */
+function withSymbolLayers(stored: Record<string, unknown>): Record<string, unknown> {
+  if (!Array.isArray(stored.modelLayers)) return stored
+  return { ...stored, modelLayers: stored.modelLayers.map((layer) => (layer && typeof layer === 'object' ? migratedModelLayer(layer as Record<string, unknown>) : layer)) }
 }

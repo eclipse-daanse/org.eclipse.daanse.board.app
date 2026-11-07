@@ -1,0 +1,61 @@
+{
+  "id": "trees",
+  "name": "Bäume",
+  "visible": true,
+  "url": "http://localhost:8080/tree.fbx",
+  "format": "",
+  "scale": 0.01,
+  "rotation": 0,
+  "altitudeOffset": 0,
+  "color": "#5b8c3a",
+  "trunkColor": "#6b4f32",
+  "instances": [],
+  "datasourceId": "jena-baeume",
+  "heightProperty": "Baumhöhe",
+  "widthProperty": "Kronendurchmesser",
+  "defaultHeight": 10,
+  "rules": [
+    {
+      "property": "Baumart",
+      "value": "Tilia*",
+      "url": "",
+      "color": "#4caf50"
+    },
+    {
+      "property": "Baumart",
+      "value": "Acer*",
+      "url": "",
+      "color": "#8bc34a"
+    },
+    {
+      "property": "Baumart",
+      "value": "Quercus*",
+      "url": "",
+      "color": "#33691e"
+    },
+    {
+      "property": "Baumart",
+      "value": "Salix*",
+      "url": "",
+      "color": "#9e9d24"
+    },
+    {
+      "property": "Baumart",
+      "value": "Betula*",
+      "url": "",
+      "color": "#cddc39"
+    },
+    {
+      "property": "Baumart",
+      "value": "Fraxinus*",
+      "url": "",
+      "color": "#558b2f"
+    },
+    {
+      "property": "Baumart",
+      "value": "Pinus*",
+      "url": "",
+      "color": "#1b5e20"
+    }
+  ]
+}

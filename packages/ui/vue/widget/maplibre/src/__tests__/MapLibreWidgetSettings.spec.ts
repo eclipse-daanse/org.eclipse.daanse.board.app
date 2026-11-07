@@ -65,3 +65,17 @@ describe('the WMS section of the 3D map settings (#1274)', () => {
     expect(wrapper.find('.wms-layers__item').text()).toContain('Stadtplan (S/W)')
   })
 })
+
+describe('the symbol layers in the settings of the 3D map (#1296)', () => {
+  it('are a generated form: layer, data, model, encodings, parts and instances, and say whether the model can be read', async () => {
+    const stored = modelledSettings({ modelLayers: [{ id: 'trees', name: 'Bäume', url: 'http://localhost:8080/tree.fbx', size: { height: { field: 'Baumhöhe' } } }] })
+    const wrapper = mount(MapLibreWidgetSettings, { props: { modelValue: stored } })
+    await flushPromises()
+    const section = wrapper.find('[data-section-id="models"]')
+    expect(section.find('.symbol-status__name').text()).toBe('Bäume')
+    expect(section.findComponent({ name: 'SettingsForm' }).exists()).toBe(true)
+    // The hand-written fields of before are gone; what the form shows comes from the model.
+    expect(section.text()).not.toContain('Settings.models.heightProperty')
+    expect(section.text()).toContain('maplibre:Symbols.MapLibreSettings.modelLayers')
+  })
+})

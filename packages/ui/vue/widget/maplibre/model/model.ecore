@@ -537,7 +537,7 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
 
     <eClassifiers xsi:type="ecore:EClass" name="ModelLayer">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A 3D model drawn at many places of the map: one file (FBX, glTF or GLB), many instances. It stands on the ground with the lowest point of the model, and the buildings hide it where they are in front (#1281)."/>
+            <details key="documentation" value="A symbol layer: a 3D model drawn at many places of the map - one file (FBX, glTF or GLB), many instances, placed by hand or at the points of a data source, sized, coloured and chosen by encodings of their fields (#1281, #1296). It stands on the ground with the lowest point of the model, and the buildings hide it where they are in front."/>
         </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -579,16 +579,6 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
                 <details key="documentation" value="Height above the ground, in metres."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The colour of the model where no rule gives one, any CSS colour; the trunk (a mesh named trunk, stem, bark or cylinder) takes trunkColor. Empty: the colours of the file."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="trunkColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The colour of the trunk of the model, any CSS colour. Empty: the colour of the file."/>
-            </eAnnotations>
-        </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1" eType="#//ModelInstance" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Where the model stands."/>
@@ -599,50 +589,186 @@ once. The OGC STA layer reads its things the way the Leaflet map does since
                 <details key="documentation" value="A data source of points (e.g. a WFS tree cadastre): a model stands at every point, besides the instances placed by hand (#1282). Empty: only those."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="heightProperty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="transforms" upperBound="-1" containment="true">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform"/>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The property of a point that says how tall it is, in metres (e.g. baumhoehe): the model is scaled to that height. Empty: the scale of the layer."/>
+                <details key="documentation" value="Steps on the points before they are drawn - filter, or extract a part of a field, e.g. the genus as the first word of a species (#1296). The shared transform of lib.datasource.base."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="0">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="size" eType="#//SizeEncoding" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The height in metres of a point without a height; 0: the scale of the layer."/>
+                <details key="documentation" value="How tall and how wide a model is, from fields of its point."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="widthProperty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="color" eType="#//ColorEncoding" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The property of a point that says how wide it is, in metres (e.g. Kronendurchmesser, the crown of a tree): the model is scaled across to that width. Empty: in proportion to the height."/>
+                <details key="documentation" value="The colour of the model, from a field of its point; the parts named in parts have their own."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1" eType="#//ModelRule" containment="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="modelBy" eType="#//ModelEncoding" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Which point gets which model and colour, by a property: the first rule that matches decides."/>
+                <details key="documentation" value="Which model file a point gets, by a field of its point. Without it, the file above."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1" eType="#//PartEncoding" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Meshes of the model that have colours of their own, e.g. the trunk of a tree."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>
 
-    <eClassifiers xsi:type="ecore:EClass" name="ModelRule">
+    <eClassifiers xsi:type="ecore:EClass" name="SizeEncoding">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A rule for the points of a model layer: a property and a pattern (x* starts with, *x ends with, *x* contains, no star is equal), and the model and colour a point that matches gets (#1282)."/>
+            <details key="documentation" value="The size of a model from fields of its point (#1296)."/>
         </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="property" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="height" eType="#//FieldEncoding" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The property of the point, e.g. gattung_deutsch."/>
+                <details key="documentation" value="How tall the model is, in metres; the model is scaled to it."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="width" eType="#//FieldEncoding" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The pattern its value is matched against, e.g. Linde or Ahorn*."/>
+                <details key="documentation" value="How wide the model is, in metres; the model is scaled across to it. Without it, across in proportion to the height."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="FieldEncoding">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A length from a field of a point, in the shape of a Vega encoding: the field, the unit of its values, a scale, and a value where the field has none (#1296)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The model file such a point gets. Empty: the model of the layer."/>
+                <details key="documentation" value="The field of the point. Empty: every point has the value below."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The unit of the field: m, cm, mm or km. Empty: the unit of its column type, else m."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="scaleType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="identity">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="identity: the value in metres as it is; linear: the domain below maps to the range below."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="domainMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="linear: the smallest value of the field."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="domainMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="linear: the largest value of the field."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="linear: the metres the smallest value gives."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="linear: the metres the largest value gives."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The metres where the field has no value; 0: the scale of the model."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ColorEncoding">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A colour from a field of a point (#1296): nominal, a colour per value; quantitative, a ramp from low to high over the domain."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The field of the point. Empty: every point has the colour below."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="nominal">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="nominal: a colour per value (mappings); quantitative: the ramp from lowColor to highColor."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1" eType="#//ColorMapping" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="nominal: which value gives which colour."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="domainMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="quantitative: the value of lowColor."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="domainMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" lowerBound="0" defaultValueLiteral="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="quantitative: the value of highColor."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="#c8e6c9">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="quantitative: the colour of the low end."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="highColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="#1b5e20">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="quantitative: the colour of the high end."/>
             </eAnnotations>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="The colour such a point gets, any CSS colour; the trunk (a mesh named trunk, stem, bark or cylinder) keeps its own. Empty: the colours of the model."/>
+                <details key="documentation" value="The colour where no value gives one. Empty: the colours of the file."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ModelEncoding">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Which model file a point gets, by a field of its point (#1296)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The field of the point."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1" eType="#//ModelMapping" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which value gives which file."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ModelMapping">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A value and the model file it gives."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The value of the field."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The model file."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="PartEncoding">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Meshes of a model with a colour of their own (#1296), e.g. the trunk of a tree; replaces names known to the code."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="mesh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Which meshes: a regular expression on their names (and the names of their materials), case ignored, e.g. trunk|stem|cylinder."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="color" eType="#//ColorEncoding" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour of these meshes."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>

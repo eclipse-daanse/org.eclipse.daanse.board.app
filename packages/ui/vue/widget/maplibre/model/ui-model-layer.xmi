@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A symbol layer (#1296), in the order its parts are decided: the layer, its data, the model, the encodings, its parts, the instances placed by hand.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ModelLayerForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer"/>
+
+  <components xsi:type="uimodel:FormView" name="ModelLayerFormView">
+    <fields xsi:type="uimodel:GroupWidget" name="layer" layout="VERTICAL" label="maplibre:Symbols.groups.layer">
+      <fields xsi:type="uimodel:InputWidget" name="name" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/name" label="maplibre:Symbols.ModelLayer.name"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="visible" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/visible" label="maplibre:Symbols.ModelLayer.visible"/>
+    </fields>
+    <fields xsi:type="uimodel:GroupWidget" name="data" layout="VERTICAL" label="maplibre:Symbols.groups.data">
+      <fields xsi:type="uimodel:ComboboxWidget" name="datasourceId" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/datasourceId" label="maplibre:Symbols.ModelLayer.datasourceId"/>
+      <fields xsi:type="uimodel:InputWidget" name="transforms" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/transforms" label="maplibre:Symbols.ModelLayer.transforms"/>
+    </fields>
+    <fields xsi:type="uimodel:GroupWidget" name="model" layout="VERTICAL" label="maplibre:Symbols.groups.model">
+      <fields xsi:type="uimodel:InputWidget" name="url" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/url" label="maplibre:Symbols.ModelLayer.url"/>
+      <fields xsi:type="uimodel:SelectWidget" name="format" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/format" label="maplibre:Symbols.ModelLayer.format">
+        <values></values>
+        <values>fbx</values>
+        <values>gltf</values>
+        <optionLabel language="JS" body="({ auto: 'maplibre:Symbols.options.format.auto', fbx: 'maplibre:Symbols.options.format.fbx', gltf: 'maplibre:Symbols.options.format.gltf' })[option || 'auto'] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:NumberWidget" name="scale" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/scale" label="maplibre:Symbols.ModelLayer.scale" step="0.01"/>
+      <fields xsi:type="uimodel:NumberWidget" name="rotation" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/rotation" label="maplibre:Symbols.ModelLayer.rotation" min="0" max="359" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget" name="altitudeOffset" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/altitudeOffset" label="maplibre:Symbols.ModelLayer.altitudeOffset" step="0.5"/>
+    </fields>
+    <fields xsi:type="uimodel:GroupWidget" name="encodings" layout="VERTICAL" label="maplibre:Symbols.groups.encodings">
+      <fields xsi:type="uimodel:InputWidget" name="size" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/size" label="maplibre:Symbols.ModelLayer.size"/>
+      <fields xsi:type="uimodel:InputWidget" name="color" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/color" label="maplibre:Symbols.ModelLayer.color"/>
+      <fields xsi:type="uimodel:InputWidget" name="modelBy" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/modelBy" label="maplibre:Symbols.ModelLayer.modelBy"/>
+    </fields>
+    <fields xsi:type="uimodel:GroupWidget" name="parts" layout="VERTICAL" label="maplibre:Symbols.groups.parts">
+      <fields xsi:type="uimodel:InputWidget" name="parts" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/parts" label="maplibre:Symbols.ModelLayer.parts"/>
+    </fields>
+    <fields xsi:type="uimodel:GroupWidget" name="instances" layout="VERTICAL" label="maplibre:Symbols.groups.instances">
+      <fields xsi:type="uimodel:InputWidget" name="instances" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelLayer/instances" label="maplibre:Symbols.ModelLayer.instances"/>
+    </fields>
+  </components>
+</uimodel:UIModel>

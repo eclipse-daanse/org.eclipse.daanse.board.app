@@ -20,77 +20,49 @@
 
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
-import type { ModelRule } from './ModelRule.js';
+import type { ModelMapping } from './ModelMapping.js';
 import { MaplibrePackage } from './MaplibrePackage.js';
 
 /**
- * Implementation of ModelRule
+ * Implementation of ModelMapping
  * @generated
  */
-export class ModelRuleImpl extends BasicEObject implements ModelRule {
+export class ModelMappingImpl extends BasicEObject implements ModelMapping {
   // Feature ID Constants (eLiterals)
-  static readonly PROPERTY: number = 0;
-  static readonly VALUE: number = 1;
-  static readonly URL: number = 2;
-  static readonly COLOR: number = 3;
+  static readonly CODE: number = 0;
+  static readonly URL: number = 1;
 
   // Private fields
-  private _property?: string;
-  private _value?: string;
-  private _url: string = "";
-  private _color: string = "";
+  private _code?: string;
+  private _url?: string;
 
   /**
    * Returns the EClass of this object
    */
   override eClass(): EClass {
-    return MaplibrePackage.Literals.MODEL_RULE;
+    return MaplibrePackage.Literals.MODEL_MAPPING;
   }
 
   // Getters and Setters
-  get property(): string {
-    return this._property!;
+  get code(): string {
+    return this._code!;
   }
 
-  set property(value: string) {
-    const oldValue = this._property;
-    this._property = value;
+  set code(value: string) {
+    const oldValue = this._code;
+    this._code = value;
     if (this.eDeliver()) {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelRuleImpl.PROPERTY),
+        getFeature: () => this.eClass().getEStructuralFeature(ModelMappingImpl.CODE),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => ModelRuleImpl.PROPERTY,
-        merge: () => false
-      });
-    }
-  }
-
-  get value(): string {
-    return this._value!;
-  }
-
-  set value(value: string) {
-    const oldValue = this._value;
-    this._value = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelRuleImpl.VALUE),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ModelRuleImpl.VALUE,
+        getFeatureID: () => ModelMappingImpl.CODE,
         merge: () => false
       });
     }
@@ -107,38 +79,14 @@ export class ModelRuleImpl extends BasicEObject implements ModelRule {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelRuleImpl.URL),
+        getFeature: () => this.eClass().getEStructuralFeature(ModelMappingImpl.URL),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => ModelRuleImpl.URL,
-        merge: () => false
-      });
-    }
-  }
-
-  get color(): string {
-    return this._color!;
-  }
-
-  set color(value: string) {
-    const oldValue = this._color;
-    this._color = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelRuleImpl.COLOR),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ModelRuleImpl.COLOR,
+        getFeatureID: () => ModelMappingImpl.URL,
         merge: () => false
       });
     }
@@ -152,14 +100,10 @@ export class ModelRuleImpl extends BasicEObject implements ModelRule {
   override eGet(feature: EStructuralFeature): unknown {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
-      case ModelRuleImpl.PROPERTY:
-        return this.property;
-      case ModelRuleImpl.VALUE:
-        return this.value;
-      case ModelRuleImpl.URL:
+      case ModelMappingImpl.CODE:
+        return this.code;
+      case ModelMappingImpl.URL:
         return this.url;
-      case ModelRuleImpl.COLOR:
-        return this.color;
       default:
         return super.eGet(feature);
     }
@@ -171,20 +115,12 @@ export class ModelRuleImpl extends BasicEObject implements ModelRule {
   override eSet(feature: EStructuralFeature, newValue: unknown): void {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
-      case ModelRuleImpl.PROPERTY:
-        this.property = newValue as string;
+      case ModelMappingImpl.CODE:
+        this.code = newValue as string;
         super.eSet(feature, newValue);
         break;
-      case ModelRuleImpl.VALUE:
-        this.value = newValue as string;
-        super.eSet(feature, newValue);
-        break;
-      case ModelRuleImpl.URL:
+      case ModelMappingImpl.URL:
         this.url = newValue as string;
-        super.eSet(feature, newValue);
-        break;
-      case ModelRuleImpl.COLOR:
-        this.color = newValue as string;
         super.eSet(feature, newValue);
         break;
       default:
@@ -198,14 +134,10 @@ export class ModelRuleImpl extends BasicEObject implements ModelRule {
   override eIsSet(feature: EStructuralFeature): boolean {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
-      case ModelRuleImpl.PROPERTY:
-        return this._property !== undefined;
-      case ModelRuleImpl.VALUE:
-        return this._value !== undefined;
-      case ModelRuleImpl.URL:
-        return this._url !== "";
-      case ModelRuleImpl.COLOR:
-        return this._color !== "";
+      case ModelMappingImpl.CODE:
+        return this._code !== undefined;
+      case ModelMappingImpl.URL:
+        return this._url !== undefined;
       default:
         return super.eIsSet(feature);
     }
@@ -217,17 +149,11 @@ export class ModelRuleImpl extends BasicEObject implements ModelRule {
   override eUnset(feature: EStructuralFeature): void {
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
-      case ModelRuleImpl.PROPERTY:
-        this._property = undefined;
+      case ModelMappingImpl.CODE:
+        this._code = undefined;
         return;
-      case ModelRuleImpl.VALUE:
-        this._value = undefined;
-        return;
-      case ModelRuleImpl.URL:
-        this._url = "";
-        return;
-      case ModelRuleImpl.COLOR:
-        this._color = "";
+      case ModelMappingImpl.URL:
+        this._url = undefined;
         return;
       default:
         super.eUnset(feature);
@@ -244,10 +170,8 @@ export class ModelRuleImpl extends BasicEObject implements ModelRule {
    */
   toJSON(): Record<string, unknown> {
     return {
-      property: this.property,
-      value: this.value,
+      code: this.code,
       url: this.url,
-      color: this.color,
     };
   }
 }

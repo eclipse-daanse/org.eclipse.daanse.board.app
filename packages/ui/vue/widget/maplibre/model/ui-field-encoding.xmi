@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A length from a field (#1296), as a Vega encoding: field, unit, scale, and a value where the field has none.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="FieldEncodingForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding"/>
+
+  <components xsi:type="uimodel:FormView" name="FieldEncodingFormView">
+    <fields xsi:type="uimodel:ComboboxWidget" name="field" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding/field" label="maplibre:Symbols.FieldEncoding.field"/>
+    <fields xsi:type="uimodel:SelectWidget" name="unit" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding/unit" label="maplibre:Symbols.FieldEncoding.unit">
+      <values></values>
+      <values>m</values>
+      <values>cm</values>
+      <values>mm</values>
+      <values>km</values>
+      <optionLabel language="JS" body="({ auto: 'maplibre:Symbols.options.unit.auto', m: 'maplibre:Symbols.options.unit.m', cm: 'maplibre:Symbols.options.unit.cm', mm: 'maplibre:Symbols.options.unit.mm', km: 'maplibre:Symbols.options.unit.km' })[option || 'auto'] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget" name="scaleType" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding/scaleType" label="maplibre:Symbols.FieldEncoding.scaleType">
+      <values>identity</values>
+      <values>linear</values>
+      <optionLabel language="JS" body="({ identity: 'maplibre:Symbols.options.scaleType.identity', linear: 'maplibre:Symbols.options.scaleType.linear' })[option || 'auto'] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="domainMin" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding/domainMin" label="maplibre:Symbols.FieldEncoding.domainMin">
+      <visibilityCondition language="JS" body="self.scaleType === 'linear'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="domainMax" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding/domainMax" label="maplibre:Symbols.FieldEncoding.domainMax">
+      <visibilityCondition language="JS" body="self.scaleType === 'linear'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="rangeMin" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding/rangeMin" label="maplibre:Symbols.FieldEncoding.rangeMin">
+      <visibilityCondition language="JS" body="self.scaleType === 'linear'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="rangeMax" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding/rangeMax" label="maplibre:Symbols.FieldEncoding.rangeMax">
+      <visibilityCondition language="JS" body="self.scaleType === 'linear'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="value" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//FieldEncoding/value" label="maplibre:Symbols.FieldEncoding.value" min="0" step="0.5"/>
+  </components>
+</uimodel:UIModel>

@@ -81,45 +81,114 @@
     "geoJson": "GeoJSON (eingetragen, vor der Adresse)",
     "heightProperty": "Eigenschaft mit der Höhe",
     "models": {
-      "none": "Noch kein 3D-Modell.",
-      "url": "Modelldatei (FBX, glTF, GLB)",
       "urlHint": "Der Server der Datei muss dem Board das Lesen erlauben (CORS).",
-      "format": "Format",
-      "formats": {
-        "auto": "Nach der Endung der Adresse"
-      },
-      "scale": "Meter je Einheit des Modells",
-      "scaleHint": "Die meisten FBX-Dateien sind in Zentimetern: 0,01.",
-      "rotation": "Drehung (im Uhrzeigersinn von Norden)",
-      "altitudeOffset": "Höhe über dem Boden (m)",
       "place": "Auf der Karte platzieren",
       "placing": "Platzieren - hier klicken zum Beenden",
       "placeHint": "In der Vorschau: ein Klick setzt das Modell, Ziehen verschiebt es, ein Rechtsklick entfernt es.",
-      "count": "{{count}} platziert",
-      "instanceScale": "Größe",
-      "newLayer": "Bäume",
       "loading": "Wird geladen …",
       "ready": "Das Modell ist geladen.",
       "errors": {
         "blocked": "Die Datei kann nicht gelesen werden: Der Server erlaubt es nicht (kein CORS-Header) oder ist nicht erreichbar.",
         "http": "Der Server antwortete mit einem Fehler ({{status}}).",
         "format": "Die Datei ist kein Modell in diesem Format."
+      }
+    }
+  },
+  "Symbols": {
+    "groups": {
+      "layer": "Layer",
+      "data": "Daten",
+      "model": "Modelldatei",
+      "encodings": "Kodierungen",
+      "parts": "Teile des Modells",
+      "instances": "Von Hand gesetzt"
+    },
+    "MapLibreSettings": {
+      "modelLayers": "Symbol-Layer"
+    },
+    "ModelLayer": {
+      "name": "Name",
+      "visible": "Sichtbar",
+      "datasourceId": "Datenquelle der Punkte",
+      "transforms": "Schritte auf den Punkten (filtern, herausnehmen)",
+      "url": "Modelldatei (FBX, glTF, GLB)",
+      "format": "Format",
+      "scale": "Meter je Einheit des Modells (FBX in cm: 0,01)",
+      "rotation": "Drehung (im Uhrzeigersinn von Norden)",
+      "altitudeOffset": "Höhe über dem Boden (m)",
+      "size": "Größe",
+      "color": "Farbe",
+      "modelBy": "Modell nach Wert",
+      "parts": "Teile",
+      "instances": "Instanzen"
+    },
+    "SizeEncoding": {
+      "height": "Höhe",
+      "width": "Breite"
+    },
+    "FieldEncoding": {
+      "field": "Feld",
+      "unit": "Einheit des Feldes",
+      "scaleType": "Skala",
+      "domainMin": "Kleinster Wert",
+      "domainMax": "Größter Wert",
+      "rangeMin": "Meter des kleinsten Werts",
+      "rangeMax": "Meter des größten Werts",
+      "value": "Meter ohne Wert (0: der Maßstab)"
+    },
+    "ColorEncoding": {
+      "field": "Feld",
+      "type": "Art",
+      "mappings": "Farbe je Wert",
+      "domainMin": "Wert der unteren Farbe",
+      "domainMax": "Wert der oberen Farbe",
+      "lowColor": "Untere Farbe",
+      "highColor": "Obere Farbe",
+      "color": "Farbe ohne Wert (leer: aus der Datei)"
+    },
+    "ColorMapping": {
+      "code": "Wert",
+      "color": "Farbe"
+    },
+    "ModelEncoding": {
+      "field": "Feld",
+      "mappings": "Modelldatei je Wert"
+    },
+    "ModelMapping": {
+      "code": "Wert",
+      "url": "Modelldatei"
+    },
+    "PartEncoding": {
+      "mesh": "Meshes (regulärer Ausdruck auf ihre Namen, z. B. trunk|cylinder)",
+      "color": "Farbe"
+    },
+    "ModelInstance": {
+      "lat": "Breite",
+      "lon": "Länge",
+      "scale": "Größe",
+      "rotation": "Drehung"
+    },
+    "options": {
+      "format": {
+        "auto": "Nach der Endung der Adresse",
+        "fbx": "FBX",
+        "gltf": "glTF / GLB"
       },
-      "datasource": "Auf die Punkte einer Datenquelle stellen",
-      "datasourceHint": "Z. B. ein WFS-Baumkataster: ein Modell an jedem Punkt, neben den von Hand gesetzten.",
-      "noDatasource": "Keine - nur die von Hand gesetzten",
-      "heightProperty": "Eigenschaft mit der Höhe (m)",
-      "heightPropertyHint": "Das Modell wird auf sie skaliert. Leer: der Maßstab oben.",
-      "defaultHeight": "Höhe ohne Wert (m, 0: der Maßstab oben)",
-      "ruleProperty": "Eigenschaft",
-      "ruleValue": "Wert (x* beginnt mit)",
-      "addRule": "Regel hinzufügen",
-      "ruleUrl": "Modelldatei",
-      "ruleUrlHint": "leer: das Modell oben",
-      "widthProperty": "Eigenschaft mit der Breite (m)",
-      "widthPropertyHint": "Z. B. der Kronendurchmesser. Leer: im Verhältnis zur Höhe.",
-      "color": "Farbe des Modells (leer: aus der Datei)",
-      "trunkColor": "Farbe des Stamms (leer: aus der Datei)"
+      "scaleType": {
+        "identity": "Der Wert in Metern",
+        "linear": "Linear von einem Bereich auf Meter"
+      },
+      "type": {
+        "nominal": "Eine Farbe je Wert",
+        "quantitative": "Ein Verlauf über einen Bereich"
+      },
+      "unit": {
+        "auto": "Aus dem Spaltentyp, sonst m",
+        "m": "m",
+        "cm": "cm",
+        "mm": "mm",
+        "km": "km"
+      }
     }
   }
 }

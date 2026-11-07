@@ -35,8 +35,18 @@ import { WmsLayer } from './WmsLayer.js';
 import { WmsLayerImpl } from './WmsLayerImpl.js';
 import { ModelLayer } from './ModelLayer.js';
 import { ModelLayerImpl } from './ModelLayerImpl.js';
-import { ModelRule } from './ModelRule.js';
-import { ModelRuleImpl } from './ModelRuleImpl.js';
+import { SizeEncoding } from './SizeEncoding.js';
+import { SizeEncodingImpl } from './SizeEncodingImpl.js';
+import { FieldEncoding } from './FieldEncoding.js';
+import { FieldEncodingImpl } from './FieldEncodingImpl.js';
+import { ColorEncoding } from './ColorEncoding.js';
+import { ColorEncodingImpl } from './ColorEncodingImpl.js';
+import { ModelEncoding } from './ModelEncoding.js';
+import { ModelEncodingImpl } from './ModelEncodingImpl.js';
+import { ModelMapping } from './ModelMapping.js';
+import { ModelMappingImpl } from './ModelMappingImpl.js';
+import { PartEncoding } from './PartEncoding.js';
+import { PartEncodingImpl } from './PartEncodingImpl.js';
 import { ModelInstance } from './ModelInstance.js';
 import { ModelInstanceImpl } from './ModelInstanceImpl.js';
 import { MapClickPayload } from './MapClickPayload.js';
@@ -116,10 +126,45 @@ export class MaplibreFactory extends BasicEFactory {
   }
 
   /**
-   * Create a new ModelRule instance
+   * Create a new SizeEncoding instance
    */
-  createModelRule(): ModelRule {
-    return new ModelRuleImpl();
+  createSizeEncoding(): SizeEncoding {
+    return new SizeEncodingImpl();
+  }
+
+  /**
+   * Create a new FieldEncoding instance
+   */
+  createFieldEncoding(): FieldEncoding {
+    return new FieldEncodingImpl();
+  }
+
+  /**
+   * Create a new ColorEncoding instance
+   */
+  createColorEncoding(): ColorEncoding {
+    return new ColorEncodingImpl();
+  }
+
+  /**
+   * Create a new ModelEncoding instance
+   */
+  createModelEncoding(): ModelEncoding {
+    return new ModelEncodingImpl();
+  }
+
+  /**
+   * Create a new ModelMapping instance
+   */
+  createModelMapping(): ModelMapping {
+    return new ModelMappingImpl();
+  }
+
+  /**
+   * Create a new PartEncoding instance
+   */
+  createPartEncoding(): PartEncoding {
+    return new PartEncodingImpl();
   }
 
   /**
@@ -169,8 +214,18 @@ export class MaplibreFactory extends BasicEFactory {
         return this.createWmsLayer();
       case 'ModelLayer':
         return this.createModelLayer();
-      case 'ModelRule':
-        return this.createModelRule();
+      case 'SizeEncoding':
+        return this.createSizeEncoding();
+      case 'FieldEncoding':
+        return this.createFieldEncoding();
+      case 'ColorEncoding':
+        return this.createColorEncoding();
+      case 'ModelEncoding':
+        return this.createModelEncoding();
+      case 'ModelMapping':
+        return this.createModelMapping();
+      case 'PartEncoding':
+        return this.createPartEncoding();
       case 'ModelInstance':
         return this.createModelInstance();
       case 'MapClickPayload':

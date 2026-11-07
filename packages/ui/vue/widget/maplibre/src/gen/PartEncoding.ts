@@ -19,15 +19,14 @@
  */
 
 import type { EObject } from '@emfts/core';
+import type { ColorEncoding } from './ColorEncoding.js';
 
 /**
- * ModelRule
+ * PartEncoding
  * @generated
  */
-export interface ModelRule extends EObject {
-  property?: string;
-  value?: string;
-  url?: string;
-  color?: string;
+export interface PartEncoding extends EObject {
+  mesh?: string;
+  color?: ColorEncoding;
 
 }

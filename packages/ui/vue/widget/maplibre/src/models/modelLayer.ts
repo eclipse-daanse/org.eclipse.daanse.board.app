@@ -25,6 +25,7 @@
 
 import type { CustomLayerInterface, CustomRenderMethodInput, Map as MapLibreMap } from 'maplibre-gl'
 import { loadModel } from './modelLoader'
+import { inPart, type PartEncodingLike } from './encodings'
 import { originOf, placementsOf, type Origin, type PlacedLayer, type InstancePlacement } from './placement'
 
 export const MODELS_ID = 'daanse:models'
@@ -35,9 +36,8 @@ export interface DrawnModelLayer extends PlacedLayer {
   visible?: boolean
   url?: string
   format?: string
-  /** The colour where no rule gives one, and of the trunk (#1282). */
-  color?: string
-  trunkColor?: string
+  /** The parts of the model with colours of their own (#1296). */
+  parts?: PartEncodingLike[]
 }
 
 /** The custom layer, and how the widget hands it the model layers. */
@@ -50,12 +50,7 @@ export interface ModelCustomLayer extends CustomLayerInterface {
  * turned about the vertical and scaled in the frame, the model lifted so
  * that its lowest point is on the ground.
  */
-export function instancedOf(
-  THREE: any,
-  source: any,
-  placements: InstancePlacement[],
-  look: { color?: string; trunkColor?: string } = {},
-): any {
+export function instancedOf(THREE: any, source: any, placements: InstancePlacement[], parts: PartEncodingLike[] = []): any {
   const group = new THREE.Group()
   source.updateMatrixWorld(true)
   const box = new THREE.Box3().setFromObject(source)
@@ -70,14 +65,14 @@ export function instancedOf(
   const ground = new THREE.Matrix4().makeTranslation(0, lift, 0)
   const tall = Number.isFinite(box.max.y - box.min.y) ? box.max.y - box.min.y : 0
   const wide = Math.max(box.max.x - box.min.x, box.max.z - box.min.z)
-  const tinted = !!look.color || placements.some((placement) => !!placement.color)
   for (const mesh of meshes) {
-    // A rule's colour, or the layer's, paints the model; the trunk takes its own (#1282).
-    const trunk = TRUNK.test(`${mesh.name ?? ''} ${materialNames(mesh)}`)
-    const paint = tinted && !trunk
-    const material = paint ? whiteCopyOf(mesh.material) : trunk && look.trunkColor ? colouredCopyOf(mesh.material, look.trunkColor) : mesh.material
+    // The part a mesh belongs to: the first whose pattern its names match (#1296).
+    const part = parts.findIndex((each) => inPart(each, `${mesh.name ?? ''} ${materialNames(mesh)}`))
+    const colorFor = (placement: InstancePlacement) => (part >= 0 ? placement.partColors?.[part] : placement.color)
+    const paint = placements.some((placement) => !!colorFor(placement))
+    const material = paint ? whiteCopyOf(mesh.material) : mesh.material
     const instanced = new THREE.InstancedMesh(mesh.geometry, material, placements.length)
-    const own = new THREE.Color(look.color || firstColorOf(mesh.material))
+    const own = new THREE.Color(firstColorOf(mesh.material))
     placements.forEach((placement, index) => {
       at.makeTranslation(...placement.position)
       turn.makeRotationY(placement.rotation)
@@ -86,7 +81,10 @@ export function instancedOf(
       // A width in metres scales across; without one, across as up.
       const across = placement.width && wide > 0 ? placement.width / wide : factor
       size.makeScale(across, factor, across)
-      if (paint) instanced.setColorAt(index, placement.color ? new THREE.Color(placement.color) : own)
+      if (paint) {
+        const color = colorFor(placement)
+        instanced.setColorAt(index, color ? new THREE.Color(color) : own)
+      }
       const matrix = new THREE.Matrix4().multiplyMatrices(at, turn).multiply(size).multiply(ground).multiply(mesh.matrixWorld)
       instanced.setMatrixAt(index, matrix)
     })
@@ -98,24 +96,11 @@ export function instancedOf(
   return group
 }
 
-/** A mesh that is the trunk of a tree keeps its colour under a rule's colour. */
-const TRUNK = /trunk|stem|bark|cylinder|stamm|rinde/i
-
 const materialNames = (mesh: any) =>
   (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map((m: any) => m?.name ?? '').join(' ')
 
 /** The colour a mesh is drawn in, to keep for an instance without a rule colour. */
 const firstColorOf = (material: any) => (Array.isArray(material) ? material[0] : material)?.color?.getHex?.() ?? 0xffffff
-
-/** The material in a colour, for a trunk. */
-function colouredCopyOf(material: any, color: string): any {
-  const copy = (one: any) => {
-    const made = one?.clone?.() ?? one
-    made?.color?.set?.(color)
-    return made
-  }
-  return Array.isArray(material) ? material.map(copy) : copy(material)
-}
 
 /** The material in white, so that an instance colour shows as itself, not darkened by the model's. */
 function whiteCopyOf(material: any): any {
@@ -167,7 +152,7 @@ export function createModelLayer(): ModelCustomLayer {
         }
         if (run !== generation) return
         const placements = placementsOf(layer, nextOrigin)
-        if (placements.length) next.add(instancedOf(THREE, source, placements, { color: layer.color, trunkColor: layer.trunkColor }))
+        if (placements.length) next.add(instancedOf(THREE, source, placements, layer.parts ?? []))
       }
     }
     if (run !== generation) return
