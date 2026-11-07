@@ -18,7 +18,7 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { TopLevelSpec } from 'vega-lite'
-import { drawChart, refusingLoader, replaceData, restoreSignals, signalsOf, UrlRefusedError } from '../embedChart'
+import { drawChart, fitTo, refusingLoader, replaceData, restoreSignals, signalsOf, UrlRefusedError } from '../embedChart'
 import { compileRecipe } from '../recipe'
 import { sampleDatasets, withDatasets } from '../sample'
 import { modelledSettings } from '../settingsModel'
@@ -134,6 +134,43 @@ describe('replaceData and the size', () => {
       const bounds = (chart.view.scenegraph() as unknown as { root: { bounds: { x1: number; x2: number; y1: number; y2: number } } }).root.bounds
       expect(bounds.x2 - bounds.x1).toBeLessThanOrEqual(400)
       expect(bounds.y2 - bounds.y1).toBeLessThanOrEqual(240)
+    } finally {
+      chart.finalize()
+    }
+  })
+})
+
+describe('fitTo', () => {
+  const layered = {
+    width: 300,
+    height: 200,
+    autosize: { type: 'fit', contains: 'padding' },
+    datasets: { table: Array.from({ length: 24 }, (_, i) => ({ t: `2026-11-0${(i % 9) + 1}T10:00:00Z`, v: i, w: i % 3 })) },
+    resolve: { scale: { y: 'independent' } },
+    layer: [
+      { data: { name: 'table' }, mark: 'line', encoding: { x: { field: 't', type: 'temporal' }, y: { field: 'v', type: 'quantitative' } } },
+      { data: { name: 'table' }, mark: 'bar', encoding: { x: { field: 't', type: 'temporal' }, y: { field: 'w', type: 'quantitative', axis: { orient: 'right' } } } },
+    ],
+  } as unknown as TopLevelSpec
+
+  it('lays a two-layer chart out inside the new size (#1305)', async () => {
+    const chart = await drawChart(host(), layered, { renderer: 'svg' })
+    try {
+      await fitTo(chart.view, 400, 240)
+      const { bounds } = (chart.view.scenegraph() as unknown as { root: { bounds: { x1: number; x2: number; y1: number; y2: number } } }).root
+      expect(bounds.x2 - bounds.x1).toBeLessThanOrEqual(400)
+      expect(bounds.y2 - bounds.y1).toBeLessThanOrEqual(240)
+    } finally {
+      chart.finalize()
+    }
+  })
+
+  it('lays the chart out again at the size it has - for text that changed, not the frame', async () => {
+    const chart = await drawChart(host(), layered, { renderer: 'svg' })
+    try {
+      const resize = vi.spyOn(chart.view, 'resize')
+      await fitTo(chart.view, 300, 200)
+      expect(resize).toHaveBeenCalled()
     } finally {
       chart.finalize()
     }
