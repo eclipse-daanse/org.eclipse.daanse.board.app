@@ -190,5 +190,72 @@
         "km": "km"
       }
     }
+  },
+  "Hints": {
+    "MapLibreSettings": {
+      "modelLayers": "Symbol layers of the map: a 3D model at every point of a data source, or placed by hand."
+    },
+    "ColorMapping": {
+      "code": "The value as the field or the datastream gives it, e.g. RED.",
+      "color": "The colour it gives, any CSS colour."
+    },
+    "ModelLayer": {
+      "name": "Name of the layer, as a user knows it.",
+      "visible": "Whether the layer is drawn.",
+      "url": "Address of the model file. The server must allow the board to read it (CORS).",
+      "format": "The format of the file: fbx, gltf (also glb), or empty to tell it by the ending of the address.",
+      "scale": "Metres per unit of the model. A file in centimetres (most FBX files) takes 0.01.",
+      "rotation": "Rotation of the model around the vertical, in degrees clockwise from north.",
+      "altitudeOffset": "Height above the ground, in metres.",
+      "instances": "Where the model stands.",
+      "datasourceId": "A data source of points (e.g. a WFS tree cadastre): a model stands at every point, besides the instances placed by hand. Empty: only those.",
+      "transforms": "Steps on the points before they are drawn - filter, or extract a part of a field, e.g. the genus as the first word of a species.",
+      "size": "How tall and how wide a model is, from fields of its point.",
+      "color": "The colour of the model, from a field of its point; the parts named in parts have their own.",
+      "modelBy": "Which model file a point gets, by a field of its point. Without it, the file above.",
+      "parts": "Meshes of the model that have colours of their own, e.g. the trunk of a tree."
+    },
+    "SizeEncoding": {
+      "height": "How tall the model is, in metres; the model is scaled to it.",
+      "width": "How wide the model is, in metres; the model is scaled across to it. Without it, across in proportion to the height."
+    },
+    "FieldEncoding": {
+      "field": "The field of the point. Empty: every point has the value below.",
+      "unit": "The unit of the field: m, cm, mm or km. Empty: the unit of its column type, else m.",
+      "scaleType": "identity: the value in metres as it is; linear: the domain below maps to the range below.",
+      "domainMin": "linear: the smallest value of the field.",
+      "domainMax": "linear: the largest value of the field.",
+      "rangeMin": "linear: the metres the smallest value gives.",
+      "rangeMax": "linear: the metres the largest value gives.",
+      "value": "The metres where the field has no value; 0: the scale of the model."
+    },
+    "ColorEncoding": {
+      "field": "The field of the point. Empty: every point has the colour below.",
+      "type": "nominal: a colour per value (mappings); quantitative: the ramp from lowColor to highColor.",
+      "mappings": "nominal: which value gives which colour.",
+      "domainMin": "quantitative: the value of lowColor.",
+      "domainMax": "quantitative: the value of highColor.",
+      "lowColor": "quantitative: the colour of the low end.",
+      "highColor": "quantitative: the colour of the high end.",
+      "color": "The colour where no value gives one. Empty: the colours of the file."
+    },
+    "ModelEncoding": {
+      "field": "The field of the point.",
+      "mappings": "Which value gives which file."
+    },
+    "ModelMapping": {
+      "code": "The value of the field.",
+      "url": "The model file."
+    },
+    "PartEncoding": {
+      "mesh": "Which meshes: a regular expression on their names (and the names of their materials), case ignored, e.g. trunk|stem|cylinder.",
+      "color": "The colour of these meshes."
+    },
+    "ModelInstance": {
+      "lon": "Longitude.",
+      "lat": "Latitude.",
+      "scale": "Size of this one, as a factor on the scale of the layer.",
+      "rotation": "Rotation of this one, in degrees, added to the rotation of the layer."
+    }
   }
 }
