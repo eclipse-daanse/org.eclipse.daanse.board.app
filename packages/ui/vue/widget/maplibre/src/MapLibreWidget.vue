@@ -381,10 +381,14 @@ onMounted(() => {
     styleReady = true
     applyAdditions()
   })
-  // A pin in a colour not drawn yet is made when the map first asks for it (#1273).
-  map.on('styleimagemissing', (event: { id: string }) => {
-    if (!map || !event.id.startsWith(PIN_PREFIX) || map.hasImage(event.id)) return
-    map.addImage(event.id, pinImage(event.id.slice(PIN_PREFIX.length)), { pixelRatio: PIN_PIXEL_RATIO })
+  /*
+   * A pin in a colour not drawn yet is made when the map first asks for it
+   * (#1273). A resolver, not the styleimagemissing event: since MapLibre 6
+   * an image added from the event comes too late for the tile that asked.
+   */
+  map.setMissingStyleImageResolver((id: string) => {
+    if (!map || !id.startsWith(PIN_PREFIX) || map.hasImage(id)) return
+    map.addImage(id, pinImage(id.slice(PIN_PREFIX.length)), { pixelRatio: PIN_PIXEL_RATIO })
   })
   map.on('click', onClick)
   map.on('mousemove', onMove)
