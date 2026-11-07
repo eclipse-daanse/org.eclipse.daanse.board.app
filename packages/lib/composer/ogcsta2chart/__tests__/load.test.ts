@@ -193,4 +193,19 @@ describe('a chart on an OGC STA source', () => {
     await composer.getData('TimeCoverage', { buckets })
     expect(server.requests.filter((r) => r.includes('$count=true'))).toEqual([])
   })
+
+  it('asks again for a bucket that ended less than a day ago, as late values still arrive (#1293)', async () => {
+    const { server, composer } = setup()
+    const end = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+    const start = new Date(Date.now() - 13 * 60 * 60 * 1000).toISOString()
+    const buckets = [{ start, end }]
+
+    await composer.getData('TimeCoverage', { buckets })
+    server.reset()
+    clearSharedCache()
+    await composer.getData('TimeCoverage', { buckets })
+
+    expect(server.requests.filter((r) => r.includes('$count=true'))).toHaveLength(2)
+  })
 })
+

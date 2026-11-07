@@ -17,11 +17,14 @@ import { defineComponent, h, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { identifier as datasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import {
-  bandsFromBins, binTimes, combineSeries, coverageBuckets, mergeIntervals, placeBands,
+  bandsFromBins, binTimes, combineSeries, coverageBuckets, densityOpacity, mergeIntervals, placeBands, splitAtRange,
   seriesFromChartData, seriesFromDataTable, seriesFromTimeCoverage, toMs, useTimeCoverage,
 } from '../coverage'
 
 const ms = (iso: string) => Date.parse(iso)
+/** A local time, as the axis and its buckets count. */
+const local = (month: number, day: number, hour = 0) => new Date(2026, month - 1, day, hour).getTime()
+const iso = (month: number, day: number, hour = 0) => new Date(local(month, day, hour)).toISOString()
 
 describe('mergeIntervals', () => {
   it('joins overlapping and touching intervals and sorts them', () => {
@@ -120,13 +123,13 @@ describe('useTimeCoverage', () => {
     // removeAllDatastreams: nothing selected for a moment
     answer.value = { series: [] }
     source.notify()
-    await vi.advanceTimersByTimeAsync(500)
+    await vi.advanceTimersByTimeAsync(1000)
     expect(bands()).toHaveLength(1)
 
     // addDatastreamsByName: the new sensor's datastreams
     answer.value = coverageOf('2026-08-01T00:00:00Z', '2026-08-03T00:00:00Z')
     source.notify()
-    await vi.advanceTimersByTimeAsync(500)
+    await vi.advanceTimersByTimeAsync(1000)
     expect(bands()).toEqual([{ startMs: ms('2026-08-01T00:00:00Z'), endMs: ms('2026-08-03T00:00:00Z') }])
 
     // And a source that stays empty is shown empty after the grace
@@ -153,24 +156,42 @@ describe('useTimeCoverage', () => {
   })
 })
 
-describe('buckets (#1280)', () => {
-  it('lies on whole multiples of the bucket size, so the same axis asks the same buckets', () => {
-    const min = ms('2026-10-13T06:48:15Z')
-    const max = ms('2026-11-06T07:48:15Z')
+describe('buckets (#1280, #1293)', () => {
+  it('lies on local time, as the day ticks do, and the same axis asks the same buckets', () => {
+    const min = new Date(2026, 9, 13, 6, 48, 15).getTime()
+    const max = new Date(2026, 10, 6, 7, 48, 15).getTime()
     const buckets = coverageBuckets(min, max, 40)
     expect(buckets.length).toBeLessThanOrEqual(40)
-    expect(buckets[0].start).toBe('2026-10-13T00:00:00.000Z')
+    for (const bucket of buckets) {
+      const start = new Date(bucket.start)
+      expect(start.getMinutes()).toBe(0)
+      // 24 days in at most 40 buckets: whole local days
+      expect(start.getHours()).toBe(0)
+    }
+    expect(Date.parse(buckets[0].start)).toBeLessThanOrEqual(min)
     expect(Date.parse(buckets[buckets.length - 1].end)).toBeGreaterThanOrEqual(max)
     expect(coverageBuckets(min + 60_000, max + 60_000, 40)).toEqual(buckets)
   })
 
+  it('counts hours from local midnight', () => {
+    const buckets = coverageBuckets(local(10, 1, 7), local(10, 3, 7), 10)
+    expect(buckets.every((bucket) => new Date(bucket.start).getHours() % 6 === 0)).toBe(true)
+    expect(new Date(buckets[0].start).getHours()).toBe(6)
+  })
+
+  it('keeps a day whole across a clock change', () => {
+    // Summer time ends in the night to 25 October 2026 in Central Europe; elsewhere nothing changes
+    const buckets = coverageBuckets(local(10, 20), local(10, 30), 12)
+    expect(buckets.every((bucket) => new Date(bucket.start).getHours() === 0)).toBe(true)
+  })
+
   it('counts times into buckets and makes bands of the buckets with values', () => {
-    const buckets = coverageBuckets(ms('2026-10-01T00:00:00Z'), ms('2026-10-05T00:00:00Z'), 4)
-    const bins = binTimes([ms('2026-10-01T05:00:00Z'), ms('2026-10-01T06:00:00Z'), ms('2026-10-04T01:00:00Z'), ms('2027-01-01T00:00:00Z')], buckets)
+    const buckets = coverageBuckets(local(10, 1), local(10, 5), 4)
+    const bins = binTimes([local(10, 1, 5), local(10, 1, 6), local(10, 4, 1), local(12, 31)], buckets)
     expect(bins).toEqual([2, 0, 0, 1])
     expect(bandsFromBins(bins, buckets)).toEqual([
-      { startMs: ms('2026-10-01T00:00:00Z'), endMs: ms('2026-10-02T00:00:00Z') },
-      { startMs: ms('2026-10-04T00:00:00Z'), endMs: ms('2026-10-05T00:00:00Z') },
+      { startMs: local(10, 1), endMs: local(10, 2) },
+      { startMs: local(10, 4), endMs: local(10, 5) },
     ])
   })
 
@@ -183,12 +204,34 @@ describe('buckets (#1280)', () => {
   })
 })
 
+describe('the scale and the range (#1293)', () => {
+  it('leaves an empty bucket empty and shows every other one clearly', () => {
+    expect(densityOpacity(0, 14)).toBe(0)
+    expect(densityOpacity(1, 14)).toBeGreaterThanOrEqual(0.5)
+    expect(densityOpacity(4, 14)).toBeGreaterThan(0.7)
+    expect(densityOpacity(14, 14)).toBe(1)
+    expect(densityOpacity(3, 3)).toBe(1)
+    expect(densityOpacity(1, 1)).toBe(1)
+  })
+
+  it('splits cells at the edges of the selected range', () => {
+    const parts = splitAtRange([{ startMs: 0, endMs: 100, count: 3 }, { startMs: 100, endMs: 120, count: 1 }], 50, 110)
+    expect(parts.map(({ startMs, endMs, inRange, count }) => [startMs, endMs, inRange, count])).toEqual([
+      [0, 50, false, 3],
+      [50, 100, true, 3],
+      [100, 110, true, 1],
+      [110, 120, false, 1],
+    ])
+    expect(splitAtRange([{ startMs: 200, endMs: 300 }], 50, 110)[0].inRange).toBe(false)
+  })
+})
+
 describe('generic sources (#1280)', () => {
-  const buckets = coverageBuckets(ms('2026-10-01T00:00:00Z'), ms('2026-10-05T00:00:00Z'), 4)
+  const buckets = coverageBuckets(local(10, 1), local(10, 5), 4)
 
   it('takes a chart\'s labels where each dataset has a value, one series per dataset', () => {
     const chart = {
-      labels: ['2026-10-01T10:00:00Z', '2026-10-02T10:00:00Z', '2026-10-04T10:00:00Z'],
+      labels: [iso(10, 1, 10), iso(10, 2, 10), iso(10, 4, 10)],
       datasets: [
         { label: 'pF 1', borderColor: '#9966FF', data: [1, null, 3] },
         { label: 'pF 2', data: [null, 2, null] },
@@ -202,15 +245,15 @@ describe('generic sources (#1280)', () => {
   })
 
   it('takes a table\'s time column, from rows or from items', () => {
-    const table = { headers: ['index', 'zeit'], rows: [[0, '2026-10-01T01:00:00Z'], [1, '2026-10-03T01:00:00Z']] }
+    const table = { headers: ['index', 'zeit'], rows: [[0, iso(10, 1, 1)], [1, iso(10, 3, 1)]] }
     expect(seriesFromDataTable('t', table, 'zeit', buckets)[0].bins).toEqual([1, 0, 1, 0])
-    const items = { headers: ['zeit'], items: [{ zeit: '2026-10-02T01:00:00Z' }], rows: [] }
+    const items = { headers: ['zeit'], items: [{ zeit: iso(10, 2, 1) }], rows: [] }
     expect(seriesFromDataTable('t', items, 'zeit', buckets)[0].bins).toEqual([0, 1, 0, 0])
     expect(seriesFromDataTable('t', table, 'missing', buckets)[0].bands).toEqual([])
   })
 
   it('prefers the counted buckets of a coverage over its outer interval', () => {
-    const answer = { series: [{ id: 'a', intervals: [{ start: '2026-10-01T00:00:00Z', end: '2026-10-05T00:00:00Z' }], bins: [3, 0, 0, 1] }] }
+    const answer = { series: [{ id: 'a', intervals: [{ start: iso(10, 1, 0), end: iso(10, 5, 0) }], bins: [3, 0, 0, 1] }] }
     expect(seriesFromTimeCoverage(answer, buckets)[0].bands).toHaveLength(2)
     expect(seriesFromTimeCoverage(answer, [])[0].bands).toHaveLength(1)
   })
@@ -227,7 +270,7 @@ describe('generic sources (#1280)', () => {
 describe('useTimeCoverage with a style and generic sources (#1280)', () => {
   beforeEach(() => vi.useFakeTimers())
   afterEach(() => vi.useRealTimers())
-  const buckets = coverageBuckets(ms('2026-10-01T00:00:00Z'), ms('2026-10-05T00:00:00Z'), 4)
+  const buckets = coverageBuckets(local(10, 1), local(10, 5), 4)
 
   it('asks for counts per bucket only when the density is shown', async () => {
     const source = fakeSource({ value: { series: [] } })
@@ -241,22 +284,44 @@ describe('useTimeCoverage with a style and generic sources (#1280)', () => {
   })
 
   it('reads a chart source and a table source with its time column', async () => {
-    const chart = fakeSource({ value: { labels: ['2026-10-02T10:00:00Z'], datasets: [{ label: 'x', data: [1] }] } })
+    const chart = fakeSource({ value: { labels: [iso(10, 2, 10)], datasets: [{ label: 'x', data: [1] }] } })
     const fromChart = mountWith(chart, ref(['c']), { answers: ['ChartData', 'DataTable'], buckets })
     await vi.runAllTimersAsync()
     expect(chart.getData).toHaveBeenCalledWith('ChartData', expect.anything())
-    expect(fromChart.bands()).toEqual([{ startMs: ms('2026-10-02T00:00:00Z'), endMs: ms('2026-10-03T00:00:00Z') }])
+    expect(fromChart.bands()).toEqual([{ startMs: local(10, 2), endMs: local(10, 3) }])
 
-    const table = fakeSource({ value: { headers: ['t'], rows: [['2026-10-04T10:00:00Z']] } })
+    const table = fakeSource({ value: { headers: ['t'], rows: [[iso(10, 4, 10)]] } })
     const fromTable = mountWith(table, ref(['t']), { answers: ['DataTable'], timeField: 't', buckets })
     await vi.runAllTimersAsync()
-    expect(fromTable.bands()).toEqual([{ startMs: ms('2026-10-04T00:00:00Z'), endMs: ms('2026-10-05T00:00:00Z') }])
+    expect(fromTable.bands()).toEqual([{ startMs: local(10, 4), endMs: local(10, 5) }])
 
     // Without a time column a table says nothing
-    const silent = fakeSource({ value: { headers: ['t'], rows: [['2026-10-04T10:00:00Z']] } })
+    const silent = fakeSource({ value: { headers: ['t'], rows: [[iso(10, 4, 10)]] } })
     const none = mountWith(silent, ref(['t']), { answers: ['DataTable'], buckets })
     await vi.runAllTimersAsync()
     expect(silent.getData).not.toHaveBeenCalled()
     expect(none.series()).toEqual([])
   })
 })
+
+describe('repeated notifies (#1293)', () => {
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => vi.useRealTimers())
+
+  it('asks once for a burst of changes, as a sensor switch sends them', async () => {
+    const source = fakeSource({ value: coverageOf('2026-10-01T00:00:00Z', '2026-10-05T00:00:00Z') })
+    mountWith(source)
+    await vi.runAllTimersAsync()
+    source.getData.mockClear()
+
+    // removeAllDatastreams, the map's filter, addDatastreamsByName
+    source.notify()
+    await vi.advanceTimersByTimeAsync(300)
+    source.notify()
+    await vi.advanceTimersByTimeAsync(300)
+    source.notify()
+    await vi.runAllTimersAsync()
+    expect(source.getData).toHaveBeenCalledTimes(1)
+  })
+})
+

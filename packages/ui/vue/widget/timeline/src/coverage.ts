@@ -99,23 +99,56 @@ export function placeBands<T extends CoverageBand>(bands: T[], minMs: number, ma
 const MINUTE = 60_000
 const HOUR = 60 * MINUTE
 const DAY = 24 * HOUR
-const BUCKET_SIZES = [15 * MINUTE, 30 * MINUTE, HOUR, 3 * HOUR, 6 * HOUR, 12 * HOUR, DAY, 2 * DAY, 7 * DAY, 14 * DAY, 30 * DAY]
+
+/** Bucket sizes, smallest first; minutes and hours within a local day, then local days. */
+const BUCKET_STEPS: Array<{ minutes?: number; days?: number; approxMs: number }> = [
+  ...[15, 30, 60, 180, 360, 720].map((minutes) => ({ minutes, approxMs: minutes * MINUTE })),
+  ...[1, 2, 7, 14, 30].map((days) => ({ days, approxMs: days * DAY })),
+]
+
+/** The number of a local calendar day, the same on either side of a clock change. */
+const localDayNumber = (d: Date) => Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY)
 
 /**
- * Buckets over the axis, at most about `target` of them.
+ * Buckets over the axis, at most about `target` of them (#1280, #1293).
  *
- * Their edges are whole multiples of the bucket size, counted from the
- * epoch, so the same axis gives the same buckets each time and a source
- * can keep its counts of ended ones.
+ * Their edges are in local time, as the day ticks of the axis and of the
+ * charts are: hours and minutes count from local midnight, days from a
+ * fixed local day. So the cells line up with the ticks, and the same axis
+ * gives the same buckets each time, which a source can keep counts of.
+ * A day with a clock change has a bucket one hour longer or shorter.
  */
 export function coverageBuckets(minMs: number, maxMs: number, target: number): TimeInterval[] {
   const span = maxMs - minMs
   if (!Number.isFinite(span) || span <= 0) return []
   const wanted = Math.max(1, Math.floor(target))
-  const size = BUCKET_SIZES.find((each) => span / each <= wanted) ?? Math.ceil(span / wanted / DAY) * DAY
+  const step = BUCKET_STEPS.find((each) => span / each.approxMs <= wanted)
+    ?? { days: Math.ceil(span / wanted / DAY), approxMs: Math.ceil(span / wanted / DAY) * DAY }
+
+  const first = new Date(minMs)
+  first.setHours(0, 0, 0, 0)
+  if (step.days) {
+    // Days from a fixed local day, so a step of two days does not move with the axis
+    const offset = ((localDayNumber(first) % step.days) + step.days) % step.days
+    first.setDate(first.getDate() - offset)
+  } else {
+    const minutes = step.minutes!
+    const into = Math.floor(((new Date(minMs).getHours() * 60 + new Date(minMs).getMinutes())) / minutes) * minutes
+    first.setMinutes(into)
+  }
+
+  const advance = (d: Date) => {
+    const next = new Date(d)
+    if (step.days) next.setDate(next.getDate() + step.days)
+    else next.setMinutes(next.getMinutes() + step.minutes!)
+    return next
+  }
+
   const buckets: TimeInterval[] = []
-  for (let start = Math.floor(minMs / size) * size; start < maxMs; start += size) {
-    buckets.push({ start: new Date(start).toISOString(), end: new Date(start + size).toISOString() })
+  for (let start = first; start.getTime() < maxMs && buckets.length < 1000; ) {
+    const end = advance(start)
+    buckets.push({ start: start.toISOString(), end: end.toISOString() })
+    start = end
   }
   return buckets
 }
@@ -133,18 +166,73 @@ export function toMs(value: unknown): number {
   return NaN
 }
 
-/** Counts times into buckets; times outside every bucket are not counted. */
+/**
+ * Counts times into buckets; times outside every bucket are not counted.
+ * Buckets need not be of one length - a day with a clock change is not.
+ */
 export function binTimes(times: number[], buckets: TimeInterval[]): number[] {
   const bins = new Array<number>(buckets.length).fill(0)
-  if (buckets.length === 0) return bins
-  const first = Date.parse(buckets[0].start)
-  const size = Date.parse(buckets[0].end) - first
+  const starts = buckets.map((bucket) => Date.parse(bucket.start))
+  const ends = buckets.map((bucket) => Date.parse(bucket.end))
   for (const time of times) {
     if (!Number.isFinite(time)) continue
-    const index = Math.floor((time - first) / size)
-    if (index >= 0 && index < bins.length) bins[index]++
+    // The last bucket that starts at or before the time
+    let low = 0
+    let high = starts.length - 1
+    let found = -1
+    while (low <= high) {
+      const middle = (low + high) >> 1
+      if (starts[middle] <= time) {
+        found = middle
+        low = middle + 1
+      } else {
+        high = middle - 1
+      }
+    }
+    if (found >= 0 && time < ends[found]) bins[found]++
   }
   return bins
+}
+
+/**
+ * The opacity of a bucket by its count (#1293): none for an empty bucket,
+ * so a gap stays a gap, and at least a clearly visible minimum for one
+ * with values. A log scale, so 4 values next to 14 still read as data.
+ */
+export const MIN_DENSITY_OPACITY = 0.5
+
+export function densityOpacity(count: number, most: number): number {
+  if (!(count > 0)) return 0
+  if (!(most > 1)) return 1
+  return MIN_DENSITY_OPACITY + (1 - MIN_DENSITY_OPACITY) * (Math.log1p(count) / Math.log1p(most))
+}
+
+/**
+ * Splits cells at the edges of the selected range (#1293), so the part
+ * outside it can be drawn dimmer: the charts show only what is inside.
+ */
+export function splitAtRange<T extends { startMs: number; endMs: number }>(
+  cells: T[],
+  rangeStartMs: number,
+  rangeEndMs: number,
+): Array<T & { inRange: boolean }> {
+  const parts: Array<T & { inRange: boolean }> = []
+  for (const cell of cells) {
+    const edges = [cell.startMs, cell.endMs, rangeStartMs, rangeEndMs]
+      .filter((edge) => edge >= cell.startMs && edge <= cell.endMs)
+      .sort((a, b) => a - b)
+    const unique = edges.filter((edge, index) => index === 0 || edge !== edges[index - 1])
+    if (unique.length < 2) {
+      parts.push({ ...cell, inRange: cell.startMs >= rangeStartMs && cell.endMs <= rangeEndMs })
+      continue
+    }
+    for (let index = 0; index < unique.length - 1; index++) {
+      const startMs = unique[index]
+      const endMs = unique[index + 1]
+      parts.push({ ...cell, startMs, endMs, inRange: startMs >= rangeStartMs && endMs <= rangeEndMs })
+    }
+  }
+  return parts
 }
 
 /** The buckets with values, joined where they touch. */
@@ -228,8 +316,12 @@ export function combineSeries(series: CoverageSeries[]): CoverageSeries[] {
   return [{ id: 'all', bands: mergeBands(series.flatMap((each) => each.bands)), bins }]
 }
 
-/** Gathers changes that arrive together, as the steps of one sensor switch do. */
-const SETTLE_MS = 300
+/**
+ * Gathers changes that arrive together, as the steps of one sensor switch
+ * do: removing the datastreams, the lookup of the new thing, adding them,
+ * and the map's own filter on the same source (#1293).
+ */
+const SETTLE_MS = 700
 /**
  * How long lanes stay when a source says it shows nothing. A sensor switch
  * first removes every datastream and adds the new ones only after a lookup
