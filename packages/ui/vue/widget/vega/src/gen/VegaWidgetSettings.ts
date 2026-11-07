@@ -27,6 +27,7 @@ import type { Param } from './Param.js';
 import type { DatasetBinding } from './DatasetBinding.js';
 import type { StarterChart } from './StarterChart.js';
 import type { Channel } from './Channel.js';
+import type { Reference } from './Reference.js';
 
 /**
  * VegaWidgetSettings
@@ -44,5 +45,6 @@ export interface VegaWidgetSettings extends EObject {
   specOverlay?: string;
   starter?: StarterChart;
   independentScales: EList<Channel>;
+  references: EList<Reference>;
 
 }

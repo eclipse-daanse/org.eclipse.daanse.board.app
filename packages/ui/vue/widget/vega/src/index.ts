@@ -36,6 +36,7 @@ import facetFormXmi from '../model/ui-facet.xmi?raw'
 import datasetFormXmi from '../model/ui-dataset.xmi?raw'
 import columnTypeFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-column-type.xmi?raw'
 import scaleEntryFormXmi from '../model/ui-scale-entry.xmi?raw'
+import referenceFormXmi from '../model/ui-reference.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -85,6 +86,7 @@ export class VegaWidgetProvider implements WidgetProvider {
       { xmi: facetFormXmi, uri: '/vega-facet.ui.xmi' },
       { xmi: datasetFormXmi, uri: '/vega-dataset.ui.xmi' },
       { xmi: scaleEntryFormXmi, uri: '/vega-scale-entry.ui.xmi' },
+      { xmi: referenceFormXmi, uri: '/vega-reference.ui.xmi' },
       { xmi: columnTypeFormXmi, uri: '/vega-column-type.ui.xmi' },
     ],
     /* i18n-keys: vega:Hints.* - the hint under each field, one per feature (#1285). */

@@ -269,6 +269,11 @@ they are.
                 <details key="documentation" value="The channels whose scale each layer has for itself (#1304): y gives every layer its own y axis - a temperature on the left, a precipitation on the right. Only read with more than one layer or with small multiples."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1" eType="#//Reference" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Constant lines and bands drawn with the chart (#1304): limits, targets, zones, a date. They belong to the whole chart and share its scales, so a band from 0 to 1.8 lies where 0 and 1.8 are on the axis. Not drawn in small multiples."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="DatasetBinding">
@@ -701,5 +706,78 @@ they are.
         <eLiterals name="right" literal="right" value="2"/>
         <eLiterals name="top" literal="top" value="3"/>
         <eLiterals name="bottom" literal="bottom" value="4"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="ReferenceKind">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A line at one value, or a band between two."/>
+        </eAnnotations>
+        <eLiterals name="line" literal="line"/>
+        <eLiterals name="band" literal="band" value="1"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="LabelPosition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Where along the line or band its label stands."/>
+        </eAnnotations>
+        <eLiterals name="start" literal="start"/>
+        <eLiterals name="middle" literal="middle" value="1"/>
+        <eLiterals name="end" literal="end" value="2"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Reference">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A constant line or band of the chart (#1304)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//ReferenceKind" lowerBound="0" defaultValueLiteral="line">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A line at one value, or a band between two."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="channel" eType="#//Channel" lowerBound="0" defaultValueLiteral="y">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="y draws it across the chart at a value of the y axis; x draws it upright at a value of the x axis."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//FieldType" lowerBound="0" defaultValueLiteral="quantitative">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the values are: numbers, or points in time on a time axis."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The value of the line; for a band its lower end. A point in time is written as ISO 8601 text (2026-11-07T12:00:00Z)."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Band: the upper end."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A CSS colour, with transparency for a band (#E5393514). Empty: the colour of the theme."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Text drawn at the line or band. Empty: none."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelAt" eType="#//LabelPosition" lowerBound="0" defaultValueLiteral="start">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where along the line or band the label stands."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="behind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0" defaultValueLiteral="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether it is drawn behind the layers of the chart, or in front of them."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="dash" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Line: the dash pattern in pixels, comma-separated (4,2). Empty: solid."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 </ecore:EPackage>
