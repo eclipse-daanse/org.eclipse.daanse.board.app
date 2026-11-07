@@ -6,10 +6,12 @@
     "startKnob": "Beginn",
     "startKnobFixed": "Beginn (fixiert)",
     "endKnob": "Ende",
-    "start": "Beginn:",
-    "end": "Ende:",
-    "duration": "Dauer:",
-    "speed": "Geschwindigkeit:"
+    "start": "Beginn",
+    "end": "Ende",
+    "duration": "Dauer",
+    "speed": "Tempo",
+    "play": "Abspielen",
+    "pause": "Anhalten"
   },
   "Settings": {
     "section": "Zeitraum",

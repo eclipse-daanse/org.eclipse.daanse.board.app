@@ -14,6 +14,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
 import { TimelinesettingsPackage } from '../gen/TimelinesettingsPackage';
+import { TimelinesettingsFactory } from '../gen/TimelinesettingsFactory';
 import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { mount } from '@vue/test-utils';
@@ -673,5 +674,44 @@ describe('Rendering tests for org.eclipse.daanse.board.app.ui.vue.widget.timelin
       }
     });
     expect(wrapper.exists()).toBe(true);
+  });
+
+  describe('colours (#1276)', () => {
+    const mountWith = (rangeStripColor?: string) => {
+      const configv = TimelinesettingsFactory.eINSTANCE.createTimelineSettings();
+      configv.timelineMin = '2026-10-13T00:00:00.000Z';
+      configv.timelineMax = '2026-11-06T00:00:00.000Z';
+      configv.rangeStart = '2026-11-01T00:00:00.000Z';
+      configv.rangeEnd = '2026-11-05T00:00:00.000Z';
+      if (rangeStripColor !== undefined) configv.rangeStripColor = rangeStripColor;
+      const wrapper = mount(TimelineWidget, {
+        props: { datasourceId: 'ds-1', id: 'widget-1', configv } as any,
+        global: { provide: widgetProvides },
+      });
+      return { wrapper, configv };
+    };
+
+    it('takes the theme accent when no colour is set, and writes none into the settings', () => {
+      const { wrapper, configv } = mountWith();
+      const root = wrapper.find('.timeline-widget').element as HTMLElement;
+      expect(root.style.getPropertyValue('--range-color')).toBe('var(--color-accent)');
+      expect(configv.rangeStripColor).toBeUndefined();
+    });
+
+    it('colours only the range with a set colour, never the rail', () => {
+      const { wrapper } = mountWith('#4FC3F7');
+      const root = wrapper.find('.timeline-widget').element as HTMLElement;
+      expect(root.style.getPropertyValue('--range-color')).toBe('#4FC3F7');
+      const rail = wrapper.find('.rail').element as HTMLElement;
+      expect(rail.getAttribute('style')).toBeNull();
+    });
+
+    it('draws ticks at round times', () => {
+      const { wrapper } = mountWith();
+      const labels = wrapper.findAll('.tick-label');
+      expect(labels.length).toBeGreaterThan(1);
+      // Day steps: no clock times in the labels
+      expect(labels.every((label) => !/\d{2}:\d{2}/.test(label.text()))).toBe(true);
+    });
   });
 });

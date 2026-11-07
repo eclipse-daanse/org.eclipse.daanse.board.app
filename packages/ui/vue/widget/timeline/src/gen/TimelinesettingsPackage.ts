@@ -264,7 +264,6 @@ export class TimelinesettingsPackage extends BasicEPackage {
     timelineSettings_rangeStripColor.setName('rangeStripColor');
     timelineSettings_rangeStripColor.setLowerBound(0);
     timelineSettings_rangeStripColor.setUpperBound(1);
-    timelineSettings_rangeStripColor.setDefaultValueLiteral("#d17600");
     timelineSettingsClass.getEStructuralFeatures().push(timelineSettings_rangeStripColor);
     TimelinesettingsPackage.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR = timelineSettings_rangeStripColor;
 

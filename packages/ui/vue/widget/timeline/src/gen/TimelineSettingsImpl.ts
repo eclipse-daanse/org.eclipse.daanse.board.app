@@ -64,7 +64,7 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
   private _autoPlay: boolean = false;
   private _fixStartKnob: boolean = false;
   private _showControls: boolean = true;
-  private _rangeStripColor: string = "#d17600";
+  private _rangeStripColor?: string;
   private _showTimeInfo: boolean = true;
 
   /**
@@ -680,7 +680,7 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
       case TimelineSettingsImpl.SHOW_CONTROLS:
         return this._showControls !== true;
       case TimelineSettingsImpl.RANGE_STRIP_COLOR:
-        return this._rangeStripColor !== "#d17600";
+        return this._rangeStripColor !== undefined;
       case TimelineSettingsImpl.SHOW_TIME_INFO:
         return this._showTimeInfo !== true;
       default:
@@ -741,7 +741,7 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
         this._showControls = true;
         return;
       case TimelineSettingsImpl.RANGE_STRIP_COLOR:
-        this._rangeStripColor = "#d17600";
+        this._rangeStripColor = undefined;
         return;
       case TimelineSettingsImpl.SHOW_TIME_INFO:
         this._showTimeInfo = true;
