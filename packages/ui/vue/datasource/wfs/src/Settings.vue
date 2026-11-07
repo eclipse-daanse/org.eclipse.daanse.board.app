@@ -177,7 +177,7 @@ function setNumber(name: string, value: unknown, fallback: number) {
     </template>
     <template v-else>
       <DInput type="number" :model-value="config.pointTolerance" :label="t('Fields.pointTolerance')"
-        @update:model-value="(v) => setNumber('pointTolerance', v, 70)" />
+        @update:model-value="(v) => setNumber('pointTolerance', v, 72)" />
     </template>
     <SettingsForm
       v-model="extentModel"
