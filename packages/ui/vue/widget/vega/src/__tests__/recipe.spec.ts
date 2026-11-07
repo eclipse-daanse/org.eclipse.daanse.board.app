@@ -246,6 +246,15 @@ describe('compileRecipe', () => {
     expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
   })
 
+  it('keeps values and selections of a single view together', () => {
+    const spec = compileRecipe(recipe({
+      params: [{ name: 'pick', kind: 'point', fields: ['category'] }, { name: 'limit', kind: 'value', value: '1' }],
+      layers: [bars()],
+    })) as Record<string, any>
+    expect(spec.params.map((p: { name: string }) => p.name)).toEqual(['limit', 'pick'])
+    expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+  })
+
   it('declares selections on the first layer and values on the chart', () => {
     const spec = compileRecipe(recipe({
       params: [{ name: 'pick', kind: 'point' }, { name: 'limit', kind: 'value', value: '50' }],

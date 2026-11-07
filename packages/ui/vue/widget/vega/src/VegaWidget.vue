@@ -36,7 +36,11 @@ import { useDatasets, type ChartStore } from './useDatasets'
 import { modelledSettings } from './settingsModel'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
-import { busEventOf, clickEventOf, paramEventOf, selectionEventOf, type VegaEvent } from './events/VegaWidgetEvents'
+import { busEventOf, clickEventOf, paramEventOf, selectionEventOf, WIDGET_TYPE, type VegaEvent } from './events/VegaWidgetEvents'
+import { EVENT_ACTIONS_REGISTRY, type EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { useRoute } from 'vue-router'
+import { VegaWidgetInterfaceImpl } from './gen/VegaWidgetInterfaceImpl'
+import type { VegaWidgetInterface } from './gen/VegaWidgetInterface'
 import { themeConfig } from './theme'
 
 const stored = defineModel<unknown>('configv', { required: true })
@@ -64,6 +68,50 @@ const emit = ({ event, payload }: VegaEvent) => {
   const type = busEventOf(event)
   bus.emit(type, { type, widgetId: props.id, payload })
 }
+
+/* ---------------------------------------------------------- actions */
+
+/*
+ * What the board can ask of the chart (#1290), as the actions modelled in
+ * VegaWidgetInterface. A parameter set before the chart is drawn - right
+ * after a change of page - is set once it is.
+ */
+const actionsRegistry = inject<EventActionsRegistry | undefined>(EVENT_ACTIONS_REGISTRY, undefined)
+const route = useRoute()
+const pageId = (route?.params?.pageid as string) || ''
+const pendingParams = new Map<string, unknown>()
+
+const applyParam = async (name: string, value: unknown) => {
+  if (!chart) {
+    pendingParams.set(name, value)
+    return
+  }
+  const { setSelection, setValueParam } = await import('./embedChart')
+  if (!chart) return
+  const kind = [...(settings.value?.params ?? [])].find((p) => String(p.name ?? '').trim() === name)?.kind
+  if (kind === 'value' || !(await setSelection(chart.view, name, value))) await setValueParam(chart.view, name, value)
+}
+
+class VegaWidgetApi extends VegaWidgetInterfaceImpl {
+  setParam = (name: string, value?: unknown) => applyParam(String(name ?? '').trim(), value)
+  clearSelection = (name: string) => applyParam(String(name ?? '').trim(), null)
+  refresh = () => {
+    update(ownSource.value, ownSource.value)
+    datasets.reload()
+  }
+  exportAsImage = async (format = 'png') => {
+    if (!chart) return
+    const type = format === 'svg' ? 'svg' : 'png'
+    const { imageOf } = await import('./embedChart')
+    const link = document.createElement('a')
+    link.href = await imageOf(chart.view, type)
+    link.download = `${String(settings.value?.title ?? '').trim() || 'chart'}.${type}`
+    link.click()
+  }
+}
+const api = new VegaWidgetApi()
+/* Exposed by the modelled interface, not the class: a class type carries EMF's private fields. */
+defineExpose<Pick<VegaWidgetInterface, 'setParam' | 'clearSelection' | 'refresh' | 'exportAsImage'>>(api)
 
 /* ------------------------------------------------------------ theme */
 
@@ -115,7 +163,7 @@ watch(own, (answer) => {
 })
 
 const repository = inject<DatasourceRepository | undefined>(DATASOURCE_REPOSITORY, undefined)
-useDatasets({
+const datasets = useDatasets({
   sources: () => sources.value.filter((source) => source.datasourceId),
   resolve: (id) => {
     try {
@@ -195,6 +243,8 @@ const draw = async (keepSignals = false) => {
     })
     /* The frame may have changed while Vega loaded. */
     fit()
+    for (const [name, value] of pendingParams) void applyParam(name, value)
+    pendingParams.clear()
     /* Rows that arrived while the chart was drawn go in now. */
     if (dataRevision !== drawnRevision) for (const name of Object.keys(datasetsNow())) void push(name)
   } catch (e) {
@@ -237,6 +287,7 @@ onMounted(() => {
     })
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'style', 'class'] })
   }
+  if (props.id) actionsRegistry?.registerInstance(props.id, api, WIDGET_TYPE, pageId)
   void draw()
 })
 
@@ -248,6 +299,7 @@ onUnmounted(() => {
   generation++
   resizeObserver?.disconnect()
   themeObserver?.disconnect()
+  if (props.id) actionsRegistry?.unregisterInstance(props.id)
   finalize()
 })
 </script>

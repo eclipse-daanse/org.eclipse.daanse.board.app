@@ -91,4 +91,7 @@ export function useDatasets(options: {
   onUnmounted(() => {
     for (const id of [...subscriptions.keys()]) unsubscribe(id)
   })
+
+  /** Loads every dataset again - the refresh action (#1290). */
+  return { reload: () => { for (const source of current) void load(source) } }
 }

@@ -120,7 +120,9 @@ export function compileRecipe(settings: VegaWidgetSettings): TopLevelSpec {
     return { ...top, data: { name: [...datasets][0] }, ...facet, spec: inner } as unknown as TopLevelSpec
   }
 
-  const body = units.length === 1 ? units[0] : { layer: units }
+  const body: Json = units.length === 1 ? { ...units[0] } : { layer: units }
+  /* One view holds its selections and the chart's values in one list - spread over each other, the selections replaced the values. */
+  if (units.length === 1 && values.length && body.params) body.params = [...values, ...(body.params as Json[])]
   return {
     ...top,
     /* The board frame sizes the chart, not the spec. */
