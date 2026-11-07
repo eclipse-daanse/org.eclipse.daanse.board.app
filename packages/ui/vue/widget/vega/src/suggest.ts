@@ -38,6 +38,20 @@ export interface BoardSources {
   headersOf: (datasourceId: string) => Promise<string[]>
   /** The ids of the board's data sources. */
   datasourceIds?: () => string[]
+  /** The distinct values of a column of a source (#1304). */
+  valuesOf?: (datasourceId: string, column: string) => Promise<string[]>
+}
+
+/** The distinct values of a column in rows, as text, at most fifty. */
+export function distinctValues(rows: Array<Record<string, unknown>>, column: string): string[] {
+  const values = new Set<string>()
+  for (const row of rows) {
+    const value = row[column]
+    if (value === null || value === undefined || value === '') continue
+    values.add(String(value))
+    if (values.size >= 50) break
+  }
+  return [...values]
 }
 
 const text = (value: unknown) => String(value ?? '').trim()
@@ -104,6 +118,19 @@ export async function suggestFields(
   board: BoardSources,
 ): Promise<string[]> {
   if (feature === 'datasourceId') return board.datasourceIds?.() ?? []
+  /* The value of a fixed output (#1304): the values the encoding's field has. */
+  if (feature === 'value' && owner && typeof owner === 'object' && 'output' in owner) {
+    const encoding = (owner as Contained).eContainer?.() as { field?: string } | undefined
+    const column = text(encoding?.field)
+    if (!column) return []
+    const datasourceId = sourceOf(encoding, widgetSource)
+    if (!datasourceId) return distinctValues(SAMPLE_VALUES, column)
+    try {
+      return (await board.valuesOf?.(datasourceId, column)) ?? []
+    } catch {
+      return []
+    }
+  }
   if (feature === 'dataset') {
     const names = items(rootOf(owner)?.datasets).map((each) => text((each as { name?: string }).name) || DEFAULT_DATASET)
     return [...new Set([DEFAULT_DATASET, ...names])]

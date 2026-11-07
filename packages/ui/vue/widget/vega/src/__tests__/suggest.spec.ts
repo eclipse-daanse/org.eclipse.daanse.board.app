@@ -17,7 +17,7 @@
 import { describe, expect, it } from 'vitest'
 import { VegawidgetPackage } from '../gen/VegawidgetPackage'
 import { modelledSettings } from '../settingsModel'
-import { headersOfAnswer, suggestFields } from '../suggest'
+import { distinctValues, headersOfAnswer, suggestFields } from '../suggest'
 
 void VegawidgetPackage.eINSTANCE
 
@@ -88,5 +88,21 @@ describe('headersOfAnswer', () => {
     expect(headersOfAnswer({ headers: ['a', 'b'], items: [] })).toEqual(['a', 'b'])
     expect(headersOfAnswer({ items: [{ x: 1, y: 2 }] })).toEqual(['x', 'y'])
     expect(headersOfAnswer(null)).toEqual([])
+  })
+
+  it('suggests the values of the field for a fixed output (#1304)', async () => {
+    const settings = modelledSettings({
+      datasets: [{ name: 'other', datasourceId: 'areas' }],
+      layers: [
+        { mark: 'bar', encodings: [{ channel: 'color', field: 'category', scaleEntries: [{ value: '' }] }] },
+        { mark: 'bar', dataset: 'other', encodings: [{ channel: 'color', field: 'state', scaleEntries: [{ value: '' }] }] },
+      ],
+    })
+    const sample = settings.layers.get(0).encodings.get(0).scaleEntries.get(0)
+    const sourced = settings.layers.get(1).encodings.get(0).scaleEntries.get(0)
+    expect(await suggestFields(sample, 'value', undefined, { headersOf: none })).toEqual(['A', 'B', 'C', 'D', 'E', 'F'])
+    const valuesOf = async (id: string, column: string) => (id === 'areas' && column === 'state' ? ['dry', 'moist'] : [])
+    expect(await suggestFields(sourced, 'value', 'sales', { headersOf: none, valuesOf })).toEqual(['dry', 'moist'])
+    expect(distinctValues([{ a: 1 }, { a: 1 }, { a: '' }, { a: 2 }], 'a')).toEqual(['1', '2'])
   })
 })

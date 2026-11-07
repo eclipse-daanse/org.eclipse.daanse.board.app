@@ -276,6 +276,12 @@ function scaleOf(encoding: Encoding, channel: string): Json | undefined {
   if (max) scale.domainMax = scalar(max)
   const scheme = text(encoding.scheme)
   if (scheme && channel === 'color') scale.scheme = scheme
+  /* Fixed outputs per value (#1304): each listed value drawn as its own output. */
+  const entries = items(encoding.scaleEntries).filter((entry) => text(entry.value) && text(entry.output))
+  if (entries.length) {
+    scale.domain = entries.map((entry) => scalar(entry.value))
+    scale.range = entries.map((entry) => scalar(entry.output))
+  }
   return Object.keys(scale).length ? scale : undefined
 }
 

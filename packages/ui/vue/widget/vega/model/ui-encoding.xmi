@@ -182,6 +182,13 @@ x - is not shown.
       <visibilityCondition language="JS" body="['x', 'y', 'xOffset', 'yOffset', 'color', 'size', 'shape', 'opacity', 'theta', 'radius'].includes(self.channel) &amp;&amp; !!self.field"/>
     </fields>
     <fields xsi:type="uimodel:InputWidget"
+        name="scaleEntries"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/scaleEntries"
+        label="vega:FormEncoding.scaleEntries"
+        placeholder="vega:FormEncoding.scaleEntriesHint">
+      <visibilityCondition language="JS" body="['x', 'y', 'xOffset', 'yOffset', 'color', 'size', 'shape', 'opacity', 'theta', 'radius'].includes(self.channel) &amp;&amp; !!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
         name="scheme"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/scheme"
         label="vega:FormEncoding.scheme">

@@ -198,7 +198,9 @@
     "labelAngle": "Winkel der Beschriftung (Grad)",
     "showLegend": "Legende zeichnen",
     "highlightParam": "Hervorheben, was diese Auswahl enthält",
-    "valueIfNotSelected": "Wert außerhalb der Auswahl (z. B. lightgray, 0.2)"
+    "valueIfNotSelected": "Wert außerhalb der Auswahl (z. B. lightgray, 0.2)",
+    "scaleEntries": "Feste Ausgabe je Wert",
+    "scaleEntriesHint": "Keine: das Schema entscheidet."
   },
   "FormParam": {
     "name": "Name",
@@ -277,7 +279,8 @@
       "labelAngle": "Der Winkel der Achsenbeschriftung in Grad, etwa -45. Leer lässt Vega-Lite wählen.",
       "showLegend": "Ob ein Farb-, Größen-, Form- oder Deckkraftkanal seine Legende zeichnet.",
       "highlightParam": "Der Name einer Auswahl. Marken in der Auswahl behalten Feld oder Wert oben; die anderen nehmen den Wert darunter – so hebt eine Auswahl hervor.",
-      "valueIfNotSelected": "Der Wert, den Marken außerhalb der Auswahl nehmen, etwa lightgray oder 0.2."
+      "valueIfNotSelected": "Der Wert, den Marken außerhalb der Auswahl nehmen, etwa lightgray oder 0.2.",
+      "scaleEntries": "Jeder hier genannte Wert des Felds wird mit seiner eigenen Ausgabe gezeichnet - Farbe, Form, Größe, Deckkraft - statt wie das Schema wählt. Nenne alle Werte oder keinen: ein nicht genannter Wert bekommt keine eigene Ausgabe."
     },
     "Facet": {
       "row": "Das Feld, dessen Werte die Zeilen bilden. Leer bildet keine Zeilen.",
@@ -291,6 +294,10 @@
       "encodings": "Die Kanäle, über die ein Bereich spannt, meist x oder x und y. Leer spannt über beide.",
       "bind": "Woran die Auswahl gebunden ist.",
       "value": "Der Anfangswert als JSON – bei einem Wert dessen Wert, bei einer Auswahl, was sie zu Beginn enthält. Leer beginnt leer."
+    },
+    "ScaleEntry": {
+      "value": "Der Wert des Felds, wie er in den Daten steht. Eine Zahl darf als Text stehen.",
+      "output": "Als was der Wert gezeichnet wird: eine CSS-Farbe für Farbe, ein Formname (circle, square, triangle-up, ...) für Form, eine Zahl für Größe und Deckkraft."
     }
   },
   "SpecTab": {
@@ -304,5 +311,9 @@
     "refused": "Entfernt",
     "invalid": "Das ist kein JSON-Objekt: {{message}}",
     "noWidget": "Das Widget ist nicht auf diesem Board."
+  },
+  "FormScaleEntry": {
+    "value": "Wert",
+    "output": "Gezeichnet als (Farbe, Form, Größe)"
   }
 }

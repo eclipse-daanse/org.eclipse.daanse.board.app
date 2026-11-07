@@ -198,7 +198,9 @@
     "labelAngle": "Angle of the labels (degrees)",
     "showLegend": "Draw the legend",
     "highlightParam": "Highlight what this selection holds",
-    "valueIfNotSelected": "Value outside the selection (e.g. lightgray, 0.2)"
+    "valueIfNotSelected": "Value outside the selection (e.g. lightgray, 0.2)",
+    "scaleEntries": "Fixed output per value",
+    "scaleEntriesHint": "None: the scheme decides."
   },
   "FormParam": {
     "name": "Name",
@@ -277,7 +279,8 @@
       "labelAngle": "The angle of the axis labels in degrees, for example -45. Empty lets Vega-Lite choose.",
       "showLegend": "Whether a colour, size, shape or opacity channel draws its legend.",
       "highlightParam": "The name of a selection. Marks the selection holds keep the field or value above; the others take the value below - this is how a selection highlights.",
-      "valueIfNotSelected": "The value the marks outside the selection take, for example lightgray or 0.2."
+      "valueIfNotSelected": "The value the marks outside the selection take, for example lightgray or 0.2.",
+      "scaleEntries": "Each listed value of the field is drawn as its own output - a colour, a shape, a size, an opacity - rather than as the scheme picks. List every value, or none: a value not listed gets no output of its own."
     },
     "Facet": {
       "row": "The field whose values make the rows. Empty makes no rows.",
@@ -291,6 +294,10 @@
       "encodings": "The channels an interval spans, usually x, or x and y. Empty spans both.",
       "bind": "What the selection is bound to.",
       "value": "The initial value, as JSON - for a value parameter its value, for a selection what it holds at the start. Empty starts empty."
+    },
+    "ScaleEntry": {
+      "value": "The value of the field, as it appears in the data. A number may be written as text.",
+      "output": "What the value is drawn as: a CSS colour for colour, a shape name (circle, square, triangle-up, ...) for shape, a number for size and opacity."
     }
   },
   "SpecTab": {
@@ -304,5 +311,9 @@
     "refused": "Taken out",
     "invalid": "This is no JSON object: {{message}}",
     "noWidget": "The widget is not on this board."
+  },
+  "FormScaleEntry": {
+    "value": "Value",
+    "output": "Drawn as (colour, shape, size)"
   }
 }

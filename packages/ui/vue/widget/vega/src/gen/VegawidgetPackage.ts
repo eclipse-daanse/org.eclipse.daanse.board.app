@@ -127,6 +127,7 @@ export class VegawidgetPackage extends BasicEPackage {
     ENCODING__SHOW_LEGEND: null as unknown as EAttribute | EReference,
     ENCODING__HIGHLIGHT_PARAM: null as unknown as EAttribute | EReference,
     ENCODING__VALUE_IF_NOT_SELECTED: null as unknown as EAttribute | EReference,
+    ENCODING__SCALE_ENTRIES: null as unknown as EAttribute | EReference,
     FACET: null as unknown as EClass,
     FACET__ROW: null as unknown as EAttribute | EReference,
     FACET__COLUMN: null as unknown as EAttribute | EReference,
@@ -149,6 +150,9 @@ export class VegawidgetPackage extends BasicEPackage {
     PARAM_PAYLOAD__PARAM: null as unknown as EAttribute | EReference,
     PARAM_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_INTERFACE: null as unknown as EClass,
+    SCALE_ENTRY: null as unknown as EClass,
+    SCALE_ENTRY__VALUE: null as unknown as EAttribute | EReference,
+    SCALE_ENTRY__OUTPUT: null as unknown as EAttribute | EReference,
     VEGA_RENDERER: null as unknown as EEnum,
     LEGEND_POSITION: null as unknown as EEnum,
     MARK_TYPE: null as unknown as EEnum,
@@ -670,6 +674,15 @@ export class VegawidgetPackage extends BasicEPackage {
     encodingClass.getEStructuralFeatures().push(encoding_valueIfNotSelected);
     VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED = encoding_valueIfNotSelected;
 
+    // Create scaleEntries feature
+    const encoding_scaleEntries = new BasicEReference();
+    encoding_scaleEntries.setContainment(true);
+    encoding_scaleEntries.setName('scaleEntries');
+    encoding_scaleEntries.setLowerBound(0);
+    encoding_scaleEntries.setUpperBound(-1);
+    encodingClass.getEStructuralFeatures().push(encoding_scaleEntries);
+    VegawidgetPackage.Literals.ENCODING__SCALE_ENTRIES = encoding_scaleEntries;
+
     // Create Facet class
     const facetClass = new BasicEClass();
     facetClass.setName('Facet');
@@ -858,6 +871,33 @@ export class VegawidgetPackage extends BasicEPackage {
     this.getEClassifiers().push(vegaWidgetInterfaceClass);
     vegaWidgetInterfaceClass.setEPackage(this);
     VegawidgetPackage.Literals.VEGA_WIDGET_INTERFACE = vegaWidgetInterfaceClass;
+
+    // Create ScaleEntry class
+    const scaleEntryClass = new BasicEClass();
+    scaleEntryClass.setName('ScaleEntry');
+    scaleEntryClass.setAbstract(false);
+    scaleEntryClass.setInterface(false);
+    this.getEClassifiers().push(scaleEntryClass);
+    scaleEntryClass.setEPackage(this);
+    VegawidgetPackage.Literals.SCALE_ENTRY = scaleEntryClass;
+
+    // Create value feature
+    const scaleEntry_value = new BasicEAttribute();
+    scaleEntry_value.setName('value');
+    scaleEntry_value.setLowerBound(0);
+    scaleEntry_value.setUpperBound(1);
+    scaleEntry_value.setDefaultValueLiteral("");
+    scaleEntryClass.getEStructuralFeatures().push(scaleEntry_value);
+    VegawidgetPackage.Literals.SCALE_ENTRY__VALUE = scaleEntry_value;
+
+    // Create output feature
+    const scaleEntry_output = new BasicEAttribute();
+    scaleEntry_output.setName('output');
+    scaleEntry_output.setLowerBound(0);
+    scaleEntry_output.setUpperBound(1);
+    scaleEntry_output.setDefaultValueLiteral("");
+    scaleEntryClass.getEStructuralFeatures().push(scaleEntry_output);
+    VegawidgetPackage.Literals.SCALE_ENTRY__OUTPUT = scaleEntry_output;
 
     // Create VegaRenderer enum
     const vegaRendererEnumType = new BasicEEnum();
@@ -2133,6 +2173,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.ENCODING__SHOW_LEGEND as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (VegawidgetPackage.Literals.ENCODING__HIGHLIGHT_PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__SCALE_ENTRIES as BasicEReference).setEType(VegawidgetPackage.Literals.SCALE_ENTRY);
     (VegawidgetPackage.Literals.FACET__ROW as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
@@ -2149,6 +2190,8 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.SELECTION_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (VegawidgetPackage.Literals.PARAM_PAYLOAD__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.PARAM_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (VegawidgetPackage.Literals.SCALE_ENTRY__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.SCALE_ENTRY__OUTPUT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)
