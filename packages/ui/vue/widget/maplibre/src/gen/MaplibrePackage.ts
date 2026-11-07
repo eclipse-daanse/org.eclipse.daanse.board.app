@@ -99,6 +99,8 @@ export class MaplibrePackage extends BasicEPackage {
     THING_LAYER__FILL_OPACITY: null as unknown as EAttribute | EReference,
     THING_LAYER__OUTLINE_COLOR: null as unknown as EAttribute | EReference,
     THING_LAYER__POINT_RADIUS: null as unknown as EAttribute | EReference,
+    THING_LAYER__POINT_STYLE: null as unknown as EAttribute | EReference,
+    THING_LAYER__MARKER_SIZE: null as unknown as EAttribute | EReference,
     THING_LAYER__EXTRUDE: null as unknown as EAttribute | EReference,
     THING_LAYER__HEIGHT_SUFFIX: null as unknown as EAttribute | EReference,
     THING_LAYER__HEIGHT_FACTOR: null as unknown as EAttribute | EReference,
@@ -521,6 +523,24 @@ export class MaplibrePackage extends BasicEPackage {
     thingLayerClass.getEStructuralFeatures().push(thingLayer_pointRadius);
     MaplibrePackage.Literals.THING_LAYER__POINT_RADIUS = thingLayer_pointRadius;
 
+    // Create pointStyle feature
+    const thingLayer_pointStyle = new BasicEAttribute();
+    thingLayer_pointStyle.setName('pointStyle');
+    thingLayer_pointStyle.setLowerBound(0);
+    thingLayer_pointStyle.setUpperBound(1);
+    thingLayer_pointStyle.setDefaultValueLiteral("circle");
+    thingLayerClass.getEStructuralFeatures().push(thingLayer_pointStyle);
+    MaplibrePackage.Literals.THING_LAYER__POINT_STYLE = thingLayer_pointStyle;
+
+    // Create markerSize feature
+    const thingLayer_markerSize = new BasicEAttribute();
+    thingLayer_markerSize.setName('markerSize');
+    thingLayer_markerSize.setLowerBound(0);
+    thingLayer_markerSize.setUpperBound(1);
+    thingLayer_markerSize.setDefaultValueLiteral("1");
+    thingLayerClass.getEStructuralFeatures().push(thingLayer_markerSize);
+    MaplibrePackage.Literals.THING_LAYER__MARKER_SIZE = thingLayer_markerSize;
+
     // Create extrude feature
     const thingLayer_extrude = new BasicEAttribute();
     thingLayer_extrude.setName('extrude');
@@ -896,6 +916,8 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.THING_LAYER__FILL_OPACITY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.THING_LAYER__OUTLINE_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.THING_LAYER__POINT_RADIUS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.THING_LAYER__POINT_STYLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MaplibrePackage.Literals.THING_LAYER__MARKER_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.THING_LAYER__EXTRUDE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (MaplibrePackage.Literals.THING_LAYER__HEIGHT_SUFFIX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.THING_LAYER__HEIGHT_FACTOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);

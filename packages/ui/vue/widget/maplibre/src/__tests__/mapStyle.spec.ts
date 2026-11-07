@@ -110,6 +110,33 @@ describe('the data layers of the 3D map', () => {
     expect(beforeIdOf({ type: 'fill' }, false)).toBeUndefined()
   })
 
+  it('draw points as pins in the colour of their value, a selected one larger with a ring (#1273)', () => {
+    const layers = featureLayersOf(source, thingLookOf({ pointStyle: 'pin', markerSize: 2, fillColor: '#123' }, '#ff0')) as any[]
+    expect(layers.map((l) => l.id)).toEqual([
+      'daanse:things:areas:fill',
+      'daanse:things:areas:line',
+      'daanse:things:areas:halo',
+      'daanse:things:areas:pin',
+    ])
+    const pin = layers[3]
+    expect(pin.type).toBe('symbol')
+    expect(pin.layout['icon-image']).toEqual([
+      'case',
+      ['boolean', ['get', 'selected'], false],
+      'daanse-pin:#ff0',
+      ['concat', 'daanse-pin:', ['coalesce', ['get', 'color'], '#123']],
+    ])
+    expect(pin.layout['icon-anchor']).toBe('bottom')
+    expect(pin.layout['icon-size']).toEqual(['case', ['boolean', ['get', 'selected'], false], 2.7, 2])
+    expect(layers[2].filter[2]).toEqual(['boolean', ['get', 'selected'], false])
+    // A pin stands in front of the buildings, its ring lies below them.
+    expect(beforeIdOf(pin, true)).toBeUndefined()
+    expect(beforeIdOf(layers[2], true)).toBe('daanse:buildings')
+    expect(dataLayerOf('daanse:things:areas:pin')).toEqual({ kind: 'things', id: 'areas' })
+    // Old boards keep their circles.
+    expect(featureLayersOf(source, thingLookOf({}, '#ff0')).map((l) => l.type)).toEqual(['fill', 'line', 'circle'])
+  })
+
   it('name the layer a click hit', () => {
     expect(dataLayerOf('daanse:things:areas:extrusion')).toEqual({ kind: 'things', id: 'areas' })
     expect(dataLayerOf('daanse:geojson:a:b:fill')).toEqual({ kind: 'geojson', id: 'a:b' })

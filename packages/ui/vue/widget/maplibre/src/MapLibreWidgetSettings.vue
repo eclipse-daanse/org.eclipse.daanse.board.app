@@ -44,6 +44,11 @@ const sources = computed(() => {
   ]
 })
 
+const pointStyles = computed(() => [
+  { value: 'circle', label: t('Settings.pointStyles.circle') },
+  { value: 'pin', label: t('Settings.pointStyles.pin') },
+])
+
 const encodings = computed(() => [
   { value: 'terrarium', label: 'Terrarium' },
   { value: 'mapbox', label: 'Mapbox (Terrain-RGB)' },
@@ -179,6 +184,10 @@ function addColor(layer: ThingLayer) {
           <DColorInput v-model="layer.fillColor" :label="t('Settings.fillColor')" />
           <DSlider v-model="layer.fillOpacity" :label="t('Settings.fillOpacity')" :min="0" :max="1" :step="0.05" />
           <DColorInput v-model="layer.outlineColor" :label="t('Settings.outlineColor')" />
+          <DSelect v-model="layer.pointStyle" :options="pointStyles" value-key="value" label-key="label"
+            :label="t('Settings.pointStyle')" />
+          <DSlider v-if="layer.pointStyle === 'pin'" v-model="layer.markerSize" :label="t('Settings.markerSize')"
+            :min="0.5" :max="3" :step="0.1" />
           <DCheckbox v-model="layer.extrude" :label="t('Settings.extrude')" />
           <template v-if="layer.extrude">
             <DInput v-model="layer.heightSuffix" :label="t('Settings.heightSuffix')" placeholder="~referenceArea~sensorCount" />

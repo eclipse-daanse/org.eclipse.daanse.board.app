@@ -60,6 +60,12 @@
     "fillColor": "Colour without a value",
     "fillOpacity": "Opacity",
     "outlineColor": "Colour of the outlines",
+    "pointStyle": "Points as",
+    "pointStyles": {
+      "circle": "Circle",
+      "pin": "Pin (marker)"
+    },
+    "markerSize": "Size of the pins",
     "extrude": "Areas in 3D",
     "heightSuffix": "Datastream of the height (end of its id)",
     "heightFactor": "Metres per unit",

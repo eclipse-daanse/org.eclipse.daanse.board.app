@@ -23,6 +23,7 @@ Contributors:
 import { computed, inject, onMounted, onUnmounted, ref, shallowRef, toRefs, watch } from 'vue'
 import { AttributionControl, Map as MapLibreMap, NavigationControl, type GeoJSONSource, type IControl, type MapMouseEvent } from 'maplibre-gl'
 import { TextAttributionControl } from './attribution'
+import { PIN_PIXEL_RATIO, PIN_PREFIX, pinImage } from './pin'
 import { useMapLibreWorker } from './worker'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useRoute } from 'vue-router'
@@ -149,7 +150,7 @@ const lookKey = computed(() => {
     [s.rasterUrl, s.rasterLayers, s.rasterOpacity, s.rasterAttribution, s.rasterInvertDark],
     [s.buildings, s.buildingColor, s.buildingOpacity, s.buildingSourceLayer],
     [s.terrainUrl, s.terrainEncoding, s.terrainExaggeration, s.sky, s.selectionColor],
-    s.thingLayers.toArray().map((l) => [l.id, l.visible, l.fillColor, l.fillOpacity, l.outlineColor, l.pointRadius, l.extrude]),
+    s.thingLayers.toArray().map((l) => [l.id, l.visible, l.fillColor, l.fillOpacity, l.outlineColor, l.pointRadius, l.extrude, l.pointStyle, l.markerSize]),
     s.geoJsonLayers.toArray().map((l) => [l.id, l.visible, l.color, l.opacity, l.extrude, l.heightProperty, l.heightFactor, l.baseHeight]),
   ])
 })
@@ -379,6 +380,11 @@ onMounted(() => {
   map.on('style.load', () => {
     styleReady = true
     applyAdditions()
+  })
+  // A pin in a colour not drawn yet is made when the map first asks for it (#1273).
+  map.on('styleimagemissing', (event: { id: string }) => {
+    if (!map || !event.id.startsWith(PIN_PREFIX) || map.hasImage(event.id)) return
+    map.addImage(event.id, pinImage(event.id.slice(PIN_PREFIX.length)), { pixelRatio: PIN_PIXEL_RATIO })
   })
   map.on('click', onClick)
   map.on('mousemove', onMove)

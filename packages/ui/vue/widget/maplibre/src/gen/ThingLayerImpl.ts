@@ -42,11 +42,13 @@ export class ThingLayerImpl extends BasicEObject implements ThingLayer {
   static readonly FILL_OPACITY: number = 8;
   static readonly OUTLINE_COLOR: number = 9;
   static readonly POINT_RADIUS: number = 10;
-  static readonly EXTRUDE: number = 11;
-  static readonly HEIGHT_SUFFIX: number = 12;
-  static readonly HEIGHT_FACTOR: number = 13;
-  static readonly BASE_HEIGHT: number = 14;
-  static readonly REFRESH_SECONDS: number = 15;
+  static readonly POINT_STYLE: number = 11;
+  static readonly MARKER_SIZE: number = 12;
+  static readonly EXTRUDE: number = 13;
+  static readonly HEIGHT_SUFFIX: number = 14;
+  static readonly HEIGHT_FACTOR: number = 15;
+  static readonly BASE_HEIGHT: number = 16;
+  static readonly REFRESH_SECONDS: number = 17;
 
   // Private fields
   private _id?: string;
@@ -60,6 +62,8 @@ export class ThingLayerImpl extends BasicEObject implements ThingLayer {
   private _fillOpacity: number = 0.6;
   private _outlineColor: string = "#1f2937";
   private _pointRadius: number = 7;
+  private _pointStyle: string = "circle";
+  private _markerSize: number = 1;
   private _extrude: boolean = false;
   private _heightSuffix: string = "";
   private _heightFactor: number = 10;
@@ -304,6 +308,54 @@ export class ThingLayerImpl extends BasicEObject implements ThingLayer {
     }
   }
 
+  get pointStyle(): string {
+    return this._pointStyle!;
+  }
+
+  set pointStyle(value: string) {
+    const oldValue = this._pointStyle;
+    this._pointStyle = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ThingLayerImpl.POINT_STYLE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ThingLayerImpl.POINT_STYLE,
+        merge: () => false
+      });
+    }
+  }
+
+  get markerSize(): number {
+    return this._markerSize!;
+  }
+
+  set markerSize(value: number) {
+    const oldValue = this._markerSize;
+    this._markerSize = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(ThingLayerImpl.MARKER_SIZE),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => ThingLayerImpl.MARKER_SIZE,
+        merge: () => false
+      });
+    }
+  }
+
   get extrude(): boolean {
     return this._extrude!;
   }
@@ -454,6 +506,10 @@ export class ThingLayerImpl extends BasicEObject implements ThingLayer {
         return this.outlineColor;
       case ThingLayerImpl.POINT_RADIUS:
         return this.pointRadius;
+      case ThingLayerImpl.POINT_STYLE:
+        return this.pointStyle;
+      case ThingLayerImpl.MARKER_SIZE:
+        return this.markerSize;
       case ThingLayerImpl.EXTRUDE:
         return this.extrude;
       case ThingLayerImpl.HEIGHT_SUFFIX:
@@ -521,6 +577,14 @@ export class ThingLayerImpl extends BasicEObject implements ThingLayer {
         this.pointRadius = newValue as number;
         super.eSet(feature, newValue);
         break;
+      case ThingLayerImpl.POINT_STYLE:
+        this.pointStyle = newValue as string;
+        super.eSet(feature, newValue);
+        break;
+      case ThingLayerImpl.MARKER_SIZE:
+        this.markerSize = newValue as number;
+        super.eSet(feature, newValue);
+        break;
       case ThingLayerImpl.EXTRUDE:
         this.extrude = newValue as boolean;
         super.eSet(feature, newValue);
@@ -574,6 +638,10 @@ export class ThingLayerImpl extends BasicEObject implements ThingLayer {
         return this._outlineColor !== "#1f2937";
       case ThingLayerImpl.POINT_RADIUS:
         return this._pointRadius !== 7;
+      case ThingLayerImpl.POINT_STYLE:
+        return this._pointStyle !== "circle";
+      case ThingLayerImpl.MARKER_SIZE:
+        return this._markerSize !== 1;
       case ThingLayerImpl.EXTRUDE:
         return this._extrude !== false;
       case ThingLayerImpl.HEIGHT_SUFFIX:
@@ -628,6 +696,12 @@ export class ThingLayerImpl extends BasicEObject implements ThingLayer {
       case ThingLayerImpl.POINT_RADIUS:
         this._pointRadius = 7;
         return;
+      case ThingLayerImpl.POINT_STYLE:
+        this._pointStyle = "circle";
+        return;
+      case ThingLayerImpl.MARKER_SIZE:
+        this._markerSize = 1;
+        return;
       case ThingLayerImpl.EXTRUDE:
         this._extrude = false;
         return;
@@ -669,6 +743,8 @@ export class ThingLayerImpl extends BasicEObject implements ThingLayer {
       fillOpacity: this.fillOpacity,
       outlineColor: this.outlineColor,
       pointRadius: this.pointRadius,
+      pointStyle: this.pointStyle,
+      markerSize: this.markerSize,
       extrude: this.extrude,
       heightSuffix: this.heightSuffix,
       heightFactor: this.heightFactor,

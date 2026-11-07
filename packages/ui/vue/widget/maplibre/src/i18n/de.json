@@ -60,6 +60,12 @@
     "fillColor": "Farbe ohne Wert",
     "fillOpacity": "Deckkraft",
     "outlineColor": "Farbe der Umrisse",
+    "pointStyle": "Punkte als",
+    "pointStyles": {
+      "circle": "Kreis",
+      "pin": "Pin (Marker)"
+    },
+    "markerSize": "Größe der Pins",
     "extrude": "Flächen in 3D",
     "heightSuffix": "Datastream der Höhe (Ende seiner ID)",
     "heightFactor": "Meter je Einheit",
