@@ -32,7 +32,7 @@ Contributors:
  * widget holds a reference to it and would not see a new one.
  */
 import { computed, inject, ref, watch } from 'vue'
-import { evaluateValue } from '@emfts/uimodel-composer'
+import { evaluateValue, trackExpressionTick } from '@emfts/uimodel-composer'
 import type { EObject, EStructuralFeature } from '@emfts/core'
 import {
   identifier as VARIABLE_REPOSITORY,
@@ -170,6 +170,12 @@ function toggle(value: string | number, on: boolean) {
 /** Reads and writes the plain attribute, for a field with no wrapper. */
 const plain = computed<any>({
   get: () => {
+    /*
+     * Read again on every change the form's model reports: an attribute
+     * written by code - a chart that empties its starter choice once it
+     * applied it (#1292) - showed the value the reader had picked.
+     */
+    trackExpressionTick()
     const held = readHeld()
     return holdsValue(held) ? (held as { value: unknown }).value : held
   },
