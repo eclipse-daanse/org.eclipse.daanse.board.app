@@ -46,4 +46,6 @@ export { type WfsStore, type IWfsStoreConfiguration, WFS_STORE_FACTORY, factoryS
 export { WfsstorePackage, WfsstoreFactory, IWfsStoreConfigurationImpl }
 export { boxOf, exceptionOf, featuresOf, featuresOfGml, getCapabilitiesPath, getFeaturePath, tableOf, GEOJSON } from './wfs'
 export type { WfsRequest } from './wfs'
+export { featureInfoPath, featuresOfFeatureInfo, mergedOf, tilesOf, MAX_TILES } from './featureInfo'
+export type { FeatureInfoRequest } from './featureInfo'
 export type { WfsFailure } from './classes/WfsStore'

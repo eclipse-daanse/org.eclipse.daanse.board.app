@@ -8,7 +8,10 @@
     "srsName": "Koordinatensystem",
     "maxFeatures": "Höchstens so viele Features",
     "bbox": "Nur in diesem Rechteck",
-    "filter": "CQL-Filter"
+    "filter": "CQL-Filter",
+    "mode": "Lesen über",
+    "tileSize": "Kachelkante (Grad Breite)",
+    "pointTolerance": "Toleranz (px)"
   },
   "Hints": {
     "connection": "Eine REST-Verbindung, deren Adresse der Dienst ist, z. B. https://gdi.berlin.de/services/wfs/baumbestand",
@@ -16,13 +19,19 @@
     "outputFormat": "Leer: GeoJSON. Ein Dienst ohne GeoJSON antwortet mit GML, das ebenfalls gelesen wird.",
     "maxFeatures": "0: keine Grenze.",
     "bbox": "West,Süd,Ost,Nord in Grad. Leer: überall.",
-    "filter": "Wo der Dienst CQL kennt. Leer: kein Filter."
+    "filter": "Wo der Dienst CQL kennt. Leer: kein Filter.",
+    "mode": "WMS GetFeatureInfo ist für einen QGIS Server, der den Layer nur als WMS anbietet; es braucht ein Rechteck und liest es in Kacheln.",
+    "tileSize": "Eine Anfrage je Kachel; 0,01 ist etwa 1 km."
   },
   "Settings": {
     "reload": "Feature-Typen neu lesen",
     "noTypes": "Der Dienst nennt keinen Feature-Typ.",
     "noWfs": "Diese Adresse antwortet nicht mit WFS-GetCapabilities.",
-    "unreachable": "Der Dienst ist nicht erreichbar oder erlaubt dem Board das Lesen nicht (CORS)."
+    "unreachable": "Der Dienst ist nicht erreichbar oder erlaubt dem Board das Lesen nicht (CORS).",
+    "modes": {
+      "wfs": "WFS GetFeature",
+      "getFeatureInfo": "WMS GetFeatureInfo (in Kacheln)"
+    }
   },
   "Preview": {
     "count": "{{count}} Features",

@@ -115,7 +115,9 @@
       "ruleValue": "Wert (x* beginnt mit)",
       "addRule": "Regel hinzufügen",
       "ruleUrl": "Modelldatei",
-      "ruleUrlHint": "leer: das Modell oben"
+      "ruleUrlHint": "leer: das Modell oben",
+      "widthProperty": "Eigenschaft mit der Breite (m)",
+      "widthPropertyHint": "Z. B. der Kronendurchmesser. Leer: im Verhältnis zur Höhe."
     }
   }
 }

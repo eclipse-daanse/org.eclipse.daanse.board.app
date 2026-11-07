@@ -39,6 +39,7 @@ export interface ModelLayer extends EObject {
   datasourceId?: string;
   heightProperty?: string;
   defaultHeight?: number;
+  widthProperty?: string;
   rules: EList<ModelRule>;
 
 }

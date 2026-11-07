@@ -22,9 +22,10 @@ import { reactive } from 'vue'
 import Settings from '../Settings.vue'
 
 const createServiceWFS = vi.fn()
+const createServiceWMS = vi.fn()
 vi.mock('org.eclipse.daanse.board.app.ui.vue.common.map', async (original) => ({
   ...((await original()) as object),
-  useOGCService: () => ({ createServiceWFS }),
+  useOGCService: () => ({ createServiceWFS, createServiceWMS }),
 }))
 
 const connections = [{ uid: 'berlin', name: 'Berlin', type: 'rest', config: { url: 'https://gdi.berlin.de/services/wfs/baumbestand' } }]
@@ -32,6 +33,7 @@ const connections = [{ uid: 'berlin', name: 'Berlin', type: 'rest', config: { ur
 afterEach(() => {
   vi.unstubAllGlobals()
   createServiceWFS.mockReset()
+  createServiceWMS.mockReset()
 })
 
 describe('the WFS settings', () => {
@@ -46,6 +48,16 @@ describe('the WFS settings', () => {
     expect(wrapper.find('.wfs-settings__error').exists()).toBe(false)
     const options = wrapper.findAll('option').map((o) => o.text())
     expect(options).toContain('Straßenbäume (baumbestand:strassenbaeume)')
+  })
+
+  it('offer the WMS layers in the GetFeatureInfo mode', async () => {
+    createServiceWMS.mockResolvedValue({ getLayers: () => [{ name: 'Bäume', title: 'Bäume' }] })
+    const config = reactive<any>({ connection: 'berlin', url: '', mode: 'getFeatureInfo' })
+    const wrapper = mount(Settings, { props: { config, connections } })
+    await flushPromises()
+    expect(createServiceWMS).toHaveBeenCalled()
+    expect(createServiceWFS).not.toHaveBeenCalled()
+    expect(wrapper.findAll('option').map((o) => o.text())).toContain('Bäume (Bäume)')
   })
 
   it('say why there are none in the service words', async () => {

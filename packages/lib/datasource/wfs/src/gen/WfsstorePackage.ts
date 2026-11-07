@@ -68,6 +68,9 @@ export class WfsstorePackage extends BasicEPackage {
     I_WFS_STORE_CONFIGURATION__MAX_FEATURES: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__BBOX: null as unknown as EAttribute | EReference,
     I_WFS_STORE_CONFIGURATION__FILTER: null as unknown as EAttribute | EReference,
+    I_WFS_STORE_CONFIGURATION__MODE: null as unknown as EAttribute | EReference,
+    I_WFS_STORE_CONFIGURATION__TILE_SIZE: null as unknown as EAttribute | EReference,
+    I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE: null as unknown as EAttribute | EReference,
   };
 
   private constructor() {
@@ -177,6 +180,33 @@ export class WfsstorePackage extends BasicEPackage {
     iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_filter);
     WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__FILTER = iWfsStoreConfiguration_filter;
 
+    // Create mode feature
+    const iWfsStoreConfiguration_mode = new BasicEAttribute();
+    iWfsStoreConfiguration_mode.setName('mode');
+    iWfsStoreConfiguration_mode.setLowerBound(0);
+    iWfsStoreConfiguration_mode.setUpperBound(1);
+    iWfsStoreConfiguration_mode.setDefaultValueLiteral("wfs");
+    iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_mode);
+    WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MODE = iWfsStoreConfiguration_mode;
+
+    // Create tileSize feature
+    const iWfsStoreConfiguration_tileSize = new BasicEAttribute();
+    iWfsStoreConfiguration_tileSize.setName('tileSize');
+    iWfsStoreConfiguration_tileSize.setLowerBound(0);
+    iWfsStoreConfiguration_tileSize.setUpperBound(1);
+    iWfsStoreConfiguration_tileSize.setDefaultValueLiteral("0.01");
+    iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_tileSize);
+    WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__TILE_SIZE = iWfsStoreConfiguration_tileSize;
+
+    // Create pointTolerance feature
+    const iWfsStoreConfiguration_pointTolerance = new BasicEAttribute();
+    iWfsStoreConfiguration_pointTolerance.setName('pointTolerance');
+    iWfsStoreConfiguration_pointTolerance.setLowerBound(0);
+    iWfsStoreConfiguration_pointTolerance.setUpperBound(1);
+    iWfsStoreConfiguration_pointTolerance.setDefaultValueLiteral("70");
+    iWfsStoreConfigurationClass.getEStructuralFeatures().push(iWfsStoreConfiguration_pointTolerance);
+    WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE = iWfsStoreConfiguration_pointTolerance;
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -197,6 +227,9 @@ export class WfsstorePackage extends BasicEPackage {
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MAX_FEATURES as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__BBOX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__FILTER as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__MODE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__TILE_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (WfsstorePackage.Literals.I_WFS_STORE_CONFIGURATION__POINT_TOLERANCE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)

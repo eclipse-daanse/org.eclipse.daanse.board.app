@@ -22,7 +22,7 @@ import * as THREE from 'three'
 import { localOf, nearestWithin, originOf, placementsOf } from '../models/placement'
 import { failureOf, forgetModels, formatOf, loadModel, modelStatus } from '../models/modelLoader'
 import { frameMatrix, instancedOf } from '../models/modelLayer'
-import { heightFor, instancesByModel, ruleFor } from '../models/modelRules'
+import { heightFor, instancesByModel, ruleFor, widthFor } from '../models/modelRules'
 import { modelledSettings, newModelLayer } from '../settingsModel'
 import { MaplibreFactory } from '../gen/MaplibreFactory'
 import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
@@ -237,5 +237,29 @@ describe('model instances from data (#1282)', () => {
     crownMesh.getColorAt(1, color)
     expect(color.getHexString()).toBe('cccccc')
     expect(crownMesh.material.color.getHexString()).toBe('ffffff')
+  })
+})
+
+describe('the width of model instances (#1282)', () => {
+  it('comes from a property in metres, as the crown of a Jena tree', () => {
+    const layer = { id: 'b', url: 'https://x/tree.fbx', heightProperty: 'Baumhöhe', widthProperty: 'Kronendurchmesser', rules: [{ property: 'Baumart', value: 'Tilia*', color: '#4caf50' }] }
+    expect(widthFor(layer, { Kronendurchmesser: 9 })).toBe(9)
+    expect(widthFor(layer, { Kronendurchmesser: '' })).toBeUndefined()
+    const byModel = instancesByModel(layer, {
+      features: [{ id: 'Bäume.101', geometry: { type: 'Point', coordinates: [11.615, 50.958] }, properties: { Baumart: 'Tilia cordata, Winterlinde', Baumhöhe: 14, Kronendurchmesser: 9 } }],
+    })
+    expect(byModel.get('https://x/tree.fbx')).toEqual([{ id: 'Bäume.101', lon: 11.615, lat: 50.958, height: 14, width: 9, color: '#4caf50' }])
+  })
+
+  it('scales the model across to it, and up to its height', () => {
+    const source = new THREE.Group()
+    source.add(new THREE.Mesh(new THREE.BoxGeometry(2, 4, 2), new THREE.MeshBasicMaterial()))
+    const [mesh] = instancedOf(THREE, source, [{ position: [0, 0, 0], rotation: 0, scale: 1, height: 12, width: 8 }]).children
+    const matrix = new THREE.Matrix4()
+    mesh.getMatrixAt(0, matrix)
+    const corner = new THREE.Vector3(1, 2, 1).applyMatrix4(matrix)
+    expect(corner.y).toBeCloseTo(12, 9)
+    expect(corner.x).toBeCloseTo(4, 9)
+    expect(corner.z).toBeCloseTo(4, 9)
   })
 })

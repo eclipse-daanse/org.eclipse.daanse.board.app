@@ -115,7 +115,9 @@
       "ruleValue": "Value (x* starts with)",
       "addRule": "Add a rule",
       "ruleUrl": "Model file",
-      "ruleUrlHint": "empty: the model above"
+      "ruleUrlHint": "empty: the model above",
+      "widthProperty": "Property with the width (m)",
+      "widthPropertyHint": "E.g. the crown diameter. Empty: in proportion to the height."
     }
   }
 }

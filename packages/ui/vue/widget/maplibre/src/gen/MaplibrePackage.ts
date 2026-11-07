@@ -151,6 +151,7 @@ export class MaplibrePackage extends BasicEPackage {
     MODEL_LAYER__DATASOURCE_ID: null as unknown as EAttribute | EReference,
     MODEL_LAYER__HEIGHT_PROPERTY: null as unknown as EAttribute | EReference,
     MODEL_LAYER__DEFAULT_HEIGHT: null as unknown as EAttribute | EReference,
+    MODEL_LAYER__WIDTH_PROPERTY: null as unknown as EAttribute | EReference,
     MODEL_LAYER__RULES: null as unknown as EAttribute | EReference,
     MODEL_RULE: null as unknown as EClass,
     MODEL_RULE__PROPERTY: null as unknown as EAttribute | EReference,
@@ -1019,6 +1020,15 @@ export class MaplibrePackage extends BasicEPackage {
     modelLayerClass.getEStructuralFeatures().push(modelLayer_defaultHeight);
     MaplibrePackage.Literals.MODEL_LAYER__DEFAULT_HEIGHT = modelLayer_defaultHeight;
 
+    // Create widthProperty feature
+    const modelLayer_widthProperty = new BasicEAttribute();
+    modelLayer_widthProperty.setName('widthProperty');
+    modelLayer_widthProperty.setLowerBound(0);
+    modelLayer_widthProperty.setUpperBound(1);
+    modelLayer_widthProperty.setDefaultValueLiteral("");
+    modelLayerClass.getEStructuralFeatures().push(modelLayer_widthProperty);
+    MaplibrePackage.Literals.MODEL_LAYER__WIDTH_PROPERTY = modelLayer_widthProperty;
+
     // Create rules feature
     const modelLayer_rules = new BasicEReference();
     modelLayer_rules.setContainment(true);
@@ -1368,6 +1378,7 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.MODEL_LAYER__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_LAYER__HEIGHT_PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_LAYER__DEFAULT_HEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.MODEL_LAYER__WIDTH_PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_LAYER__RULES as BasicEReference).setEType(MaplibrePackage.Literals.MODEL_RULE);
     (MaplibrePackage.Literals.MODEL_RULE__PROPERTY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.MODEL_RULE__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
