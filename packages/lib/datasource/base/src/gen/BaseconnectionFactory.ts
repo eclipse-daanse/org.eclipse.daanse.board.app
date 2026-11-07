@@ -21,6 +21,10 @@
 import { BasicEFactory } from '@emfts/core';
 import type { EClass, EObject } from '@emfts/core';
 import { BaseconnectionPackage } from './BaseconnectionPackage.js';
+import { ColumnType } from './ColumnType.js';
+import { ColumnTypeImpl } from './ColumnTypeImpl.js';
+import { Transform } from './Transform.js';
+import { TransformImpl } from './TransformImpl.js';
 
 /**
  * Factory for creating Baseconnection model objects
@@ -43,10 +47,28 @@ export class BaseconnectionFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new ColumnType instance
+   */
+  createColumnType(): ColumnType {
+    return new ColumnTypeImpl();
+  }
+
+  /**
+   * Create a new Transform instance
+   */
+  createTransform(): Transform {
+    return new TransformImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
     switch (eClass.getName()) {
+      case 'ColumnType':
+        return this.createColumnType();
+      case 'Transform':
+        return this.createTransform();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

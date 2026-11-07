@@ -25,11 +25,12 @@
  * widget hands the values to Vega at run time (#1286).
  */
 
+import './referencedPackages'
 import type { TopLevelSpec } from 'vega-lite'
 import type { VegaWidgetSettings } from './gen/VegaWidgetSettings'
 import type { Layer } from './gen/Layer'
 import type { Encoding } from './gen/Encoding'
-import type { Transform } from './gen/Transform'
+import type { Transform } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import type { Param } from './gen/Param'
 
 /** The dataset a layer draws when it names none: the widget's own source. */

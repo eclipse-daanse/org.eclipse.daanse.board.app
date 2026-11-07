@@ -9,6 +9,7 @@
   "dependencies": [
     "lib.api.datasource",
     "lib.api.widget",
+    "lib.datasource.base",
     "platform.vue",
     "ui.vue.composables"
   ],
@@ -45,6 +46,10 @@
     {
       "id": "@emfts/core",
       "versionRange": "^0.3.0-next.6"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.datasource.base",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
