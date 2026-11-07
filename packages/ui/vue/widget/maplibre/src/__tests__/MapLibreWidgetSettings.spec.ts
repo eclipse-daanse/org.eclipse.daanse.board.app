@@ -24,6 +24,9 @@ import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { MaplibrePackage } from '../gen/MaplibrePackage'
 import MapLibreWidgetSettings from '../MapLibreWidgetSettings.vue'
 import { modelledSettings } from '../settingsModel'
+import { placing } from '../models/placementMode'
+import ModelFileField from '../symbols/ModelFileField.vue'
+import ModelInstancesField from '../symbols/ModelInstancesField.vue'
 
 void EventsPackage.eINSTANCE
 void MaplibrePackage.eINSTANCE
@@ -72,10 +75,23 @@ describe('the symbol layers in the settings of the 3D map (#1296)', () => {
     const wrapper = mount(MapLibreWidgetSettings, { props: { modelValue: stored } })
     await flushPromises()
     const section = wrapper.find('[data-section-id="models"]')
-    expect(section.find('.symbol-status__name').text()).toBe('Bäume')
     expect(section.findComponent({ name: 'SettingsForm' }).exists()).toBe(true)
+    // The model file and the place mode are field widgets inside the generated form, not beside it.
+    expect(section.find('.symbol-status').exists()).toBe(false)
+    const file = section.findComponent(ModelFileField)
+    expect(file.exists()).toBe(true)
+    expect(file.find('.file-field__status').text()).toMatch(/Settings\.models\.(loading|ready|errors)/)
+    const instances = section.findComponent(ModelInstancesField)
+    expect(instances.exists()).toBe(true)
+    const place = instances.findAll('button').find((b) => b.text().includes('Settings.models.place'))!
+    await place.trigger('click')
+    expect(placing.value).toEqual({ settings: stored, layerId: 'trees' })
+    expect(instances.text()).toContain('Settings.models.placeHint')
     // The hand-written fields of before are gone; what the form shows comes from the model.
     expect(section.text()).not.toContain('Settings.models.heightProperty')
     expect(section.text()).toContain('maplibre:Symbols.MapLibreSettings.modelLayers')
+    // Closing the dialog ends the place mode.
+    wrapper.unmount()
+    expect(placing.value).toBeNull()
   })
 })
