@@ -46,9 +46,10 @@ export interface ModelCustomLayer extends CustomLayerInterface {
 }
 
 /**
- * One InstancedMesh per mesh of the file, the instances placed: moved,
- * turned about the vertical and scaled in the frame, the model lifted so
- * that its lowest point is on the ground.
+ * One InstancedMesh per mesh of the file - per material, where a mesh has
+ * several - the instances placed: moved, turned about the vertical and
+ * scaled in the frame, the model lifted so that its lowest point is on the
+ * ground.
  */
 export function instancedOf(THREE: any, source: any, placements: InstancePlacement[], parts: PartEncodingLike[] = []): any {
   const group = new THREE.Group()
@@ -65,14 +66,14 @@ export function instancedOf(THREE: any, source: any, placements: InstancePlaceme
   const ground = new THREE.Matrix4().makeTranslation(0, lift, 0)
   const tall = Number.isFinite(box.max.y - box.min.y) ? box.max.y - box.min.y : 0
   const wide = Math.max(box.max.x - box.min.x, box.max.z - box.min.z)
-  for (const mesh of meshes) {
-    // The part a mesh belongs to: the first whose pattern its names match (#1296).
-    const part = parts.findIndex((each) => inPart(each, `${mesh.name ?? ''} ${materialNames(mesh)}`))
+  for (const { mesh, geometry, material: given } of meshes.flatMap((mesh) => piecesOf(THREE, mesh))) {
+    // The part a piece belongs to: the first whose pattern its names match (#1296).
+    const part = parts.findIndex((each) => inPart(each, `${mesh.name ?? ''} ${materialNames(given)}`))
     const colorFor = (placement: InstancePlacement) => (part >= 0 ? placement.partColors?.[part] : placement.color)
     const paint = placements.some((placement) => !!colorFor(placement))
-    const material = paint ? whiteCopyOf(mesh.material) : mesh.material
-    const instanced = new THREE.InstancedMesh(mesh.geometry, material, placements.length)
-    const own = new THREE.Color(firstColorOf(mesh.material))
+    const material = paint ? whiteCopyOf(given) : given
+    const instanced = new THREE.InstancedMesh(geometry, material, placements.length)
+    const own = new THREE.Color(firstColorOf(given))
     placements.forEach((placement, index) => {
       at.makeTranslation(...placement.position)
       turn.makeRotationY(placement.rotation)
@@ -96,8 +97,32 @@ export function instancedOf(THREE: any, source: any, placements: InstancePlaceme
   return group
 }
 
-const materialNames = (mesh: any) =>
-  (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map((m: any) => m?.name ?? '').join(' ')
+/*
+ * The pieces of a mesh that are coloured on their own: the mesh itself, or,
+ * where it has several materials, one piece per material - a tree in one
+ * mesh with the materials Bark and Tree has a trunk and a crown (#1299).
+ * A piece shares the vertices of the mesh and draws only the groups of its
+ * material.
+ */
+function piecesOf(THREE: any, mesh: any): { mesh: any; geometry: any; material: any }[] {
+  const materials = mesh.material
+  const groups: { start: number; count: number; materialIndex?: number }[] = mesh.geometry?.groups ?? []
+  if (!Array.isArray(materials) || materials.length < 2 || !groups.length) {
+    return [{ mesh, geometry: mesh.geometry, material: materials }]
+  }
+  return materials.flatMap((material: any, index: number) => {
+    const own = groups.filter((group) => (group.materialIndex ?? 0) === index)
+    if (!own.length) return []
+    const geometry = new THREE.BufferGeometry()
+    geometry.setIndex(mesh.geometry.index)
+    for (const [name, attribute] of Object.entries(mesh.geometry.attributes)) geometry.setAttribute(name, attribute)
+    for (const group of own) geometry.addGroup(group.start, group.count, 0)
+    return [{ mesh, geometry, material: [material] }]
+  })
+}
+
+const materialNames = (material: any) =>
+  (Array.isArray(material) ? material : [material]).map((m: any) => m?.name ?? '').join(' ')
 
 /** The colour a mesh is drawn in, to keep for an instance without a rule colour. */
 const firstColorOf = (material: any) => (Array.isArray(material) ? material[0] : material)?.color?.getHex?.() ?? 0xffffff
