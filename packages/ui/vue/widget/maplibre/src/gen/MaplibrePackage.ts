@@ -101,6 +101,7 @@ export class MaplibrePackage extends BasicEPackage {
     THING_LAYER__POINT_RADIUS: null as unknown as EAttribute | EReference,
     THING_LAYER__POINT_STYLE: null as unknown as EAttribute | EReference,
     THING_LAYER__MARKER_SIZE: null as unknown as EAttribute | EReference,
+    THING_LAYER__MARKER_ICON: null as unknown as EAttribute | EReference,
     THING_LAYER__EXTRUDE: null as unknown as EAttribute | EReference,
     THING_LAYER__HEIGHT_SUFFIX: null as unknown as EAttribute | EReference,
     THING_LAYER__HEIGHT_FACTOR: null as unknown as EAttribute | EReference,
@@ -541,6 +542,15 @@ export class MaplibrePackage extends BasicEPackage {
     thingLayerClass.getEStructuralFeatures().push(thingLayer_markerSize);
     MaplibrePackage.Literals.THING_LAYER__MARKER_SIZE = thingLayer_markerSize;
 
+    // Create markerIcon feature
+    const thingLayer_markerIcon = new BasicEAttribute();
+    thingLayer_markerIcon.setName('markerIcon');
+    thingLayer_markerIcon.setLowerBound(0);
+    thingLayer_markerIcon.setUpperBound(1);
+    thingLayer_markerIcon.setDefaultValueLiteral("");
+    thingLayerClass.getEStructuralFeatures().push(thingLayer_markerIcon);
+    MaplibrePackage.Literals.THING_LAYER__MARKER_ICON = thingLayer_markerIcon;
+
     // Create extrude feature
     const thingLayer_extrude = new BasicEAttribute();
     thingLayer_extrude.setName('extrude');
@@ -918,6 +928,7 @@ export class MaplibrePackage extends BasicEPackage {
     (MaplibrePackage.Literals.THING_LAYER__POINT_RADIUS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (MaplibrePackage.Literals.THING_LAYER__POINT_STYLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.THING_LAYER__MARKER_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
+    (MaplibrePackage.Literals.THING_LAYER__MARKER_ICON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.THING_LAYER__EXTRUDE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (MaplibrePackage.Literals.THING_LAYER__HEIGHT_SUFFIX as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MaplibrePackage.Literals.THING_LAYER__HEIGHT_FACTOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);

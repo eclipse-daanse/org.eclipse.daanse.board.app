@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { describe, it, expect } from 'vitest'
-import { pinImage, rgbOf } from '../pin'
+import { pinImage, pinImageId, pinOfImageId, pinWithIcon, rgbOf } from '../pin'
 
 const pixel = (image: ReturnType<typeof pinImage>, x: number, y: number) =>
   Array.from(image.data.slice((y * image.width + x) * 4, (y * image.width + x) * 4 + 4))
@@ -37,5 +37,16 @@ describe('the pin of a sensor (#1273)', () => {
     expect(edge[3]).toBeGreaterThan(200)
     // The tip reaches down to where the pin stands.
     expect(pixel(image, 24, 60)[3]).toBeGreaterThan(0)
+  })
+
+  it('is named by its icon and colour, and has no eye where an icon goes', async () => {
+    expect(pinImageId('#E53935')).toBe('daanse-pin:#E53935')
+    expect(pinImageId('#E53935', 'sensors')).toBe('daanse-pin:sensors|#E53935')
+    expect(pinOfImageId('daanse-pin:sensors|#E53935')).toEqual({ icon: 'sensors', color: '#E53935' })
+    expect(pinOfImageId('daanse-pin:#E53935')).toEqual({ icon: '', color: '#E53935' })
+    expect(pixel(pinImage('#E53935', false), 24, 22)).toEqual([229, 57, 53, 255])
+    // Without a canvas (here) the pin keeps its eye rather than failing.
+    const fallback = await pinWithIcon('#E53935', 'sensors', { createElement: () => ({ getContext: () => null }) } as any)
+    expect(pixel(fallback, 24, 22)).toEqual([255, 255, 255, 255])
   })
 })

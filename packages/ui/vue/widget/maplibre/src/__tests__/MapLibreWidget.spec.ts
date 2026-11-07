@@ -48,8 +48,8 @@ vi.mock('maplibre-gl', () => {
       return this.images.has(id)
     }
     addImage = vi.fn((id: string, image: any) => this.images.set(id, image))
-    resolveImage?: (id: string) => void
-    setMissingStyleImageResolver(resolver: (id: string) => void) {
+    resolveImage?: (id: string) => unknown
+    setMissingStyleImageResolver(resolver: (id: string) => unknown) {
       this.resolveImage = resolver
     }
     getBearing = () => -20
@@ -344,9 +344,9 @@ describe('the actions after a change of page (#1272)', () => {
 describe('the pins of a layer (#1273)', () => {
   it('are drawn in a colour when the map first asks for it, once', async () => {
     const { map } = await mountWidget(stored())
-    map.resolveImage('daanse-pin:#E53935')
-    map.resolveImage('daanse-pin:#E53935')
-    map.resolveImage('other-image')
+    await map.resolveImage('daanse-pin:#E53935')
+    await map.resolveImage('daanse-pin:#E53935')
+    await map.resolveImage('other-image')
     expect(map.addImage).toHaveBeenCalledTimes(1)
     const [id, image, options] = map.addImage.mock.calls[0]
     expect(id).toBe('daanse-pin:#E53935')

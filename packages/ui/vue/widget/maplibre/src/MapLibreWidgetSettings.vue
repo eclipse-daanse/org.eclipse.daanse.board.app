@@ -21,7 +21,7 @@ Contributors:
 import { computed, inject, type ShallowRef } from 'vue'
 import { identifier, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { DButton, DCheckbox, DColorInput, DIcon, DInput, DSelect, DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DCheckbox, DColorInput, DIcon, DIconPicker, DInput, DSelect, DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import type { MapLibreSettings } from './gen/MapLibreSettings'
 import type { ThingLayer } from './gen/ThingLayer'
 import { modelledSettings, newColorMapping, newGeoJsonLayer, newThingLayer } from './settingsModel'
@@ -188,6 +188,8 @@ function addColor(layer: ThingLayer) {
             :label="t('Settings.pointStyle')" />
           <DSlider v-if="layer.pointStyle === 'pin'" v-model="layer.markerSize" :label="t('Settings.markerSize')"
             :min="0.5" :max="3" :step="0.1" />
+          <DIconPicker v-if="layer.pointStyle === 'pin'" v-model="layer.markerIcon" :label="t('Settings.markerIcon')"
+            :hint="t('Settings.markerIconHint')" />
           <DCheckbox v-model="layer.extrude" :label="t('Settings.extrude')" />
           <template v-if="layer.extrude">
             <DInput v-model="layer.heightSuffix" :label="t('Settings.heightSuffix')" placeholder="~referenceArea~sensorCount" />

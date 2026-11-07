@@ -23,7 +23,7 @@ Contributors:
 import { computed, inject, onMounted, onUnmounted, ref, shallowRef, toRefs, watch } from 'vue'
 import { AttributionControl, Map as MapLibreMap, NavigationControl, type GeoJSONSource, type IControl, type MapMouseEvent } from 'maplibre-gl'
 import { TextAttributionControl } from './attribution'
-import { PIN_PIXEL_RATIO, PIN_PREFIX, pinImage } from './pin'
+import { PIN_PIXEL_RATIO, PIN_PREFIX, pinImage, pinOfImageId, pinWithIcon } from './pin'
 import { useMapLibreWorker } from './worker'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useRoute } from 'vue-router'
@@ -150,7 +150,7 @@ const lookKey = computed(() => {
     [s.rasterUrl, s.rasterLayers, s.rasterOpacity, s.rasterAttribution, s.rasterInvertDark],
     [s.buildings, s.buildingColor, s.buildingOpacity, s.buildingSourceLayer],
     [s.terrainUrl, s.terrainEncoding, s.terrainExaggeration, s.sky, s.selectionColor],
-    s.thingLayers.toArray().map((l) => [l.id, l.visible, l.fillColor, l.fillOpacity, l.outlineColor, l.pointRadius, l.extrude, l.pointStyle, l.markerSize]),
+    s.thingLayers.toArray().map((l) => [l.id, l.visible, l.fillColor, l.fillOpacity, l.outlineColor, l.pointRadius, l.extrude, l.pointStyle, l.markerSize, l.markerIcon]),
     s.geoJsonLayers.toArray().map((l) => [l.id, l.visible, l.color, l.opacity, l.extrude, l.heightProperty, l.heightFactor, l.baseHeight]),
   ])
 })
@@ -386,9 +386,11 @@ onMounted(() => {
    * (#1273). A resolver, not the styleimagemissing event: since MapLibre 6
    * an image added from the event comes too late for the tile that asked.
    */
-  map.setMissingStyleImageResolver((id: string) => {
+  map.setMissingStyleImageResolver(async (id: string) => {
     if (!map || !id.startsWith(PIN_PREFIX) || map.hasImage(id)) return
-    map.addImage(id, pinImage(id.slice(PIN_PREFIX.length)), { pixelRatio: PIN_PIXEL_RATIO })
+    const { color, icon } = pinOfImageId(id)
+    const image = icon ? await pinWithIcon(color, icon) : pinImage(color)
+    if (map && !map.hasImage(id)) map.addImage(id, image, { pixelRatio: PIN_PIXEL_RATIO })
   })
   map.on('click', onClick)
   map.on('mousemove', onMove)
