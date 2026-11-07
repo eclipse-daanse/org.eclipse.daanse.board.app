@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+One encoding of a layer (#1285): which field drives which channel, and how
+the field is read and shown. The field is typed with the names of the data
+suggested; what the channel does not read - an axis on a colour, a legend on
+x - is not shown.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaEncodingForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaEncodingFormView">
+    <fields xsi:type="uimodel:SelectWidget"
+        name="channel"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/channel"
+        label="vega:FormEncoding.channel">
+      <values>x</values>
+      <values>y</values>
+      <values>x2</values>
+      <values>y2</values>
+      <values>xOffset</values>
+      <values>yOffset</values>
+      <values>color</values>
+      <values>size</values>
+      <values>shape</values>
+      <values>opacity</values>
+      <values>theta</values>
+      <values>radius</values>
+      <values>text</values>
+      <values>tooltip</values>
+      <values>detail</values>
+      <values>order</values>
+      <optionLabel language="JS" body="({ x: 'vega:Options.channel.x', y: 'vega:Options.channel.y', x2: 'vega:Options.channel.x2', y2: 'vega:Options.channel.y2', xOffset: 'vega:Options.channel.xOffset', yOffset: 'vega:Options.channel.yOffset', color: 'vega:Options.channel.color', size: 'vega:Options.channel.size', shape: 'vega:Options.channel.shape', opacity: 'vega:Options.channel.opacity', theta: 'vega:Options.channel.theta', radius: 'vega:Options.channel.radius', text: 'vega:Options.channel.text', tooltip: 'vega:Options.channel.tooltip', detail: 'vega:Options.channel.detail', order: 'vega:Options.channel.order' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="field"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/field"
+        label="vega:FormEncoding.field"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="type"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/type"
+        label="vega:FormEncoding.type">
+      <values>quantitative</values>
+      <values>temporal</values>
+      <values>ordinal</values>
+      <values>nominal</values>
+      <optionLabel language="JS" body="({ quantitative: 'vega:Options.type.quantitative', temporal: 'vega:Options.type.temporal', ordinal: 'vega:Options.type.ordinal', nominal: 'vega:Options.type.nominal' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="!!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="aggregate"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/aggregate"
+        label="vega:FormEncoding.aggregate">
+      <values>none</values>
+      <values>count</values>
+      <values>sum</values>
+      <values>mean</values>
+      <values>median</values>
+      <values>min</values>
+      <values>max</values>
+      <values>distinct</values>
+      <values>stdev</values>
+      <optionLabel language="JS" body="({ none: 'vega:Options.aggregate.none', count: 'vega:Options.aggregate.count', sum: 'vega:Options.aggregate.sum', mean: 'vega:Options.aggregate.mean', median: 'vega:Options.aggregate.median', min: 'vega:Options.aggregate.min', max: 'vega:Options.aggregate.max', distinct: 'vega:Options.aggregate.distinct', stdev: 'vega:Options.aggregate.stdev' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="value"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/value"
+        label="vega:FormEncoding.value">
+      <visibilityCondition language="JS" body="!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="bin"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/bin"
+        label="vega:FormEncoding.bin">
+      <visibilityCondition language="JS" body="!!self.field &amp;&amp; self.type === 'quantitative'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget"
+        name="maxBins"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/maxBins"
+        label="vega:FormEncoding.maxBins" min="0" step="1">
+      <visibilityCondition language="JS" body="self.bin === true"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="timeUnit"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/timeUnit"
+        label="vega:FormEncoding.timeUnit">
+      <values>none</values>
+      <values>year</values>
+      <values>yearmonth</values>
+      <values>yearmonthdate</values>
+      <values>month</values>
+      <values>date</values>
+      <values>day</values>
+      <values>hours</values>
+      <values>hoursminutes</values>
+      <optionLabel language="JS" body="({ none: 'vega:Options.timeUnit.none', year: 'vega:Options.timeUnit.year', yearmonth: 'vega:Options.timeUnit.yearmonth', yearmonthdate: 'vega:Options.timeUnit.yearmonthdate', month: 'vega:Options.timeUnit.month', date: 'vega:Options.timeUnit.date', day: 'vega:Options.timeUnit.day', hours: 'vega:Options.timeUnit.hours', hoursminutes: 'vega:Options.timeUnit.hoursminutes' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="!!self.field &amp;&amp; self.type === 'temporal'"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="sort"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/sort"
+        label="vega:FormEncoding.sort">
+      <values>none</values>
+      <values>ascending</values>
+      <values>descending</values>
+      <values>otherAscending</values>
+      <values>otherDescending</values>
+      <optionLabel language="JS" body="({ none: 'vega:Options.sort.none', ascending: 'vega:Options.sort.ascending', descending: 'vega:Options.sort.descending', otherAscending: 'vega:Options.sort.otherAscending', otherDescending: 'vega:Options.sort.otherDescending' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="['x', 'y', 'xOffset', 'yOffset', 'color', 'size', 'shape', 'opacity', 'theta', 'radius', 'order'].includes(self.channel)"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="stack"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/stack"
+        label="vega:FormEncoding.stack">
+      <values>auto</values>
+      <values>zero</values>
+      <values>normalize</values>
+      <values>center</values>
+      <values>none</values>
+      <optionLabel language="JS" body="({ auto: 'vega:Options.stack.auto', zero: 'vega:Options.stack.zero', normalize: 'vega:Options.stack.normalize', center: 'vega:Options.stack.center', none: 'vega:Options.stack.none' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="['x', 'y', 'theta', 'radius'].includes(self.channel)"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="title"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/title"
+        label="vega:FormEncoding.title">
+      <visibilityCondition language="JS" body="!!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="format"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/format"
+        label="vega:FormEncoding.format">
+      <visibilityCondition language="JS" body="!!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="scaleType"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/scaleType"
+        label="vega:FormEncoding.scaleType">
+      <values>auto</values>
+      <values>linear</values>
+      <values>log</values>
+      <values>sqrt</values>
+      <values>pow</values>
+      <values>time</values>
+      <values>utc</values>
+      <values>band</values>
+      <values>point</values>
+      <optionLabel language="JS" body="({ auto: 'vega:Options.scaleType.auto', linear: 'vega:Options.scaleType.linear', log: 'vega:Options.scaleType.log', sqrt: 'vega:Options.scaleType.sqrt', pow: 'vega:Options.scaleType.pow', time: 'vega:Options.scaleType.time', utc: 'vega:Options.scaleType.utc', band: 'vega:Options.scaleType.band', point: 'vega:Options.scaleType.point' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="['x', 'y', 'xOffset', 'yOffset', 'color', 'size', 'shape', 'opacity', 'theta', 'radius'].includes(self.channel) &amp;&amp; !!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="scaleZero"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/scaleZero"
+        label="vega:FormEncoding.scaleZero">
+      <visibilityCondition language="JS" body="['x', 'y', 'xOffset', 'yOffset', 'color', 'size', 'shape', 'opacity', 'theta', 'radius'].includes(self.channel) &amp;&amp; self.type === 'quantitative'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="domainMin"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/domainMin"
+        label="vega:FormEncoding.domainMin">
+      <visibilityCondition language="JS" body="['x', 'y', 'xOffset', 'yOffset', 'color', 'size', 'shape', 'opacity', 'theta', 'radius'].includes(self.channel) &amp;&amp; !!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="domainMax"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/domainMax"
+        label="vega:FormEncoding.domainMax">
+      <visibilityCondition language="JS" body="['x', 'y', 'xOffset', 'yOffset', 'color', 'size', 'shape', 'opacity', 'theta', 'radius'].includes(self.channel) &amp;&amp; !!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="scheme"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/scheme"
+        label="vega:FormEncoding.scheme">
+      <visibilityCondition language="JS" body="self.channel === 'color' &amp;&amp; !!self.field"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="showAxis"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/showAxis"
+        label="vega:FormEncoding.showAxis">
+      <visibilityCondition language="JS" body="['x', 'y'].includes(self.channel)"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="showGrid"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/showGrid"
+        label="vega:FormEncoding.showGrid">
+      <visibilityCondition language="JS" body="['x', 'y'].includes(self.channel) &amp;&amp; self.showAxis !== false"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="labelAngle"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/labelAngle"
+        label="vega:FormEncoding.labelAngle">
+      <visibilityCondition language="JS" body="['x', 'y'].includes(self.channel) &amp;&amp; self.showAxis !== false"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="showLegend"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/showLegend"
+        label="vega:FormEncoding.showLegend">
+      <visibilityCondition language="JS" body="['color', 'size', 'shape', 'opacity'].includes(self.channel)"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="highlightParam"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/highlightParam"
+        label="vega:FormEncoding.highlightParam"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="valueIfNotSelected"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Encoding/valueIfNotSelected"
+        label="vega:FormEncoding.valueIfNotSelected">
+      <visibilityCondition language="JS" body="!!self.highlightParam"/>
+    </fields>
+  </components>
+</uimodel:UIModel>

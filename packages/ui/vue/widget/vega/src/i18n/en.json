@@ -3,19 +3,221 @@
     "name": "Vega-Lite chart",
     "error": "The chart cannot be drawn: {{message}}"
   },
-  "Form": {
-    "title": "Title",
-    "renderer": "Drawn as",
-    "tooltip": "Show values in a tooltip"
-  },
-  "Options": {
-    "renderer": {
-      "canvas": "Canvas (fast with many marks)",
-      "svg": "SVG (sharp when zoomed)"
-    }
-  },
   "Recipe": {
     "noLayers": "The chart has no layer yet. Add one in the settings.",
     "facetNeedsOneDataset": "Small multiples need every layer to draw the same dataset."
+  },
+  "Form": {
+    "title": "Title",
+    "layers": "Layers",
+    "facet": "Small multiples",
+    "params": "Selections and values",
+    "legendPosition": "Legend",
+    "tooltip": "Show values in a tooltip",
+    "renderer": "Drawn as",
+    "layersHint": "No layer yet: add one to draw marks.",
+    "paramsHint": "No selection: marks are not picked."
+  },
+  "Options": {
+    "legendPosition": {
+      "right": "Right",
+      "bottom": "Below",
+      "top": "Above",
+      "left": "Left",
+      "none": "No legend"
+    },
+    "renderer": {
+      "canvas": "Canvas (fast with many marks)",
+      "svg": "SVG (sharp when zoomed)"
+    },
+    "mark": {
+      "bar": "Bars",
+      "line": "Line",
+      "area": "Area",
+      "point": "Points",
+      "circle": "Circles",
+      "square": "Squares",
+      "tick": "Ticks",
+      "rule": "Rule (reference line)",
+      "rect": "Rectangles (heatmap)",
+      "arc": "Arc (pie, donut)",
+      "text": "Text",
+      "trail": "Trail (line of varying width)",
+      "boxplot": "Box plot",
+      "errorbar": "Error bars"
+    },
+    "interpolate": {
+      "linear": "Straight",
+      "monotone": "Smooth",
+      "step": "Steps",
+      "basis": "Curved"
+    },
+    "channel": {
+      "x": "x - horizontal position",
+      "y": "y - vertical position",
+      "x2": "x2 - end of a horizontal range",
+      "y2": "y2 - end of a vertical range",
+      "xOffset": "x offset - side by side within a band",
+      "yOffset": "y offset - stacked within a band",
+      "color": "Colour",
+      "size": "Size",
+      "shape": "Shape",
+      "opacity": "Opacity",
+      "theta": "Angle (arc)",
+      "radius": "Radius (arc)",
+      "text": "Text",
+      "tooltip": "Tooltip",
+      "detail": "Detail - group without a visual channel",
+      "order": "Drawing order"
+    },
+    "type": {
+      "quantitative": "Numbers",
+      "temporal": "Points in time",
+      "ordinal": "Ordered categories",
+      "nominal": "Categories"
+    },
+    "aggregate": {
+      "none": "None - every value",
+      "count": "Count of rows",
+      "sum": "Sum",
+      "mean": "Mean",
+      "median": "Median",
+      "min": "Minimum",
+      "max": "Maximum",
+      "distinct": "Distinct values",
+      "stdev": "Standard deviation"
+    },
+    "timeUnit": {
+      "none": "The whole point in time",
+      "year": "Year",
+      "yearmonth": "Year and month",
+      "yearmonthdate": "Day",
+      "month": "Month of the year",
+      "date": "Day of the month",
+      "day": "Day of the week",
+      "hours": "Hour of the day",
+      "hoursminutes": "Time of day"
+    },
+    "sort": {
+      "none": "As the data comes",
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "otherAscending": "By the other axis, ascending",
+      "otherDescending": "By the other axis, descending"
+    },
+    "stack": {
+      "auto": "As the mark stacks",
+      "zero": "From zero",
+      "normalize": "As shares of the whole",
+      "center": "Centred",
+      "none": "Not stacked"
+    },
+    "scaleType": {
+      "auto": "Automatic",
+      "linear": "Linear",
+      "log": "Logarithmic",
+      "sqrt": "Square root",
+      "pow": "Power",
+      "time": "Time (local)",
+      "utc": "Time (UTC)",
+      "band": "Bands",
+      "point": "Points"
+    },
+    "kind": {
+      "filter": "Filter rows",
+      "fold": "Columns to rows",
+      "calculate": "Calculate a field"
+    },
+    "op": {
+      "eq": "equals",
+      "neq": "does not equal",
+      "lt": "less than",
+      "lte": "at most",
+      "gt": "greater than",
+      "gte": "at least",
+      "oneOf": "one of (comma-separated)",
+      "range": "between (two values, comma-separated)",
+      "valid": "has a value",
+      "param": "is in a selection"
+    },
+    "paramKind": {
+      "point": "Pick marks",
+      "interval": "Pick a range",
+      "value": "A value"
+    },
+    "encodings": {
+      "x": "x",
+      "y": "y"
+    },
+    "bind": {
+      "none": "In the chart",
+      "legend": "In the legend",
+      "scales": "Zoom and pan the chart"
+    }
+  },
+  "FormLayer": {
+    "mark": "Mark",
+    "encodings": "Encodings",
+    "transforms": "Steps on the data",
+    "interpolate": "Line between points",
+    "showPoints": "Draw a point at each value",
+    "filled": "Filled",
+    "color": "Colour of every mark",
+    "opacity": "Opacity",
+    "cornerRadius": "Rounded corners (px)",
+    "innerRadius": "Inner radius (px) - more than 0 draws a donut",
+    "strokeWidth": "Line width (px)",
+    "dataset": "Dataset (empty: the data of the widget)",
+    "encodingsHint": "No encoding: add x and y to place the marks."
+  },
+  "FormEncoding": {
+    "channel": "Channel",
+    "field": "Field",
+    "type": "The values are",
+    "aggregate": "Combine values",
+    "value": "Fixed value (without a field)",
+    "bin": "Group into bins (histogram)",
+    "maxBins": "Largest number of bins (0: automatic)",
+    "timeUnit": "Part of the point in time",
+    "sort": "Order",
+    "stack": "Stacking",
+    "title": "Title of the axis or legend",
+    "format": "Format (d3, e.g. ,.2f or %Y-%m)",
+    "scaleType": "Scale",
+    "scaleZero": "Scale includes zero",
+    "domainMin": "Lowest value shown",
+    "domainMax": "Highest value shown",
+    "scheme": "Colour scheme (e.g. tableau10, blues, viridis)",
+    "showAxis": "Draw the axis",
+    "showGrid": "Grid lines",
+    "labelAngle": "Angle of the labels (degrees)",
+    "showLegend": "Draw the legend",
+    "highlightParam": "Highlight what this selection holds",
+    "valueIfNotSelected": "Value outside the selection (e.g. lightgray, 0.2)"
+  },
+  "FormTransform": {
+    "kind": "Step",
+    "op": "Keep the rows where the field",
+    "field": "Field",
+    "value": "Value",
+    "param": "Selection",
+    "fields": "Columns to turn into rows",
+    "keyAs": "Name of the column field",
+    "valueAs": "Name of the value field",
+    "as": "Name of the new field",
+    "expression": "Expression (e.g. datum.price * datum.amount)"
+  },
+  "FormParam": {
+    "name": "Name",
+    "kind": "What it is",
+    "fields": "Select all marks with the same",
+    "encodings": "The range spans",
+    "bind": "Picked",
+    "value": "Initial value (JSON)"
+  },
+  "FormFacet": {
+    "row": "One row per",
+    "column": "One column per",
+    "columns": "Columns before wrapping (0: no wrap)"
   }
 }

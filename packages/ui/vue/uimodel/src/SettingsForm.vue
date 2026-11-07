@@ -26,6 +26,7 @@ Contributors:
  * form, in the stored state and in the widget, without three separate
  * edits that can drift apart.
  */
+import { FIELD_SUGGESTIONS, type FieldSuggest } from './suggestions'
 import { computed, markRaw, onMounted, provide, shallowRef, watch } from 'vue'
 import type { EObject, EPackage } from '@emfts/core'
 import { UIModelComposer, TRANSLATOR_KEY } from '@emfts/uimodel-composer'
@@ -119,7 +120,15 @@ const props = defineProps<{
   ecore?: string
   /** Shown when the object has no features to edit. */
   emptyText?: string
+  /**
+   * What the free-text fields of this form suggest - every ComboboxWidget
+   * below it asks (#1285). Without one they are plain text fields.
+   */
+  suggest?: FieldSuggest
 }>()
+
+/* A getter, so a form handed a new function later is asked through it. */
+provide(FIELD_SUGGESTIONS, () => props.suggest)
 
 /*
  * Taking the model in is idempotent and keyed by nsURI, so handing over the

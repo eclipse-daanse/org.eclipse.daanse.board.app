@@ -11,15 +11,23 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component } from '@eclipse-daanse/tsm'
+import { component, inject } from '@eclipse-daanse/tsm'
+import { DATASOURCE_REPOSITORY, type DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { READS_NOTHING } from 'org.eclipse.daanse.board.app.lib.core'
 import Icon from './assets/vega.svg'
 import VegaWidget from './VegaWidget.vue'
 import { VegawidgetPackage } from './gen/VegawidgetPackage'
 import { emptySettings } from './settingsModel'
-/* The form for these settings, written as a model beside the Ecore. */
+import { headersOfAnswer, suggestFields } from './suggest'
+/* The form for these settings, written as a model beside the Ecore, and
+ * the forms of what its lists hold. */
 import vegaSettingsFormXmi from '../model/ui.xmi?raw'
+import layerFormXmi from '../model/ui-layer.xmi?raw'
+import encodingFormXmi from '../model/ui-encoding.xmi?raw'
+import transformFormXmi from '../model/ui-transform.xmi?raw'
+import paramFormXmi from '../model/ui-param.xmi?raw'
+import facetFormXmi from '../model/ui-facet.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
 import settingsEcore from '../model/model.ecore?raw'
 
@@ -59,7 +67,21 @@ export class VegaWidgetProvider implements WidgetProvider {
     ePackage: () => VegawidgetPackage.eINSTANCE,
     /* Empty: the form adopts the stored chart into it, layers and all. */
     create: () => emptySettings(),
+    entryForms: [
+      { xmi: layerFormXmi, uri: '/vega-layer.ui.xmi' },
+      { xmi: encodingFormXmi, uri: '/vega-encoding.ui.xmi' },
+      { xmi: transformFormXmi, uri: '/vega-transform.ui.xmi' },
+      { xmi: paramFormXmi, uri: '/vega-param.ui.xmi' },
+      { xmi: facetFormXmi, uri: '/vega-facet.ui.xmi' },
+    ],
+    /* A field is picked from the names the chart's data has. */
+    suggest: (owner: unknown, feature: string, context: { datasourceId?: string }) =>
+      suggestFields(owner, feature, context.datasourceId, async (id) =>
+        headersOfAnswer(await this.datasources.getDatasource(id).getData('DataTable')),
+      ),
   }
+
+  constructor(@inject(DATASOURCE_REPOSITORY) private readonly datasources: DatasourceRepository) {}
 }
 
 export { VegaWidget, VegawidgetPackage, vegaSettingsFormXmi }

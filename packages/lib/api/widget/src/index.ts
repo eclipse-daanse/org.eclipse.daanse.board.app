@@ -57,6 +57,19 @@ export interface SettingsFormI {
      * data-section-id they carry - not by their name, which is translated.
      */
     unmodelledSections?: string[];
+    /**
+     * What the free-text fields of the form suggest - each ComboboxWidget
+     * in it asks with the object it edits and the feature's name (#1285).
+     * The context says which data source the widget reads, as far as the
+     * dialog knows it; a chart suggests the fields of that source.
+     */
+    suggest?: (owner: unknown, feature: string, context: SettingsFormContext) => Promise<string[]> | string[];
+}
+
+/** What the settings dialog knows about the widget a form edits. */
+export interface SettingsFormContext {
+    /** The data source the widget reads; empty when it reads none. */
+    datasourceId?: string;
 }
 
 export interface WidgetConfig {

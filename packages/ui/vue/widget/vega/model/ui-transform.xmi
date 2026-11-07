@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+One step on the data of a layer (#1285). One class for every kind of step;
+the kind decides which of the fields below the form shows.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaTransformForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaTransformFormView">
+    <fields xsi:type="uimodel:SelectWidget"
+        name="kind"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/kind"
+        label="vega:FormTransform.kind">
+      <values>filter</values>
+      <values>fold</values>
+      <values>calculate</values>
+      <optionLabel language="JS" body="({ filter: 'vega:Options.kind.filter', fold: 'vega:Options.kind.fold', calculate: 'vega:Options.kind.calculate' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="op"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/op"
+        label="vega:FormTransform.op">
+      <values>eq</values>
+      <values>neq</values>
+      <values>lt</values>
+      <values>lte</values>
+      <values>gt</values>
+      <values>gte</values>
+      <values>oneOf</values>
+      <values>range</values>
+      <values>valid</values>
+      <values>param</values>
+      <optionLabel language="JS" body="({ eq: 'vega:Options.op.eq', neq: 'vega:Options.op.neq', lt: 'vega:Options.op.lt', lte: 'vega:Options.op.lte', gt: 'vega:Options.op.gt', gte: 'vega:Options.op.gte', oneOf: 'vega:Options.op.oneOf', range: 'vega:Options.op.range', valid: 'vega:Options.op.valid', param: 'vega:Options.op.param' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="self.kind === 'filter'"/>
+    </fields>
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="field"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/field"
+        label="vega:FormTransform.field">
+      <visibilityCondition language="JS" body="self.kind === 'filter' &amp;&amp; self.op !== 'param'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="value"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/value"
+        label="vega:FormTransform.value">
+      <visibilityCondition language="JS" body="self.kind === 'filter' &amp;&amp; !['valid', 'param'].includes(self.op)"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="param"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/param"
+        label="vega:FormTransform.param">
+      <visibilityCondition language="JS" body="self.kind === 'filter' &amp;&amp; self.op === 'param'"/>
+    </fields>
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="fields"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/fields"
+        label="vega:FormTransform.fields" multiSelect="true">
+      <visibilityCondition language="JS" body="self.kind === 'fold'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="keyAs"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/keyAs"
+        label="vega:FormTransform.keyAs">
+      <visibilityCondition language="JS" body="self.kind === 'fold'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="valueAs"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/valueAs"
+        label="vega:FormTransform.valueAs">
+      <visibilityCondition language="JS" body="self.kind === 'fold'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="as"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/as"
+        label="vega:FormTransform.as">
+      <visibilityCondition language="JS" body="self.kind === 'calculate'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="expression"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Transform/expression"
+        label="vega:FormTransform.expression">
+      <visibilityCondition language="JS" body="self.kind === 'calculate'"/>
+    </fields>
+  </components>
+</uimodel:UIModel>

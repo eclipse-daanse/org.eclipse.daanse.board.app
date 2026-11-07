@@ -10,8 +10,12 @@
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
 
-The form for the Vega-Lite chart (#1283). The chart is configured here and
-nowhere else; the widget derives the spec from what this form writes.
+The form of the Vega-Lite chart (#1285). The chart is configured here and
+nowhere else; the widget compiles the spec from what this form writes.
+
+The chart first, then its parts: the layers carry the marks and their
+encodings, each in a form of its own (ui-layer.xmi, ui-encoding.xmi); the
+small multiples and the selections follow.
 -->
 <uimodel:UIModel
     xmlns:xmi="http://www.omg.org/XMI"
@@ -27,6 +31,35 @@ nowhere else; the widget derives the spec from what this form writes.
         name="title"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/title"
         label="vega:Form.title"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="layers"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/layers"
+        label="vega:Form.layers"
+        placeholder="vega:Form.layersHint"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="facet"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/facet"
+        label="vega:Form.facet"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="params"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/params"
+        label="vega:Form.params"
+        placeholder="vega:Form.paramsHint"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="legendPosition"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/legendPosition"
+        label="vega:Form.legendPosition">
+      <values>right</values>
+      <values>bottom</values>
+      <values>top</values>
+      <values>left</values>
+      <values>none</values>
+      <optionLabel language="JS" body="({ right: 'vega:Options.legendPosition.right', bottom: 'vega:Options.legendPosition.bottom', top: 'vega:Options.legendPosition.top', left: 'vega:Options.legendPosition.left', none: 'vega:Options.legendPosition.none' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="tooltip"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/tooltip"
+        label="vega:Form.tooltip"/>
     <fields xsi:type="uimodel:SelectWidget"
         name="renderer"
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/renderer"
@@ -35,9 +68,5 @@ nowhere else; the widget derives the spec from what this form writes.
       <values>svg</values>
       <optionLabel language="JS" body="({ canvas: 'vega:Options.renderer.canvas', svg: 'vega:Options.renderer.svg' })[option] ?? option"/>
     </fields>
-    <fields xsi:type="uimodel:CheckboxWidget"
-        name="tooltip"
-        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//VegaWidgetSettings/tooltip"
-        label="vega:Form.tooltip"/>
   </components>
 </uimodel:UIModel>

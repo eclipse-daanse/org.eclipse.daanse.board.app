@@ -131,11 +131,25 @@ interface SettingsForm {
   unmodelledSections?: string[]
   /** Forms for the classes inside this widget's list settings. */
   entryForms?: Array<{ xmi: string; uri?: string }>
+  /** What the free-text fields suggest, given the source the widget reads (#1285). */
+  suggest?: (owner: unknown, feature: string, context: { datasourceId?: string }) => Promise<string[]> | string[]
 }
 
 const modelledLook = computed<SettingsForm | undefined>(() => {
   const type = widget.value?.type
   return type ? (availableWidgets.value[type] as { settingsForm?: SettingsForm })?.settingsForm : undefined
+})
+
+/*
+ * The form's suggestions, told which source the widget reads (#1285). A
+ * new function only when the widget's form changes, so the fields do not
+ * ask again on every render.
+ */
+const suggestFields = computed(() => {
+  const suggest = modelledLook.value?.suggest
+  if (!suggest) return undefined
+  return (owner: unknown, feature: string) =>
+    suggest(owner, feature, { datasourceId: chosenDatasource.value || undefined })
 })
 
 /*
@@ -676,6 +690,7 @@ onBeforeUnmount(() => {
                 :ui-model-uri="modelledLook.uri"
                 :entry-forms="modelledLook.entryForms"
                 :ecore="modelledLook.ecore"
+                :suggest="suggestFields"
               />
               <!-- The widget itself, beside its config: the source is a
                 reference on the widget now, not an id in the config, and
