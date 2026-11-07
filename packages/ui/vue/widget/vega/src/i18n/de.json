@@ -13,5 +13,9 @@
       "canvas": "Canvas (schnell bei vielen Marken)",
       "svg": "SVG (scharf beim Zoomen)"
     }
+  },
+  "Recipe": {
+    "noLayers": "Das Diagramm hat noch keine Ebene. Füge in den Einstellungen eine hinzu.",
+    "facetNeedsOneDataset": "Kleine Vielfache brauchen für alle Ebenen denselben Datensatz."
   }
 }

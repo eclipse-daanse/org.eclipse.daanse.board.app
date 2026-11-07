@@ -13,5 +13,9 @@
       "canvas": "Canvas (fast with many marks)",
       "svg": "SVG (sharp when zoomed)"
     }
+  },
+  "Recipe": {
+    "noLayers": "The chart has no layer yet. Add one in the settings.",
+    "facetNeedsOneDataset": "Small multiples need every layer to draw the same dataset."
   }
 }

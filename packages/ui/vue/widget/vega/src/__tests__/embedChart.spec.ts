@@ -19,7 +19,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { TopLevelSpec } from 'vega-lite'
 import { drawChart, refusingLoader, UrlRefusedError } from '../embedChart'
-import { specOf } from '../spec'
+import { compileRecipe } from '../recipe'
+import { sampleDatasets, withDatasets } from '../sample'
+import { modelledSettings } from '../settingsModel'
 
 const host = () => {
   const el = document.createElement('div')
@@ -34,7 +36,7 @@ afterEach(() => {
 
 describe('drawChart', () => {
   it('draws the sample as SVG marks', async () => {
-    const chart = await drawChart(host(), specOf({ title: 'Sales' }), { renderer: 'svg' })
+    const chart = await drawChart(host(), withDatasets(compileRecipe(modelledSettings({ title: 'Sales' })), sampleDatasets()), { renderer: 'svg' })
     try {
       const svg = chart.view.container()?.querySelector('svg')
       expect(svg).toBeTruthy()

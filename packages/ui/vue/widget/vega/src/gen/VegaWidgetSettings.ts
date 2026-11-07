@@ -18,8 +18,12 @@
  * @generated
  */
 
-import type { EObject } from '@emfts/core';
+import type { EObject, EList } from '@emfts/core';
 import type { VegaRenderer } from './VegaRenderer.js';
+import type { LegendPosition } from './LegendPosition.js';
+import type { Layer } from './Layer.js';
+import type { Facet } from './Facet.js';
+import type { Param } from './Param.js';
 
 /**
  * VegaWidgetSettings
@@ -29,5 +33,9 @@ export interface VegaWidgetSettings extends EObject {
   title?: string;
   renderer?: VegaRenderer;
   tooltip?: boolean;
+  legendPosition?: LegendPosition;
+  layers: EList<Layer>;
+  facet?: Facet;
+  params: EList<Param>;
 
 }

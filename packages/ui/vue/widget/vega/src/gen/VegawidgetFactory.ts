@@ -23,6 +23,16 @@ import type { EClass, EObject } from '@emfts/core';
 import { VegawidgetPackage } from './VegawidgetPackage.js';
 import { VegaWidgetSettings } from './VegaWidgetSettings.js';
 import { VegaWidgetSettingsImpl } from './VegaWidgetSettingsImpl.js';
+import { Layer } from './Layer.js';
+import { LayerImpl } from './LayerImpl.js';
+import { Encoding } from './Encoding.js';
+import { EncodingImpl } from './EncodingImpl.js';
+import { Transform } from './Transform.js';
+import { TransformImpl } from './TransformImpl.js';
+import { Facet } from './Facet.js';
+import { FacetImpl } from './FacetImpl.js';
+import { Param } from './Param.js';
+import { ParamImpl } from './ParamImpl.js';
 
 /**
  * Factory for creating Vegawidget model objects
@@ -52,12 +62,57 @@ export class VegawidgetFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new Layer instance
+   */
+  createLayer(): Layer {
+    return new LayerImpl();
+  }
+
+  /**
+   * Create a new Encoding instance
+   */
+  createEncoding(): Encoding {
+    return new EncodingImpl();
+  }
+
+  /**
+   * Create a new Transform instance
+   */
+  createTransform(): Transform {
+    return new TransformImpl();
+  }
+
+  /**
+   * Create a new Facet instance
+   */
+  createFacet(): Facet {
+    return new FacetImpl();
+  }
+
+  /**
+   * Create a new Param instance
+   */
+  createParam(): Param {
+    return new ParamImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
     switch (eClass.getName()) {
       case 'VegaWidgetSettings':
         return this.createVegaWidgetSettings();
+      case 'Layer':
+        return this.createLayer();
+      case 'Encoding':
+        return this.createEncoding();
+      case 'Transform':
+        return this.createTransform();
+      case 'Facet':
+        return this.createFacet();
+      case 'Param':
+        return this.createParam();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

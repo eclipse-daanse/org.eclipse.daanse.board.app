@@ -17,7 +17,7 @@ import { READS_NOTHING } from 'org.eclipse.daanse.board.app.lib.core'
 import Icon from './assets/vega.svg'
 import VegaWidget from './VegaWidget.vue'
 import { VegawidgetPackage } from './gen/VegawidgetPackage'
-import { VegaWidgetSettingsImpl } from './gen/VegaWidgetSettingsImpl'
+import { emptySettings } from './settingsModel'
 /* The form for these settings, written as a model beside the Ecore. */
 import vegaSettingsFormXmi from '../model/ui.xmi?raw'
 /* The Ecore itself, for the sentences the generator drops. */
@@ -37,7 +37,7 @@ export const WIDGET_TYPE = 'VegaWidget'
  * registers it under WIDGET_SERVICE_ID and the palette shows it.
  *
  * Its data and its events follow (#1286, #1289); until then it draws a
- * sample and reads nothing.
+ * sample in the dataset its starter layer reads, and reads nothing.
  */
 @component({
   service: [WIDGET_SERVICE_ID],
@@ -57,13 +57,16 @@ export class VegaWidgetProvider implements WidgetProvider {
     ecore: settingsEcore,
     uri: '/vega-settings.ui.xmi',
     ePackage: () => VegawidgetPackage.eINSTANCE,
-    create: () => new VegaWidgetSettingsImpl(),
+    /* Empty: the form adopts the stored chart into it, layers and all. */
+    create: () => emptySettings(),
   }
 }
 
-export { VegaWidget, VegawidgetPackage, VegaWidgetSettingsImpl, vegaSettingsFormXmi }
+export { VegaWidget, VegawidgetPackage, vegaSettingsFormXmi }
+export { VegaWidgetSettingsImpl } from './gen/VegaWidgetSettingsImpl'
 export type { VegaWidgetSettings } from './gen/VegaWidgetSettings'
-export { specOf } from './spec'
+export { compileRecipe, RecipeError } from './recipe'
+export { modelledSettings } from './settingsModel'
 
 /* Its texts - collected by lib.i18next, see src/i18n. */
 export { VegaTranslations } from './i18n'

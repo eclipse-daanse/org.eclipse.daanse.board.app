@@ -15,24 +15,27 @@ Contributors:
 /*
  * A chart drawn with Vega-Lite (#1283).
  *
- * The spec is derived from the settings (spec.ts) and drawn by
- * embedChart.ts, which this component loads on first use - Vega is the
+ * The spec is compiled from the chart recipe (recipe.ts, #1284) and drawn
+ * by embedChart.ts, which this component loads on first use - Vega is the
  * heavy part of the bundle and stays out of it until a chart is shown.
  */
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { Result } from 'vega-embed'
-import { plainSettings, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { VegaWidgetSettings } from './gen/VegaWidgetSettings'
-import { VegaWidgetSettingsImpl } from './gen/VegaWidgetSettingsImpl'
-import { specOf } from './spec'
+import { compileRecipe, RecipeError } from './recipe'
+import { sampleDatasets, withDatasets } from './sample'
+import { modelledSettings } from './settingsModel'
 
-const config = defineModel<VegaWidgetSettings>('configv', { required: true })
+const stored = defineModel<unknown>('configv', { required: true })
 defineProps<{ id?: string }>()
 
 /*
- * Watched rather than read off the model prop: the wrapper hands over the
- * same instance on every change, which Vue does not see (#1203).
+ * The stored settings as the model's object, and watched rather than read
+ * off the model prop: the wrapper hands over the same instance on every
+ * change, which Vue does not see (#1203).
  */
+const config = computed(() => modelledSettings(stored.value))
 const settings = useEObject<VegaWidgetSettings>(() => config.value)
 const { t } = useTranslation('vega')
 
@@ -51,12 +54,14 @@ const finalize = () => {
 
 const draw = async () => {
   const el = container.value
-  if (!el || unmounted) return
+  const s = settings.value
+  if (!el || !s || unmounted) return
   const mine = ++generation
   try {
+    /* Compiled before Vega is loaded: a recipe that gives no chart needs none. */
+    const spec = withDatasets(compileRecipe(s), sampleDatasets())
     const { drawChart } = await import('./embedChart')
-    const s = settings.value
-    const next = await drawChart(el, specOf(s), {
+    const next = await drawChart(el, spec, {
       renderer: s?.renderer === 'svg' ? 'svg' : 'canvas',
       tooltip: s?.tooltip !== false,
     })
@@ -70,7 +75,9 @@ const draw = async () => {
   } catch (e) {
     if (mine !== generation) return
     finalize()
-    error.value = e instanceof Error ? e.message : String(e)
+    /* i18n-keys: vega:Recipe.* - one text per RecipeProblem. */
+    error.value =
+      e instanceof RecipeError ? t(`Recipe.${e.code}`) : t('Widget.error', { message: e instanceof Error ? e.message : String(e) })
   }
 }
 
@@ -85,13 +92,11 @@ const fit = () => {
 }
 
 onMounted(() => {
-  if (config.value) {
-    /* Missing features take the model's defaults, read by feature name. */
-    Object.assign(config.value, {
-      ...plainSettings(new VegaWidgetSettingsImpl()),
-      ...plainSettings(config.value),
-    })
-  }
+  /*
+   * The adopted settings go back to the widget, so the settings form edits
+   * the instance this chart is drawn from rather than adopting its own.
+   */
+  if (stored.value !== config.value) stored.value = config.value
   if (typeof ResizeObserver !== 'undefined' && container.value) {
     resizeObserver = new ResizeObserver(fit)
     resizeObserver.observe(container.value)
@@ -113,7 +118,7 @@ onUnmounted(() => {
   <div class="vega-widget">
     <div ref="container" class="vega-widget__chart" data-testid="vega-chart" />
     <div v-if="error" class="vega-widget__error" role="alert">
-      {{ t('Widget.error', { message: error }) }}
+      {{ error }}
     </div>
   </div>
 </template>
