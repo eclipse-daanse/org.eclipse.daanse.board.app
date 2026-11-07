@@ -37,10 +37,14 @@ const XMI = `<?xml version="1.0" encoding="UTF-8"?>
   </components>
 </uimodel:UIModel>`
 
-async function formIn(fixture: Record<string, unknown>) {
+async function formIn(fixture: Record<string, unknown>, missing?: (key: string) => void) {
   void ContainmentfixturePackage.eINSTANCE
   const i18n = i18next.createInstance()
-  await i18n.init({ lng: 'de', fallbackLng: 'de', resources: { de: { fixture, uimodel: uimodelEn } } })
+  await i18n.init({
+    lng: 'de', fallbackLng: 'de', resources: { de: { fixture, uimodel: uimodelEn } },
+    saveMissing: !!missing,
+    missingKeyHandler: (_languages: readonly string[], namespace: string, key: string) => missing?.(`${namespace}:${key}`),
+  })
   const view = mount(SettingsForm, {
     props: {
       modelValue: markRaw(ContainmentfixtureFactory.eINSTANCE.createFixtureSettings()),
@@ -64,10 +68,12 @@ describe('the hint under a field', () => {
     view.unmount()
   })
 
-  it('is the model documentation where the package has none', async () => {
-    const view = await formIn({ Form: { title: 'Titel' } })
+  it('is the model documentation where the package has none, and asks for no missing text', async () => {
+    const asked: string[] = []
+    const view = await formIn({ Form: { title: 'Titel' } }, (key) => asked.push(key))
     expect(view.text()).toContain('A plain value beside the contained ones')
     expect(view.text()).not.toContain('Hints.')
+    expect(asked.filter((key) => key.includes('Hints'))).toEqual([])
     view.unmount()
   })
 })
