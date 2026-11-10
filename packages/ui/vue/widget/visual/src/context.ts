@@ -81,6 +81,8 @@ export type Problem =
   | 'noValues'
   /** No column of numbers to draw. */
   | 'needsNumbers'
+  /** A surface needs two rows and two columns to span. */
+  | 'needsGrid'
 
 /* ECharts' option is a large open object, and echarts-gl's half is not typed at all. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
