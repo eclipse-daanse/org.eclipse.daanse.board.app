@@ -47,8 +47,8 @@ const model: ModelRef<(IDSRenderer | IRenderer)[]> = defineModel<(IDSRenderer | 
   default:
     () => {
       return (
-        reactive<(IDSRenderer | IRenderer)[]>([]
-        ))
+        reactive([]
+        ) as (IDSRenderer | IRenderer)[])
     }
 })
 
