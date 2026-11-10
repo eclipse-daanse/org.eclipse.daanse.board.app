@@ -83,6 +83,8 @@ export type Problem =
   | 'needsNumbers'
   /** A surface needs two rows and two columns to span. */
   | 'needsGrid'
+  /** Points need three columns of numbers. */
+  | 'needsThreeNumbers'
 
 /* ECharts' option is a large open object, and echarts-gl's half is not typed at all. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

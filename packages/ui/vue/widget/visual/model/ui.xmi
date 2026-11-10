@@ -36,6 +36,7 @@ name, a board written by hand may hold the literal, and both read the same.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/kind" label="visual:Form.kind">
         <values>BARS3D</values>
         <values>SURFACE</values>
+        <values>SCATTER3D</values>
         <optionLabel language="JS" body="'visual:Options.kind.' + String(option).toLowerCase()"/>
       </fields>
       <fields xsi:type="uimodel:InputWidget" name="title"
@@ -51,20 +52,39 @@ name, a board written by hand may hold the literal, and both read the same.
       </fields>
     </fields>
 
+    <fields xsi:type="uimodel:GroupWidget" name="columnsGroup" layout="VERTICAL" label="visual:Form.columnsGroup">
+      <visibilityCondition language="JS" body="!['BARS3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <fields xsi:type="uimodel:InputWidget" name="xColumn"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/xColumn" label="visual:Form.xColumn">
+        <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="yColumn"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/yColumn" label="visual:Form.yColumn">
+        <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="zColumn"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/zColumn" label="visual:Form.zColumn">
+        <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="sizeColumn"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/sizeColumn" label="visual:Form.sizeColumn">
+        <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+    </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="motionGroup" layout="VERTICAL" label="visual:Form.motionGroup">
-      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="autoRotate"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/autoRotate" label="visual:Form.autoRotate">
-        <visibilityCondition language="JS" body="['BARS3D', 'SURFACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+        <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="visual:Form.displayGroup">
-      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showScale"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showScale" label="visual:Form.showScale">
-        <visibilityCondition language="JS" body="['BARS3D', 'SURFACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+        <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 
