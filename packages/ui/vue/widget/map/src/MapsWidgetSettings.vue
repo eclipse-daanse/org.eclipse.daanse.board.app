@@ -11,7 +11,9 @@ Contributors: Smart City Jena
 <script lang="ts" setup>
 import { computed, getCurrentInstance, inject, onMounted, ref, watch } from 'vue'
 
-import Draggable from 'vuedraggable-es'
+import VueDraggable from 'vuedraggable-es'
+// vuedraggable-es declares no slots, so under vue 3.5.45 its #item slot does not type-check.
+const Draggable = VueDraggable as any
 import { useOGCService } from './composables/ogcService'
 import type { IMapSettings, LayerI } from './Settings'
 import { RoadOverlay } from './gen/RoadOverlay'

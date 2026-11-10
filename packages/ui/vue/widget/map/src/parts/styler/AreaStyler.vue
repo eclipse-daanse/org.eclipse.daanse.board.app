@@ -16,13 +16,13 @@ import type { IMapProps } from './../../api/MapPreview'
 
 const model: ModelRef<IMapProps> = defineModel<IMapProps>({
   default: () => {
-    return reactive({
+    return reactive<IMapProps>({
       stroke: true,
       color: '#ccc',
       weight: 2,
       opacity: 1,
       lineCap: 'None',
-      dashOffset: 2,
+      dashOffset: '2',
       fill: true,
       fillOpacity: 1,
       className: ''
