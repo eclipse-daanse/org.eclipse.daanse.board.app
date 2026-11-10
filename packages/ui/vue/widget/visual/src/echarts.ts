@@ -23,6 +23,7 @@ import * as echarts from 'echarts/core'
 import {
   SunburstChart,
   TreemapChart,
+  SankeyChart,
 } from 'echarts/charts'
 import {
   TitleComponent,
@@ -36,6 +37,7 @@ import { Grid3DComponent } from 'echarts-gl/components'
 echarts.use([
   SunburstChart,
   TreemapChart,
+  SankeyChart,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,

@@ -26,7 +26,8 @@
       "surface": "Surface in 3D",
       "scatter3d": "Points in 3D",
       "sunburst": "Rings (sunburst)",
-      "treemap": "Tiles (treemap)"
+      "treemap": "Tiles (treemap)",
+      "sankey": "Flows (Sankey)"
     },
     "palette": {
       "aurora": "Aurora",
@@ -45,7 +46,9 @@
     "needsNumbers": "The table has no column of numbers to draw.",
     "needsGrid": "A surface needs at least two rows and two columns of numbers.",
     "needsThreeNumbers": "Points in space need three columns of numbers.",
-    "needsValues": "No row has a value above zero to draw."
+    "needsValues": "No row has a value above zero to draw.",
+    "needsValues": "No row has a value above zero to draw.",
+    "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels."
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"

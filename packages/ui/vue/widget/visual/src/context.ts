@@ -87,6 +87,8 @@ export type Problem =
   | 'needsThreeNumbers'
   /** No row has a positive value to size a ring or a tile by. */
   | 'needsValues'
+  /** No row leads from one thing to another. */
+  | 'needsFlows'
 
 /* ECharts' option is a large open object, and echarts-gl's half is not typed at all. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
