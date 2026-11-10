@@ -25,7 +25,8 @@
       "bars3d": "Balken in 3D",
       "surface": "Fläche in 3D",
       "scatter3d": "Punkte in 3D",
-      "sunburst": "Ringe (Sunburst)"
+      "sunburst": "Ringe (Sunburst)",
+      "treemap": "Kacheln (Treemap)"
     },
     "palette": {
       "aurora": "Polarlicht",

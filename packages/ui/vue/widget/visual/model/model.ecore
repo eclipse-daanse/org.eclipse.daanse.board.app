@@ -34,6 +34,7 @@ Empty, each kind takes the columns it needs from the left.
         <eLiterals name="SURFACE" literal="surface" value="1"/>
         <eLiterals name="SCATTER3D" literal="scatter3d" value="2"/>
         <eLiterals name="SUNBURST" literal="sunburst" value="3"/>
+        <eLiterals name="TREEMAP" literal="treemap" value="4"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="VisualPalette">

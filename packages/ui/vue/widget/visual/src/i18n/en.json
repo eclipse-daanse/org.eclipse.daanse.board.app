@@ -25,7 +25,8 @@
       "bars3d": "Bars in 3D",
       "surface": "Surface in 3D",
       "scatter3d": "Points in 3D",
-      "sunburst": "Rings (sunburst)"
+      "sunburst": "Rings (sunburst)",
+      "treemap": "Tiles (treemap)"
     },
     "palette": {
       "aurora": "Aurora",
