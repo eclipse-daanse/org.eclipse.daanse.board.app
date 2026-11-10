@@ -39,6 +39,7 @@ Empty, each kind takes the columns it needs from the left.
         <eLiterals name="RACE" literal="race" value="6"/>
         <eLiterals name="CALENDAR" literal="calendar" value="7"/>
         <eLiterals name="STREAM" literal="stream" value="8"/>
+        <eLiterals name="WATERFALL" literal="waterfall" value="9"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="VisualPalette">

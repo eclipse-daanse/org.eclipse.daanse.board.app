@@ -32,7 +32,8 @@
       "sankey": "Flows (Sankey)",
       "race": "Bar race",
       "calendar": "Calendar",
-      "stream": "Stream (streamgraph)"
+      "stream": "Stream (streamgraph)",
+      "waterfall": "Waterfall"
     },
     "palette": {
       "aurora": "Aurora",
@@ -59,5 +60,9 @@
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"
+  },
+  "Words": {
+    "change": "Change",
+    "runningTotal": "Running total"
   }
 }
