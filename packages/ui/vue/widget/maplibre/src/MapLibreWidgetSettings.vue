@@ -79,6 +79,11 @@ function setNames(layer: ThingLayer, value: unknown) {
 const ogc = useOGCService()
 /** The layers a service offers, by service id, once its capabilities were read. */
 const offered = reactive<Record<string, { name: string; title: string }[]>>({})
+/** The offered layers of a service, or undefined while they were not read. */
+const offeredOf = (service: { id?: string | null }): { name: string; title: string }[] | undefined =>
+  offered[service.id ?? '']
+/** An example address for the GeoJSON field. */
+const geoJsonExample = 'https://example.org/areas.geojson'
 const loading = ref('')
 const newServiceUrl = ref('')
 const serviceError = ref('')
@@ -194,16 +199,16 @@ function addColor(layer: ThingLayer) {
           <span class="wms-service__title" :title="service.url">{{ service.title || service.url }}</span>
           <DButton intent="quiet" size="sm" :busy="loading === service.id" :title="t('Settings.wmsShowLayers')"
             @click="toggleOffered(service)">
-            <DIcon :name="offered[service.id ?? ''] ? 'expand_less' : 'expand_more'" size="sm" />
+            <DIcon :name="offeredOf(service) ? 'expand_less' : 'expand_more'" size="sm" />
           </DButton>
           <DButton intent="quiet" size="sm" :title="t('Settings.remove')" @click="removeService(service)">
             <DIcon name="delete" size="sm" />
           </DButton>
         </div>
-        <ul v-if="offered[service.id ?? '']" class="wms-service__layers">
-          <li v-for="layer in offered[service.id ?? '']" :key="layer.name" class="wms-service__layer"
-            @click="addWmsLayer(service, layer)">
-            <DIcon name="add" size="sm" />{{ layer.title || layer.name }}
+        <ul v-if="offeredOf(service)" class="wms-service__layers">
+          <li v-for="offer in offeredOf(service)" :key="offer.name" class="wms-service__layer"
+            @click="addWmsLayer(service, offer)">
+            <DIcon name="add" size="sm" />{{ offer.title || offer.name }}
           </li>
         </ul>
       </div>
@@ -334,7 +339,7 @@ function addColor(layer: ThingLayer) {
         <div class="settings-container">
           <DInput v-model="layer.name" :label="t('Settings.layerName')" />
           <DCheckbox v-model="layer.visible" :label="t('Settings.visible')" />
-          <DInput v-model="layer.url" :label="t('Settings.geoJsonUrl')" placeholder="https://example.org/areas.geojson" />
+          <DInput v-model="layer.url" :label="t('Settings.geoJsonUrl')" :placeholder="geoJsonExample" />
           <DInput v-model="layer.geoJson" :label="t('Settings.geoJson')" :rows="4" />
           <DColorInput v-model="layer.color" :label="t('Settings.color')" />
           <DSlider v-model="layer.opacity" :label="t('Settings.fillOpacity')" :min="0" :max="1" :step="0.05" />
