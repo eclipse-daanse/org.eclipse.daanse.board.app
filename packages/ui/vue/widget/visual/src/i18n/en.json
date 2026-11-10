@@ -33,7 +33,8 @@
       "race": "Bar race",
       "calendar": "Calendar",
       "stream": "Stream (streamgraph)",
-      "waterfall": "Waterfall"
+      "waterfall": "Waterfall",
+      "chord": "Ties around a circle (chord)"
     },
     "palette": {
       "aurora": "Aurora",
@@ -56,7 +57,8 @@
     "needsValues": "No row has a value above zero to draw.",
     "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels.",
     "needsDates": "No label in the table reads as a day.",
-    "needsSteps": "A stream needs its layers over at least two steps: several columns of numbers, or labels whose last level is the step."
+    "needsSteps": "A stream needs its layers over at least two steps: several columns of numbers, or labels whose last level is the step.",
+    "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels."
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"
