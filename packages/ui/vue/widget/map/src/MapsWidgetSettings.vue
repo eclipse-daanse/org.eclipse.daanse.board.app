@@ -16,6 +16,7 @@ import VueDraggable from 'vuedraggable-es'
 const Draggable = VueDraggable as any
 import { useOGCService } from './composables/ogcService'
 import type { IMapSettings, LayerI } from './Settings'
+import { RoadOverlay } from './gen/RoadOverlay'
 import { clientOf, describedService } from './serviceClient'
 import { WfsEndpoint, WmsEndpoint, type WmsLayerSummary } from '@camptocamp/ogc-client'
 import { v4 } from 'uuid'
@@ -47,6 +48,22 @@ const props = defineProps<{
 
 const widgetSettings = defineModel<IMapSettings>({ required: true })
 const { t } = useTranslation('map')
+
+/* The overlay's presets, in the order the model lists them (#1235). */
+const overlayOptions = computed(() => [
+  { value: RoadOverlay.none, label: t('Settings.overlay.presets.none') },
+  { value: RoadOverlay.stadiaLines, label: t('Settings.overlay.presets.stadiaLines') },
+  { value: RoadOverlay.stadiaLinesLabels, label: t('Settings.overlay.presets.stadiaLinesLabels') },
+  { value: RoadOverlay.esriTransportation, label: t('Settings.overlay.presets.esriTransportation') },
+  { value: RoadOverlay.custom, label: t('Settings.overlay.presets.custom') },
+])
+const overlayIsStadia = computed(() =>
+  widgetSettings.value.overlay === RoadOverlay.stadiaLines ||
+  widgetSettings.value.overlay === RoadOverlay.stadiaLinesLabels,
+)
+const overlayNeedsAccount = computed(() =>
+  overlayIsStadia.value || widgetSettings.value.overlay === RoadOverlay.esriTransportation,
+)
 const showModalSizeSmall = ref(false)
 const serviceLoading = ref(false)
 const showErrorModal = ref(false)
@@ -587,6 +604,42 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
         placeholder="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         :hint="t('Settings.baseMapHint')"
       />
+
+      <DSelect
+        v-model="widgetSettings.overlay"
+        :options="overlayOptions"
+        value-key="value"
+        label-key="label"
+        :label="t('Settings.overlay.label')"
+      />
+      <template v-if="widgetSettings.overlay && widgetSettings.overlay !== 'none'">
+        <DInput
+          v-if="widgetSettings.overlay === 'custom'"
+          v-model="widgetSettings.overlayUrl"
+          :label="t('Settings.overlay.url')"
+          placeholder="https://tiles.example.org/{z}/{x}/{y}.png"
+          :hint="t('Settings.baseMapHint')"
+        />
+        <DInput
+          v-if="overlayIsStadia"
+          v-model="widgetSettings.overlayApiKey"
+          :label="t('Settings.overlay.apiKey')"
+          :hint="t('Settings.overlay.apiKeyHint')"
+        />
+        <p v-if="overlayNeedsAccount" class="hint-text">{{ t('Settings.overlay.licence') }}</p>
+        <DSlider
+          v-model="widgetSettings.overlayOpacity"
+          :label="t('Settings.overlay.opacity')"
+          :min="0"
+          :max="1"
+          :step="0.05"
+        />
+        <DCheckbox
+          v-model="widgetSettings.overlayInvertDark"
+          :label="t('Settings.overlay.invertDark')"
+          :hint="t('Settings.overlay.invertDarkHint')"
+        />
+      </template>
 
       <DCheckbox v-model="widgetSettings.fixed" :label="t('Settings.fixed')" />
 

@@ -10,9 +10,9 @@
 -->
 <script lang="ts" setup>
 import 'reflect-metadata'
-import { inject, ref, computed, onMounted } from 'vue'
+import { inject, ref, computed, onMounted, onUnmounted } from 'vue'
 import { EventManager, EVENT_MANAGER, EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
-import { type EventActionMapping, type ActionDefinition, type WidgetEventDefinition, type EventActionContext, type WidgetTypeRegistration } from 'org.eclipse.daanse.board.app.lib.events'
+import { type EventActionMapping, type ActionDefinition, type WidgetEventDefinition, type EventActionContext, type WidgetTypeRegistration, type WidgetActionParameter } from 'org.eclipse.daanse.board.app.lib.events'
 import { Comperator } from 'org.eclipse.daanse.board.app.lib.events'
 import { Condition } from 'org.eclipse.daanse.board.app.lib.events'
 import { type PageRegistryI, identifier as PageIdentifier } from 'org.eclipse.daanse.board.app.lib.api.page'
@@ -23,7 +23,9 @@ import {
   DModal,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useEObject, useGlobalVariables, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { identifier as WidgetRepositoryIdentifier, type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { EObject } from '@emfts/core'
 
 const { t } = useTranslation('eventmanager')
 
@@ -51,6 +53,12 @@ let eventRegistry: EventRegistry
 let actionsRegistry: EventActionsRegistry
 let pageRegistry: PageRegistryI
 
+const injectedEventManager = inject<EventManager>(EVENT_MANAGER)!
+const injectedEventRegistry = inject<EventRegistry>(EVENT_REGISTRY)!
+const injectedActionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
+const injectedPageRegistry = inject<PageRegistryI>(PageIdentifier)!
+const injectedWidgetRepository = inject<WidgetRepository | undefined>(WidgetRepositoryIdentifier, undefined)
+
 const mappings = ref<EventActionMapping[]>([])
 const availableEvents = ref<WidgetEventDefinition[]>([])
 const availableWidgetTypes = ref<WidgetTypeRegistration[]>([])
@@ -77,6 +85,44 @@ const contextOptions = computed(() => [
   { text: t('Context.page'), value: 'page' },
   { text: t('Context.widget'), value: 'widget' }
 ])
+
+/*
+ * Where an action can land: where an event can come from, and a
+ * datasource besides. A datasource raises no events of its own, so it is
+ * offered as a target only.
+ */
+const targetContextOptions = computed(() => [
+  ...contextOptions.value,
+  { text: t('Context.datasource'), value: 'datasource' }
+])
+
+/*
+ * Actions a provider offers change while the board runs, and the provider
+ * says so. Every computed that reads them reads this counter too, so it is
+ * asked again when the list changed - with the dialog open or not.
+ */
+const providedRevision = ref(0)
+const stopWatchingProvided = injectedActionsRegistry?.onProvidedActionsChanged?.(() => {
+  providedRevision.value++
+})
+onUnmounted(() => stopWatchingProvided?.())
+
+/** The targets the providers of a context name, for the target field. */
+const providedTargetOptions = (context: EventActionContext) => {
+  void providedRevision.value
+  return (injectedActionsRegistry?.getProvidedTargets?.(context) ?? []).map((target) => ({
+    text: target.label ?? target.id,
+    value: target.id,
+  }))
+}
+
+/** What the provider of the current action's target offers for it. */
+const currentProvidedActions = computed(() => {
+  void providedRevision.value
+  const action = currentAction.value
+  if (!action?.targetContext || !action.targetContextId) return []
+  return injectedActionsRegistry?.getProvidedActions?.(action.targetContext, action.targetContextId) ?? []
+})
 
 /* Every page, and the choice of none in particular. */
 const pageOptions = computed(() => [
@@ -184,22 +230,105 @@ const loadPages = () => {
   availablePages.value = pageRegistry.getAllPageIds()
 }
 
-const availablePayloadProperties = computed(() => {
+/** What the declared payload of the chosen event holds, by feature. */
+const payloadProperties = computed(() => {
   if (!newMapping.value.eventType) return []
-
   try {
-    // Use EventRegistry's extractPayloadPropertiesForEvent which extracts from Ecore model
-    const properties = eventRegistry.extractPayloadPropertiesForEvent(newMapping.value.eventType)
-
-    // Return options with text showing "name: type"
-    return properties.map(prop => ({
-      text: `${prop.name}: ${prop.type}${prop.optional ? '?' : ''}`,
-      value: prop.name
-    }))
+    return eventRegistry.extractPayloadPropertiesForEvent(newMapping.value.eventType)
   } catch (e) {
-    console.error('❌ Error extracting properties from Ecore:', e)
+    console.error('Could not read the payload of', newMapping.value.eventType, e)
     return []
   }
+})
+
+/*
+ * A feature holding a record - a row of a table - has fields of its own,
+ * and those are what a rule wants: the value in one column of the clicked
+ * row. The model says so by the feature's type (#1221).
+ */
+const RECORD_TYPE = 'Record'
+
+/*
+ * The widget this screen is scoped to, found on the board that holds it.
+ *
+ * A contributed settings tab is told the widget's id, not handed the
+ * widget, so it is looked up. Watched, because a source chosen under
+ * "Data" while this tab is open sets a reference on the widget, and the
+ * column list should follow it.
+ */
+const scopedWidget = (() => {
+  const only = props.scope
+  if (!only || only.context !== 'widget' || !only.contextId) return undefined
+  for (const page of injectedPageRegistry?.getPages?.() ?? []) {
+    for (const widget of page.widgets ?? []) {
+      if (widget.uid === only.contextId) return widget
+    }
+  }
+  return undefined
+})()
+const watchedWidget = useEObject(() => scopedWidget as EObject | undefined)
+
+/*
+ * Which source the widget reads from - asked the way the data table's
+ * column list asks since #1202: the reference first, the id a board
+ * written before the reference existed carries in its configuration
+ * second.
+ */
+const sourceId = computed<string>(() => {
+  const widget = watchedWidget.value as
+    | { datasource?: { uid?: string }; config?: { datasourceId?: string } }
+    | undefined
+  return widget?.datasource?.uid ?? widget?.config?.datasourceId ?? ''
+})
+
+/* Asked in the shape the widget reads, so the answer is the one its rows come from. */
+const sourceShape = (() => {
+  if (!scopedWidget?.type) return undefined
+  const reads = injectedWidgetRepository?.getAllWidgets?.()[scopedWidget.type]?.reads
+  return Array.isArray(reads) ? reads[0] : undefined
+})()
+
+const sourceAnswer = ref<any>(null)
+if (scopedWidget && sourceShape) {
+  try {
+    useDatasourceRepository(sourceId, sourceShape, sourceAnswer)
+  } catch {
+    /* No source repository where this screen stands: no columns to offer. */
+  }
+}
+
+/** The columns of the source's answer, as its first record names them. */
+const sourceColumns = computed<string[]>(() => {
+  const first = sourceAnswer.value?.items?.[0]
+  return first && typeof first === 'object' ? Object.keys(first) : []
+})
+
+const availablePayloadProperties = computed(() => {
+  const options: { text: string; value: string }[] = []
+  for (const prop of payloadProperties.value) {
+    options.push({
+      text: `${prop.name}: ${prop.type}${prop.optional ? '?' : ''}`,
+      value: prop.name,
+    })
+    if (prop.type === RECORD_TYPE) {
+      for (const column of sourceColumns.value) {
+        options.push({ text: `${prop.name}.${column}`, value: `${prop.name}.${column}` })
+      }
+    }
+  }
+  return options
+})
+
+/*
+ * Where there is a record but no columns to name - the unscoped screen, or
+ * a widget with no source yet - a path into it is typed instead.
+ */
+const offersFreePath = computed(
+  () => sourceColumns.value.length === 0 && payloadProperties.value.some((prop) => prop.type === RECORD_TYPE),
+)
+const freePathExample = computed(() => {
+  const record = payloadProperties.value.find((prop) => prop.type === RECORD_TYPE)
+  return record ? `${record.name}.…` : ''
 })
 
 /**
@@ -236,9 +365,23 @@ const availableActions = computed(() => {
     text: string
     group: string
     value: string
-    parameters?: string[]
+    parameters?: WidgetActionParameter[]
     widgetType?: string
   }[] = []
+
+  /* Offered by the provider that names the chosen target, under the target's name. */
+  if (currentProvidedActions.value.length) {
+    const targetId = currentAction.value.targetContextId!
+    const group = providedTargetOptions(targetContext).find((o) => o.value === targetId)?.text ?? targetId
+    for (const provided of currentProvidedActions.value) {
+      actions.push({
+        text: provided.label ? t(provided.label) : provided.name,
+        group,
+        value: provided.name,
+        parameters: provided.parameters,
+      })
+    }
+  }
 
   for (const widgetType of availableWidgetTypes.value) {
     // Filter by context field, fallback to name-based filtering only if context is not set
@@ -297,9 +440,14 @@ const availableInstances = computed(() => {
 
 interface ActionParameterInfo {
   name: string
+  /** What the dialog shows: the declared label from the widget's language pack, else the name. */
+  label: string
   type: string
   optional: boolean
+  /** The argument position - what a stored rule's argIndex refers to. */
   index: number
+  /** What the parameter stands for, as the action declares it (#1237). */
+  kind?: WidgetActionParameter['kind']
 }
 
 const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
@@ -327,26 +475,30 @@ const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
   for (const widgetType of searchWidgetTypes) {
     const action = widgetType.actions.find(a => a.methodName === currentAction.value?.actionName)
 
-    if (action && action.parameters) {
-      return action.parameters.map((param, index) => {
-        // Parse parameter string like "thingId: string" or "zoom?: number"
-        const match = param.match(/^(\w+)(\?)?:\s*(.+)$/)
-        if (match) {
-          return {
-            name: match[1],
-            optional: !!match[2],
-            type: match[3],
-            index
-          }
-        }
-        return {
-          name: `arg${index}`,
-          optional: false,
-          type: 'any',
-          index
-        }
-      })
+    if (action) {
+      /* Declared on the action (#1223) - the position is the argument index. */
+      return (action.parameters ?? []).map((param, index) => ({
+        name: param.name,
+        label: param.label ? t(param.label) : param.name,
+        type: param.type,
+        optional: !!param.optional,
+        index,
+        ...(param.kind ? { kind: param.kind } : {})
+      }))
     }
+  }
+
+  /* An action the target's provider offers declares its parameters the same way. */
+  const provided = currentProvidedActions.value.find(a => a.name === currentAction.value?.actionName)
+  if (provided) {
+    return (provided.parameters ?? []).map((param, index) => ({
+      name: param.name,
+      label: param.label ? t(param.label) : param.name,
+      type: param.type,
+      optional: !!param.optional,
+      index,
+      ...(param.kind ? { kind: param.kind } : {})
+    }))
   }
 
   return []
@@ -520,17 +672,104 @@ const updateParameterMapping = (paramIndex: number, payloadPath: string) => {
     action.payloadMapping = []
   }
 
+  const previous = action.payloadMapping.find(pm => pm.argIndex === paramIndex)
+
   // Remove existing mapping for this parameter index
   action.payloadMapping = action.payloadMapping.filter(
     pm => pm.argIndex !== paramIndex
   )
 
-  // Add new mapping if a payload path is selected
-  if (payloadPath) {
+  // Add new mapping if a payload path is selected - keeping its expression,
+  // which computes from whichever field is chosen (#1224)
+  if (payloadPath || previous?.expression) {
     action.payloadMapping.push({
       payloadPath,
-      argIndex: paramIndex
+      argIndex: paramIndex,
+      ...(previous?.expression ? { expression: previous.expression } : {})
     })
+  }
+}
+
+/*
+ * The expression that computes the argument from the chosen field (#1224).
+ * Emptied, the key goes, so the rule is stored as one without an expression.
+ */
+const updateParameterExpression = (paramIndex: number, expression: string) => {
+  const action = currentAction.value
+  if (!action) return
+
+  const mappings = action.payloadMapping ?? []
+  const previous = mappings.find(pm => pm.argIndex === paramIndex)
+  const rest = mappings.filter(pm => pm.argIndex !== paramIndex)
+  const payloadPath = previous?.payloadPath ?? ''
+
+  if (!expression.trim() && !payloadPath) {
+    action.payloadMapping = rest
+    return
+  }
+  action.payloadMapping = [
+    ...rest,
+    { payloadPath, argIndex: paramIndex, ...(expression.trim() ? { expression } : {}) }
+  ]
+}
+
+const getExpressionForParameter = (paramIndex: number): string =>
+  currentAction.value?.payloadMapping?.find(pm => pm.argIndex === paramIndex)?.expression ?? ''
+
+/*
+ * A payload to show a result for where the rule has seen no event yet:
+ * a value per declared feature, and for a record the first one the
+ * widget's source answers with.
+ */
+const samplePayload = computed(() => {
+  const sample: Record<string, unknown> = {}
+  for (const prop of payloadProperties.value) {
+    if (prop.type === RECORD_TYPE) {
+      const first = sourceAnswer.value?.items?.[0]
+      sample[prop.name] = first && typeof first === 'object' ? { ...first } : {}
+    } else if (prop.type === 'number') {
+      sample[prop.name] = 0
+    } else if (prop.type === 'boolean') {
+      sample[prop.name] = false
+    } else if (prop.type === 'string') {
+      sample[prop.name] = ''
+    }
+  }
+  return sample
+})
+
+const formatResult = (result: unknown): string => {
+  if (result === undefined) return 'undefined'
+  if (typeof result === 'string') return JSON.stringify(result)
+  try {
+    return JSON.stringify(result) ?? String(result)
+  } catch {
+    return String(result)
+  }
+}
+
+/**
+ * What the parameter's mapping yields, by the manager's own evaluation:
+ * for the last event the rule saw, else for the sample payload.
+ */
+const getResultPreview = (paramIndex: number): { text: string; failed: boolean } | null => {
+  const mapping = currentAction.value?.payloadMapping?.find(pm => pm.argIndex === paramIndex)
+  if (!mapping || (!mapping.payloadPath && !mapping.expression?.trim())) return null
+
+  const last = editingMappingId.value ? eventManager?.getLastPayload?.(editingMappingId.value) : undefined
+  try {
+    if (last !== undefined) {
+      const result = formatResult(eventManager.evaluatePayloadMapping(mapping, last))
+      return { text: t('Rule.resultLast', { result }), failed: false }
+    }
+    const result = formatResult(eventManager.evaluatePayloadMapping(mapping, samplePayload.value))
+    return { text: t('Rule.resultSample', { result }), failed: false }
+  } catch (error) {
+    const cause = (error as { cause?: unknown }).cause ?? error
+    return {
+      text: t('Rule.resultFailed', { message: cause instanceof Error ? cause.message : String(cause) }),
+      failed: true
+    }
   }
 }
 
@@ -562,9 +801,30 @@ const updateManualParameterValue = (paramIndex: number, value: string) => {
   }
 }
 
+/*
+ * A parameter naming a variable is fixed by default: the variable is
+ * chosen, not taken from the event.
+ */
 const getParameterValueSource = (paramIndex: number): 'payload' | 'manual' => {
-  return parameterValueSources.value.get(paramIndex) || 'payload'
+  const chosen = parameterValueSources.value.get(paramIndex)
+  if (chosen) return chosen
+  return selectedActionParameters.value.find(p => p.index === paramIndex)?.kind === 'variable' ? 'manual' : 'payload'
 }
+
+/*
+ * The global variables, for a parameter declared as naming one (#1237):
+ * by name, with their type. Asked again whenever the list is drawn, since
+ * a variable is added on another screen.
+ */
+const globalVariables = useGlobalVariables()
+const variableOptions = computed(() => {
+  void showAddDialog.value
+  void showEditDialog.value
+  return globalVariables().map(variable => ({
+    text: variable.type ? `${variable.name} (${variable.type})` : variable.name,
+    value: variable.name
+  }))
+})
 
 const setParameterValueSource = (paramIndex: number, source: 'payload' | 'manual') => {
   parameterValueSources.value.set(paramIndex, source)
@@ -628,6 +888,10 @@ const sourcePhrase = (mapping: EventActionMapping) => {
 const targetPhrase = (action: ActionDefinition) => {
   if (action.targetContext === 'system') return t('Phrase.inSystem')
   if (action.targetContext === 'page') return action.targetContextId ? t('Phrase.onPage', { page: action.targetContextId }) : t('Phrase.onAnyPage')
+  if (action.targetContext === 'datasource') {
+    const label = providedTargetOptions('datasource').find((o) => o.value === action.targetContextId)?.text
+    return t('Phrase.atSource', { source: label ?? action.targetContextId ?? '' })
+  }
   return action.targetContextId ? t('Phrase.at', { target: action.targetContextId }) : t('Phrase.atAllInstances')
 }
 
@@ -647,10 +911,6 @@ const dialogOpen = computed({
   },
 })
 
-const injectedEventManager = inject<EventManager>(EVENT_MANAGER)!
-const injectedEventRegistry = inject<EventRegistry>(EVENT_REGISTRY)!
-const injectedActionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
-const injectedPageRegistry = inject<PageRegistryI>(PageIdentifier)!
 
 onMounted(() => {
   // Injected at setup below; by mount time the loader has long registered them
@@ -801,6 +1061,11 @@ onMounted(() => {
                   label-key="text"
                   value-key="value"
                 />
+                <DInput
+                  v-if="offersFreePath"
+                  v-model="condition.prop"
+                  :placeholder="t('Rule.freePath', { example: freePathExample })"
+                />
                 <DSelect
                   v-model="condition.comperator"
                   :options="comperatorOptions"
@@ -858,7 +1123,7 @@ onMounted(() => {
                       v-model="action.targetContext"
                       :label="t('Rule.targetContext')"
                       stacked
-                      :options="contextOptions"
+                      :options="targetContextOptions"
                       label-key="text"
                       value-key="value"
                     />
@@ -871,6 +1136,18 @@ onMounted(() => {
                       label-key="text"
                       value-key="value"
                       clearable
+                    />
+                    <!-- A datasource action needs its datasource: there is no "all of them". -->
+                    <DSelect
+                      v-else-if="action.targetContext === 'datasource'"
+                      v-model="action.targetContextId"
+                      class="action__source"
+                      :label="t('Context.datasource')"
+                      stacked
+                      :options="providedTargetOptions('datasource')"
+                      label-key="text"
+                      value-key="value"
+                      :placeholder="t('Rule.chooseSource')"
                     />
                     <DSelect
                       v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
@@ -897,10 +1174,10 @@ onMounted(() => {
                   <div v-if="selectedActionParameters.length" class="params">
                     <div v-for="param in selectedActionParameters" :key="param.index" class="param">
                       <span class="param__name">
-                        {{ param.name }}<span v-if="param.optional" class="param__optional">, {{ t('Rule.optional') }}</span>
+                        {{ param.label }}<span v-if="param.optional" class="param__optional">, {{ t('Rule.optional') }}</span>
                       </span>
                       <div class="param__value">
-                        <div class="source" role="group" :aria-label="t('Rule.valueFor', { name: param.name })">
+                        <div class="source" role="group" :aria-label="t('Rule.valueFor', { name: param.label })">
                           <button
                             type="button"
                             :class="['source__side', { 'source__side--on': getParameterValueSource(param.index) === 'payload' }]"
@@ -929,12 +1206,48 @@ onMounted(() => {
                           @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
                         />
                         <DInput
-                          v-else
+                          v-if="getParameterValueSource(param.index) === 'payload' && offersFreePath"
+                          :model-value="getPayloadPathForParameter(param.index)"
+                          :placeholder="t('Rule.freePath', { example: freePathExample })"
+                          @update:model-value="updateParameterMapping(param.index, String($event ?? ''))"
+                        />
+                        <DInput
+                          v-if="getParameterValueSource(param.index) === 'payload'"
+                          class="param__expression"
+                          :model-value="getExpressionForParameter(param.index)"
+                          :aria-label="t('Rule.expression')"
+                          placeholder="value * 100"
+                          @update:model-value="updateParameterExpression(param.index, String($event ?? ''))"
+                        />
+                        <!-- On the manual source only. It hung by v-else on the free path
+                          field above, and so stood beside the payload choice too, a field
+                          that did nothing with the type as its placeholder (#1227). -->
+                        <!-- A parameter naming a variable offers the global ones; the field
+                          beside it still takes a name for one that does not exist yet (#1237). -->
+                        <DSelect
+                          v-if="getParameterValueSource(param.index) === 'manual' && param.kind === 'variable'"
+                          class="param__variable"
                           :model-value="getManualValueForParameter(param.index)"
-                          :placeholder="param.type"
+                          :options="variableOptions"
+                          label-key="text"
+                          value-key="value"
+                          :placeholder="t('Rule.chooseVariable')"
+                          @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
+                        />
+                        <DInput
+                          v-if="getParameterValueSource(param.index) === 'manual'"
+                          :model-value="getManualValueForParameter(param.index)"
+                          :placeholder="param.kind === 'variable' ? t('Rule.newVariable') : param.type"
                           @update:model-value="updateManualParameterValue(param.index, String($event ?? ''))"
                         />
                       </div>
+                      <p
+                        v-if="getParameterValueSource(param.index) === 'payload' && getResultPreview(param.index)"
+                        :class="['param__result', { 'param__result--failed': getResultPreview(param.index)?.failed }]"
+                        aria-live="polite"
+                      >
+                        {{ getResultPreview(param.index)?.text }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1297,9 +1610,24 @@ onMounted(() => {
   min-width: 0;
 }
 
-.param__value > *:last-child {
+.param__value > *:last-child,
+.param__value > .param__expression {
   flex: 1 1 0;
   min-width: 0;
+}
+
+/* What the mapping yields, under the fields that make it. */
+.param__result {
+  grid-column: 2;
+  margin: -6px 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+  overflow-wrap: anywhere;
+}
+
+.param__result--failed {
+  color: var(--color-err);
 }
 
 /* Where a value comes from is a choice between two, so it is shown as two. */

@@ -12,7 +12,7 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { useDatasourceRepository, useEObject, useTranslation, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { inject, toRefs, ref, watch, computed, onMounted, onUnmounted } from 'vue';
+import { inject, toRefs, ref, watch, computed, nextTick, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 
@@ -39,8 +39,16 @@ const settings = useEObject<DataTableSettings>(() => config.value)
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { DataTableWidgetInterface } from './api/DataTableWidgetInterface';
+import {
+    DataTableWidgetInterface,
+    type DataTableColumnMatch,
+    type DataTableRowMatch,
+} from './api/DataTableWidgetInterface';
 import type { DataTableSettings } from './gen/DataTableSettings';
+import { DataTableRowPayloadImpl } from './gen/DataTableRowPayloadImpl';
+import { DataTableCellPayloadImpl } from './gen/DataTableCellPayloadImpl';
+import { DataTableColumnPayloadImpl } from './gen/DataTableColumnPayloadImpl';
+import { DataTableSettingsImpl } from './gen/DataTableSettingsImpl';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
@@ -51,6 +59,24 @@ const pageId = (route.params.pageid as string) || '';
 class DataTableWidgetApi extends DataTableWidgetInterface {
     refresh(): void {
         update(datasourceId.value, datasourceId.value);
+    }
+
+    highlightRow(match: DataTableRowMatch | string, value?: unknown): void {
+        const row = rowMarkOf(match, value);
+        if (row) marks.value = { ...marks.value, row };
+    }
+
+    highlightColumn(column: DataTableColumnMatch): void {
+        if (isGiven(column)) marks.value = { ...marks.value, column };
+    }
+
+    highlightCell(row: DataTableRowMatch | string, column: DataTableColumnMatch, value?: unknown): void {
+        const where = rowMarkOf(row, value);
+        if (where && isGiven(column)) marks.value = { ...marks.value, cell: { row: where, column } };
+    }
+
+    clearHighlight(): void {
+        marks.value = {};
     }
 }
 const api = new DataTableWidgetApi();
@@ -76,58 +102,78 @@ const emitRightClick = () => {
     });
 };
 
-const emitRowClick = (rowId: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:row_click', {
-        type: 'widget:DataTableWidget:row_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId }
-    });
+/*
+ * What a row, a cell or a header click hands on: the record and where it
+ * sits, as the modelled payloads declare them (#1221). A rule on a row
+ * click wants a value of that row, and an id it would have to look up
+ * again gave it none.
+ *
+ * Both indices count the answer as it came - see the model for why a sort
+ * or a hidden column moves neither.
+ */
+const rowPayload = (row: Record<string, unknown>) => {
+    const payload = new DataTableRowPayloadImpl();
+    payload.widgetId = widgetId!.value!;
+    payload.timestamp = Date.now();
+    payload.row = row;
+    payload.rowIndex = rows.value.indexOf(row);
+    return payload;
 };
 
-const emitRowRightClick = (rowId: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:row_right_click', {
-        type: 'widget:DataTableWidget:row_right_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId }
-    });
+const cellPayload = (row: Record<string, unknown>, column: string) => {
+    const payload = new DataTableCellPayloadImpl();
+    payload.widgetId = widgetId!.value!;
+    payload.timestamp = Date.now();
+    payload.row = row;
+    payload.rowIndex = rows.value.indexOf(row);
+    payload.column = column;
+    payload.columnIndex = allColumns.value.indexOf(column);
+    payload.value = row[column];
+    return payload;
 };
 
-const emitColumnClick = (colId: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:col_click', {
-        type: 'widget:DataTableWidget:col_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), colId }
-    });
+const columnPayload = (column: string) => {
+    const payload = new DataTableColumnPayloadImpl();
+    payload.widgetId = widgetId!.value!;
+    payload.timestamp = Date.now();
+    payload.column = column;
+    payload.columnIndex = allColumns.value.indexOf(column);
+    return payload;
 };
 
-const emitColumnRightClick = (colId: string) => {
-    if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:col_right_click', {
-        type: 'widget:DataTableWidget:col_right_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), colId }
-    });
+const emitWith = (event: string, payload: object) => {
+    const type = `widget:DataTableWidget:${event}`;
+    eventBus.emit(type, { type, widgetId: widgetId!.value, payload });
 };
 
-const emitCellClick = (rowId: string, colId: string) => {
+const emitRowClick = (row: Record<string, unknown>) => {
     if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:cell_click', {
-        type: 'widget:DataTableWidget:cell_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId, colId }
-    });
+    emitWith('row_click', rowPayload(row));
 };
 
-const emitCellRightClick = (rowId: string, colId: string) => {
+const emitRowRightClick = (row: Record<string, unknown>) => {
     if (!widgetId?.value) return;
-    eventBus.emit('widget:DataTableWidget:cell_right_click', {
-        type: 'widget:DataTableWidget:cell_right_click',
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId, colId }
-    });
+    emitWith('row_right_click', rowPayload(row));
+};
+
+const emitColumnClick = (column: string) => {
+    if (!widgetId?.value) return;
+    emitWith('col_click', columnPayload(column));
+};
+
+const emitColumnRightClick = (column: string) => {
+    if (!widgetId?.value) return;
+    emitWith('col_right_click', columnPayload(column));
+};
+
+const emitCellClick = (row: Record<string, unknown>, column: string) => {
+    if (!widgetId?.value) return;
+    emitWith('cell_click', cellPayload(row, column));
+};
+
+const emitCellRightClick = (row: Record<string, unknown>, column: string) => {
+    if (!widgetId?.value) return;
+    emitWith('cell_right_click', cellPayload(row, column));
 };
 
 const data = ref(null as any);
@@ -189,6 +235,100 @@ const hidden = computed<Set<string>>(() => {
 
 const allColumns = computed<string[]>(() => Object.keys(rows.value[0] ?? {}))
 const columns = computed<string[]>(() => allColumns.value.filter((column) => !hidden.value.has(column)))
+
+/*
+ * The marks a rule has set (#1222).
+ *
+ * Runtime state, held here and nowhere else: a mark says what somebody on
+ * the board is pointing at right now, which is not something a saved board
+ * should remember. Each is kept as it was asked for - an index or a key -
+ * and resolved against the rows as they are, so a new answer is searched
+ * again rather than marking whatever now sits at the old place.
+ */
+type RowMark = { index: number } | { column: string; value: unknown };
+
+const marks = ref<{
+    row?: RowMark;
+    column?: DataTableColumnMatch;
+    cell?: { row: RowMark; column: DataTableColumnMatch };
+}>({});
+
+/* An argument a rule left empty arrives as undefined, or as '' from a typed field. */
+const isGiven = (value: unknown) => value !== undefined && value !== null && value !== '';
+
+/*
+ * The two forms of a row, from whatever a rule hands over: an object with a
+ * key, a key column followed by its value, or an index - typed into the
+ * rule dialog, an index is a string, and is read as a number.
+ */
+const rowMarkOf = (match: unknown, value?: unknown): RowMark | undefined => {
+    if (match && typeof match === 'object' && 'column' in match) {
+        const key = match as { column: unknown; value?: unknown };
+        return { column: String(key.column), value: key.value };
+    }
+    if (isGiven(value) && typeof match === 'string') return { column: match, value };
+    if (!isGiven(match)) return undefined;
+    const index = Number(match);
+    return Number.isInteger(index) && index >= 0 ? { index } : undefined;
+};
+
+/*
+ * Equal as the screen shows them: a value typed into a rule is a string,
+ * and the cell it is meant to find may hold the number.
+ */
+const sameValue = (left: unknown, right: unknown) =>
+    left === right || (isGiven(left) && isGiven(right) && String(left) === String(right));
+
+/** The records a row mark means, in the answer as it came. */
+const rowsMarkedBy = (mark: RowMark | undefined): Set<Record<string, unknown>> => {
+    if (!mark) return new Set();
+    if ('index' in mark) {
+        const row = rows.value[mark.index];
+        return new Set(row ? [row] : []);
+    }
+    return new Set(rows.value.filter((row) => sameValue(row[mark.column], mark.value)));
+};
+
+/*
+ * A column by name where the answer has one by that name, otherwise by its
+ * index among all columns - hidden ones counted, as columnIndex counts them.
+ */
+const columnMarkedBy = (mark: DataTableColumnMatch | undefined): string | undefined => {
+    if (!isGiven(mark)) return undefined;
+    const name = String(mark);
+    if (allColumns.value.includes(name)) return name;
+    const index = Number(mark);
+    return Number.isInteger(index) ? allColumns.value[index] : undefined;
+};
+
+const markedRows = computed(() => rowsMarkedBy(marks.value.row));
+const markedColumn = computed(() => columnMarkedBy(marks.value.column));
+const markedCellRows = computed(() => rowsMarkedBy(marks.value.cell?.row));
+const markedCellColumn = computed(() => columnMarkedBy(marks.value.cell?.column));
+
+/* A cell is marked when it is asked for, and where a marked row crosses a marked column. */
+const isMarkedCell = (row: Record<string, unknown>, column: string) =>
+    (markedCellColumn.value === column && markedCellRows.value.has(row)) ||
+    (markedColumn.value === column && markedRows.value.has(row));
+
+/*
+ * How a mark looks, which is a setting where the mark itself is not.
+ *
+ * Read through the watched settings, so a colour changed in the open dialog
+ * shows at once (#1203). A board stored before these settings existed hands
+ * over a plain object without them; the defaults are then the model's, read
+ * off an instance rather than written out a second time here.
+ */
+const MODEL_DEFAULTS = new DataTableSettingsImpl();
+const colourOf = (key: 'markedRowColor' | 'markedColumnColor' | 'markedCellColor'): string => {
+    const held = settings.value?.[key];
+    return typeof held === 'string' && held.trim() !== '' ? held : MODEL_DEFAULTS[key];
+};
+const markColours = computed(() => ({
+    '--marked-row': colourOf('markedRowColor'),
+    '--marked-column': colourOf('markedColumnColor'),
+    '--marked-cell': colourOf('markedCellColor'),
+}));
 
 const showHeader = computed<boolean>(() => settings.value?.showHeader !== false)
 const sortable = computed<boolean>(() => settings.value?.sortable === true)
@@ -260,13 +400,42 @@ watch(rows, () => {
     page.value = 0
 })
 
+const scroller = ref<HTMLElement>()
+
+/*
+ * A marked row is brought into view (#1222).
+ *
+ * The mark sits on the record, not on a place on screen, so sorting carries
+ * it along by itself. A row on another page is not seen though - a map
+ * marker clicked elsewhere on the board would mark a row nobody can find -
+ * so the table turns to its page, unless one of the marked rows is on the
+ * page already, and scrolls it into sight. Done when a mark is set and when
+ * a new answer arrives, which may hold the row somewhere else; not when the
+ * reader pages or sorts, which would take the table out of their hands.
+ * Declared after the reset above, so a new answer lands on the mark rather
+ * than on the first page.
+ */
+const bringMarkIntoView = () => {
+    const marked = new Set([...markedRows.value, ...markedCellRows.value])
+    if (!marked.size) return
+    if (pageSize.value > 0 && !shownRows.value.some((row) => marked.has(row))) {
+        const position = ordered.value.findIndex((row) => marked.has(row))
+        if (position >= 0) page.value = Math.floor(position / pageSize.value)
+    }
+    void nextTick(() => {
+        scroller.value?.querySelector('.marked_cell, .marked_row')?.scrollIntoView?.({ block: 'nearest' })
+    })
+}
+
+watch([marks, rows], bringMarkIntoView)
+
 const shownRows = computed<Record<string, unknown>[]>(() => {
     if (pageSize.value <= 0) return ordered.value
     const from = page.value * pageSize.value
     return ordered.value.slice(from, from + pageSize.value)
 })
 
-/** The row's place in the whole answer, which is what an event means by it. */
+/** The row's place in the shown order, which keeps a key stable across pages. */
 const rowIdOf = (indexOnPage: number) => String(page.value * pageSize.value + indexOnPage)
 
 const firstShown = computed(() => (ordered.value.length ? page.value * pageSize.value + 1 : 0))
@@ -275,14 +444,14 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
 <template>
     <div class="table_container" @click="emitClick" @contextmenu.prevent="emitRightClick">
         <!-- The rows scroll, the pager below them does not. -->
-        <div class="table_scroll">
-            <table class="table" :style="{ '--header-background': headerBackground }">
+        <div ref="scroller" class="table_scroll">
+            <table class="table" :style="{ '--header-background': headerBackground, ...markColours }">
                 <thead v-if="showHeader">
                     <tr>
                         <th
                             v-for="column in columns"
                             :key="column"
-                            :class="{ sortable, sorted: sortedBy?.column === column }"
+                            :class="{ sortable, sorted: sortedBy?.column === column, marked_column: markedColumn === column }"
                             :aria-sort="
                                 sortedBy?.column === column
                                     ? sortedBy.descending
@@ -306,14 +475,16 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
                     <tr
                         v-for="(row, rowIndex) in shownRows"
                         :key="rowIdOf(rowIndex)"
-                        @click="emitRowClick(rowIdOf(rowIndex))"
-                        @contextmenu.prevent="emitRowRightClick(rowIdOf(rowIndex))"
+                        :class="{ marked_row: markedRows.has(row) }"
+                        @click="emitRowClick(row)"
+                        @contextmenu.prevent="emitRowRightClick(row)"
                     >
                         <td
                             v-for="column in columns"
                             :key="column"
-                            @click="emitCellClick(rowIdOf(rowIndex), column)"
-                            @contextmenu.prevent="emitCellRightClick(rowIdOf(rowIndex), column)"
+                            :class="{ marked_column: markedColumn === column, marked_cell: isMarkedCell(row, column) }"
+                            @click="emitCellClick(row, column)"
+                            @contextmenu.prevent="emitCellRightClick(row, column)"
                         >
                             {{ row[column] }}
                         </td>
@@ -420,6 +591,26 @@ const lastShown = computed(() => Math.min((page.value + 1) * pageSize.value, ord
 
 .table tbody tr:hover {
     background: var(--color-raised);
+}
+
+/*
+ * What a rule marked. The row's colour sits on the row, the column's and
+ * the cell's on the cells, so the cell where both cross shows its own.
+ */
+.table tbody tr.marked_row {
+    background: var(--marked-row);
+}
+
+.table td.marked_column {
+    background: var(--marked-column);
+}
+
+.table th.marked_column {
+    box-shadow: inset 0 -2px 0 var(--color-accent);
+}
+
+.table td.marked_cell {
+    background: var(--marked-cell);
 }
 
 /* A column that cannot be sorted does not offer to be. */

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A light source on a board, whose light falls outside its frame: onto the
+page behind the widgets and, where asked, onto the widgets near it
+(#1242). It is invisible while the board is shown - a page whose
+background is a photo of a room gets its light where its lamps are - and
+shows a marker only while the board is edited, so it can be placed.
+
+The lamp does not draw its light. It announces it to the page, and the
+light layer of the layout draws it. What is here is what the lamp is set
+to; how the page is lit around it is the page's own setting (Lighting, in
+the workspace model).
+
+Every setting is a variable wrapper, as everywhere else in this
+application: bound to a variable, the lamp mirrors it, and a press or an
+action writes into the variable it follows.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="lampwidget"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp" nsPrefix="lampwidget">
+
+    <eClassifiers xsi:type="ecore:EClass" name="LampSettings">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A light source: on or off, how bright, in what colour, and how its light falls onto the page. It is no picture on the board: its light starts at the centre of its widget, and while the board is not edited only the light is seen."/>
+        </eAnnotations>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="on" containment="false" defaultValueLiteral="false">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether the lamp is on: true or false. Bound to a variable, the lamp mirrors it and a press or an action writes into it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="brightness" containment="false" defaultValueLiteral="100">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How bright the lamp is, from 0 to 100."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="color" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour of the light, any CSS colour. Left empty, the colour follows the colour temperature."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="colorTemperature" containment="false" defaultValueLiteral="2700">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour temperature of the light in kelvin, from 1000 (candle) to 10000 (blue sky). Used while no colour is set."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="radius" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How far the light reaches, in pixels. Left empty, the size of the widget decides: the light reaches half its longer side, so sizing the widget sizes the light."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="lightShape" containment="false" defaultValueLiteral="round">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How the light falls: round, all around the lamp, or cone, in one direction."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="direction" containment="false" defaultValueLiteral="90">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where a cone points, in degrees: 0 to the right, 90 down, 180 to the left, 270 up."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="angle" containment="false" defaultValueLiteral="60">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How wide a cone opens, in degrees."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="lightsWidgets" containment="false" defaultValueLiteral="false">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether the light falls on the widgets near the lamp as well, not only on the page behind them."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="stateField" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where in what the datasource answered the lamp finds its state, as a path (status.light). A value there that says on or off switches the lamp, a number sets its brightness, and an object may carry on, brightness, color and colorTemperature. Left empty, the datasource is not read."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="LampPayload" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//Payload">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The whole state of a lamp, sent when its state changed, so a rule can pass it on."/>
+        </eAnnotations>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether the lamp is on."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="brightness" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How bright it is, from 0 to 100."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour as set; empty where the colour temperature decides."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="colorTemperature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour temperature in kelvin."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lightColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour the light is drawn in: the colour where one is set, otherwise the colour of the temperature."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+</ecore:EPackage>

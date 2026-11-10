@@ -1,0 +1,94 @@
+{
+  "Widget": {
+    "button": "Schaltfläche",
+    "toggle": "Umschalter",
+    "multiState": "Mehrstufige Schaltfläche",
+    "slider": "Schieberegler",
+    "buttonGroup": "Schaltflächengruppe",
+    "choice": "Auswahlliste",
+    "textField": "Textfeld",
+    "numberField": "Zahlenfeld"
+  },
+  "Form": {
+    "labelGroup": "Beschriftung",
+    "label": "Beschriftung",
+    "writeGroup": "Beim Drücken",
+    "target": "Schreibt in Variable",
+    "value": "Geschriebener Wert",
+    "disabled": "Deaktiviert",
+    "lookGroup": "Aussehen",
+    "color": "Farbe",
+    "textColor": "Textfarbe",
+    "fontSize": "Schriftgröße",
+    "offLabel": "Beschriftung aus",
+    "onLabel": "Beschriftung an",
+    "toggleGroup": "Zustände",
+    "onValue": "Wert für an",
+    "offValue": "Wert für aus",
+    "offColor": "Farbe aus",
+    "onColor": "Farbe an",
+    "statesGroup": "Zustände",
+    "states": "Zustände, in der Reihenfolge eines Drucks",
+    "noStateLabel": "Beschriftung ohne Zustand",
+    "scaleGroup": "Skala",
+    "min": "Untere Grenze",
+    "max": "Obere Grenze",
+    "step": "Schrittweite",
+    "unit": "Einheit",
+    "marksGroup": "Rasterpunkte",
+    "marks": "Markierungen",
+    "markEvery": "Markierung alle n Schritte",
+    "snap": "Rastet an Markierungen ein",
+    "slideGroup": "Beim Schieben",
+    "range": "Bereich mit zwei Reglern",
+    "upperTarget": "Obere Grenze schreibt in Variable",
+    "showValue": "Wert anzeigen",
+    "orientation": "Ausrichtung",
+    "valueTextColor": "Textfarbe des Werts",
+    "optionsGroup": "Optionen",
+    "options": "Feste Optionen",
+    "optionsPath": "Liste in der Antwort der Datenquelle",
+    "optionLabel": "Feld für die Beschriftung",
+    "optionValue": "Feld für den Wert",
+    "chooseGroup": "Auswahl",
+    "multiple": "Mehrere wählbar",
+    "chosenTextColor": "Textfarbe der gewählten",
+    "labelSide": "Beschriftung steht",
+    "detents": "Benannte Rasterstufen",
+    "placeholder": "Platzhalter",
+    "fieldGroup": "Beim Übernehmen"
+  },
+  "Action": {
+    "value": "Wert",
+    "label": "Beschriftung",
+    "on": "An",
+    "lower": "Untere Grenze",
+    "upper": "Obere Grenze"
+  },
+  "FormOption": {
+    "label": "Beschriftung",
+    "value": "Wert",
+    "color": "Farbe"
+  },
+  "FormMark": {
+    "at": "Bei Wert",
+    "label": "Beschriftung"
+  },
+  "Options": {
+    "orientation": {
+      "horizontal": "Waagerecht",
+      "vertical": "Senkrecht"
+    },
+    "labelSide": {
+      "right": "Rechts",
+      "left": "Links"
+    }
+  },
+  "Default": {
+    "button": "Knopf",
+    "toggle": "Schalter",
+    "multiState": "Zustand",
+    "slider": "Regler",
+    "choice": "Bitte wählen …"
+  }
+}

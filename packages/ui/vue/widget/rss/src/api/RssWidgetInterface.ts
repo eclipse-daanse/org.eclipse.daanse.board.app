@@ -16,6 +16,6 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class RssWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'rss.refresh' })
+  @WidgetAction({ eventType: 'rss.refresh', parameters: [] })
   refresh(): void { throw new Error("refresh not implemented"); }
 }

@@ -148,33 +148,59 @@ export class EventRegistry {
    * Falls back to decorator-based extraction if Ecore model is not available
    */
   public extractPayloadPropertiesForEvent(eventType: string): PayloadPropertyInfo[] {
-    // Try to get widget type from event type
-    const widgetType = this.widgetTypeMap.get(eventType);
-
-    if (!widgetType || !this.ecoreMetadataService) {
-      console.warn(`No widget type or EcoreMetadataService for event: ${eventType}`);
-      return [];
-    }
-
-    // Get payload class name from event type (e.g., "MapWidget:click_on_thing" -> "ThingClickPayload")
     const event = this.events.get(eventType);
     if (!event || !event.payloadType) {
       console.warn(`No event or payload type found for: ${eventType}`);
       return [];
     }
 
+    if (!this.ecoreMetadataService) {
+      console.warn(`No EcoreMetadataService for event: ${eventType}`);
+      return [];
+    }
+
+    /*
+     * The declared class first, by its EClass: a generated payload knows
+     * it, so this needs neither a model registered under the widget type
+     * nor a class name matching the EClass's - the Impl's name never did
+     * (#1221).
+     */
+    const eClass = this.eClassOf(event.payloadType);
+    if (eClass) {
+      return this.ecoreMetadataService.extractPayloadMetadataFromEClass(eClass).properties;
+    }
+
+    const widgetType = this.widgetTypeMap.get(eventType);
+    if (!widgetType) {
+      console.warn(`No widget type for event: ${eventType}`);
+      return [];
+    }
+
     const payloadClassName = event.payloadType.name; // e.g., "ThingClickPayload"
-
-    // Extract from Ecore model
     const ecoreMetadata = this.ecoreMetadataService.extractPayloadMetadata(widgetType, payloadClassName);
-
     if (ecoreMetadata && ecoreMetadata.properties) {
-      console.log(`✅ Extracted ${ecoreMetadata.properties.length} properties from Ecore model for ${payloadClassName}`);
       return ecoreMetadata.properties;
     }
 
     console.warn(`No Ecore metadata found for ${payloadClassName}, returning empty array`);
     return [];
+  }
+
+  /**
+   * The EClass a payload class stands for, where it is a generated one.
+   *
+   * eClass() is an instance method, so an instance is made to ask it;
+   * a payload's constructor takes nothing and does nothing else.
+   */
+  private eClassOf(payloadType: any): any {
+    if (typeof payloadType !== 'function' || typeof payloadType.prototype?.eClass !== 'function') {
+      return undefined;
+    }
+    try {
+      return new payloadType().eClass() ?? undefined;
+    } catch {
+      return undefined;
+    }
   }
 
   /**

@@ -1,0 +1,94 @@
+{
+  "Widget": {
+    "button": "Button",
+    "toggle": "Toggle button",
+    "multiState": "Multi-state button",
+    "slider": "Slider",
+    "buttonGroup": "Button group",
+    "choice": "Choice",
+    "textField": "Text field",
+    "numberField": "Number field"
+  },
+  "Form": {
+    "labelGroup": "Label",
+    "label": "Label",
+    "writeGroup": "When pressed",
+    "target": "Writes into variable",
+    "value": "Value it writes",
+    "disabled": "Disabled",
+    "lookGroup": "Look",
+    "color": "Colour",
+    "textColor": "Text colour",
+    "fontSize": "Font size",
+    "offLabel": "Label when off",
+    "onLabel": "Label when on",
+    "toggleGroup": "States",
+    "onValue": "Value when on",
+    "offValue": "Value when off",
+    "offColor": "Colour when off",
+    "onColor": "Colour when on",
+    "statesGroup": "States",
+    "states": "States, in the order a press goes through them",
+    "noStateLabel": "Label without a state",
+    "scaleGroup": "Scale",
+    "min": "Lower limit",
+    "max": "Upper limit",
+    "step": "Step",
+    "unit": "Unit",
+    "marksGroup": "Detents",
+    "marks": "Marks",
+    "markEvery": "A mark every n steps",
+    "snap": "Snaps to the marks",
+    "slideGroup": "When moved",
+    "range": "Range with two thumbs",
+    "upperTarget": "Upper thumb writes into variable",
+    "showValue": "Show the value",
+    "orientation": "Orientation",
+    "valueTextColor": "Text colour of the value",
+    "optionsGroup": "Options",
+    "options": "Fixed options",
+    "optionsPath": "List in the source’s answer",
+    "optionLabel": "Field shown as the label",
+    "optionValue": "Field written as the value",
+    "chooseGroup": "Choice",
+    "multiple": "Several can be chosen",
+    "chosenTextColor": "Text colour of the chosen",
+    "labelSide": "Label stands",
+    "detents": "Named detents",
+    "placeholder": "Placeholder",
+    "fieldGroup": "When committed"
+  },
+  "Action": {
+    "value": "Value",
+    "label": "Label",
+    "on": "On",
+    "lower": "Lower end",
+    "upper": "Upper end"
+  },
+  "FormOption": {
+    "label": "Label",
+    "value": "Value",
+    "color": "Colour"
+  },
+  "FormMark": {
+    "at": "At value",
+    "label": "Label"
+  },
+  "Options": {
+    "orientation": {
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    },
+    "labelSide": {
+      "right": "Right",
+      "left": "Left"
+    }
+  },
+  "Default": {
+    "button": "Button",
+    "toggle": "Switch",
+    "multiState": "State",
+    "slider": "Slider",
+    "choice": "Choose …"
+  }
+}

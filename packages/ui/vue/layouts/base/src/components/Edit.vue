@@ -18,9 +18,13 @@ import Moveable from 'vue3-moveable'
 import Draggable from 'vuedraggable'
 import { useMoveableLayout, type ILayoutItem } from '../composables/useMovableLayout'
 import { restingPlace } from '../composables/restingPlace'
+import { useClipboardShortcuts, type BoardPoint } from '../composables/useClipboardShortcuts'
+import ClipboardNotice from './ClipboardNotice.vue'
 
 import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import WeatherLayer from '../weather/WeatherLayer.vue'
+import LightLayer from '../light/LightLayer.vue'
 import { cloneDeep } from 'lodash'
 import { useRouter, useRoute } from 'vue-router'
 import { DButton, DIcon } from 'org.eclipse.daanse.board.app.ui.vue.controls'
@@ -265,8 +269,43 @@ const stackActions = (uid: string) => [
   { id: 'copy', icon: 'content_copy', label: t('Menu.copy'), run: () => copyWidget(uid) },
 ]
 
+/*
+ * Where the pointer is on the board, for Ctrl+V. Board pixels - the
+ * scrolled-away part counted - and nothing while it is elsewhere, in which
+ * case a paste lands beside the original instead.
+ */
+const pointerOnBoard = ref<BoardPoint | undefined>(undefined)
+
+const trackPointer = (event: PointerEvent) => {
+  pointerOnBoard.value = getCanvasCoords(event)
+}
+
+/*
+ * The widget Ctrl+C means: the one picked, or - with none picked - the
+ * one under the pointer. With several picked there is no one widget to
+ * mean, and the clipboard holds one.
+ */
+const copyTarget = () => {
+  if (selected.value.length === 1) return selected.value[0]
+  if (selected.value.length === 0) return hovered.value ?? undefined
+  return undefined
+}
+
+const {
+  copy: copyWithShortcut,
+  copiedNotice,
+  hideNotice,
+} = useClipboardShortcuts({
+  target: copyTarget,
+  copy: (uid) => copyWidgetComposable(uid),
+  paste: (at) => {
+    pasteWidgetComposable(at ? toGrid(at.x) : undefined, at ? toGrid(at.y) : undefined)
+  },
+  pointer: () => pointerOnBoard.value,
+})
+
 const copyWidget = (widgetId: string) => {
-  copyWidgetComposable(widgetId)
+  copyWithShortcut(widgetId)
 }
 
 const pasteWidget = () => {
@@ -324,6 +363,7 @@ const closeCanvasContextMenu = () => {
 }
 
 const pasteWidgetFromMenu = () => {
+  hideNotice()
   pasteWidgetComposable(pastePosition.value.x, pastePosition.value.y)
   canvasContextMenu.value.visible = false
 }
@@ -696,13 +736,24 @@ const change = (e: any) => {
 </script>
 
 <template>
+  <!-- Still while editing: the weather waits, and draws nothing. Its region
+    is drawn here, over the board as it scrolls -->
+  <WeatherLayer :page="board.page.value" edit-mode scroller=".scroll-viewport">
+  <!-- The lamps' light and the page's dark, as when shown: it follows a lamp as it is moved -->
+  <LightLayer :page="board.page.value" scroller=".scroll-viewport">
   <div
     class="report-container"
     @contextmenu="onCanvasContextMenu"
     @click="closeCanvasContextMenu"
     @pointerdown.self="clearSelection"
   >
-    <div class="scroll-viewport" ref="scrollContainer" @scroll="updateViewport">
+    <div
+      class="scroll-viewport"
+      ref="scrollContainer"
+      @scroll="updateViewport"
+      @pointermove="trackPointer"
+      @pointerleave="pointerOnBoard = undefined"
+    >
       <div
         class="canvas dottet"
         :style="{
@@ -749,6 +800,7 @@ const change = (e: any) => {
           ]"
           :style="getInitialStyle(widget.uid)"
           :ref="widget.uid"
+          :data-light-box="widget.uid"
           @pointerdown="toggleSelection(widget.uid, $event)"
           @pointerenter="hovered = widget.uid"
           @pointerleave="hovered = hovered === widget.uid ? null : hovered"
@@ -1000,7 +1052,11 @@ const change = (e: any) => {
         ></div>
       </div>
     </DFloatingWindow>
+
+    <ClipboardNotice :shown="copiedNotice" @dismiss="hideNotice" />
   </div>
+  </LightLayer>
+  </WeatherLayer>
 </template>
 <style>
 .ghost {
@@ -1132,6 +1188,14 @@ const change = (e: any) => {
  * is needed most when placing something against the picture.
  */
 :root[data-board-backdrop='on'] .canvas.dottet {
+  background-color: transparent;
+}
+
+/*
+ * The same while the page has light or dark (#1242): the light layer draws
+ * behind the board, and the surface would hide it.
+ */
+.light--on .canvas.dottet {
   background-color: transparent;
 }
 

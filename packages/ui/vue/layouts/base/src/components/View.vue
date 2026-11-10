@@ -16,6 +16,8 @@ Contributors:
 import { inject, onMounted, nextTick } from 'vue'
 import { useMoveableLayout } from '../composables/useMovableLayout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import WeatherLayer from '../weather/WeatherLayer.vue'
+import LightLayer from '../light/LightLayer.vue'
 import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -45,23 +47,29 @@ onMounted(async () => {
 </script>
 
 <template>
+  <WeatherLayer :page="board.page.value">
+  <LightLayer :page="board.page.value">
   <div class="widget-board">
     <template v-for="widget in board.widgets.value" :key="widget.uid">
       <div
         :class="`${widget.uid} dashboard-item-container`"
         :style="getInitialStyle(widget.uid)"
         :ref="widget.uid"
+        :data-light-box="widget.uid"
       >
         <div class="dashboard-item">
           <WidgetWrapper
             :widget="widget"
             :ref="`${widget.uid}_wrapper`"
             :editEnabled="false"
+            :data-weather-obstacle="widget.uid"
           />
         </div>
       </div>
     </template>
   </div>
+  </LightLayer>
+  </WeatherLayer>
 </template>
 <style scoped>
 .dottet{

@@ -4,6 +4,10 @@
   },
   "Form": {
     "headerBackground": "Header colour",
+    "marksGroup": "Marks",
+    "markedRowColor": "Marked row colour",
+    "markedColumnColor": "Marked column colour",
+    "markedCellColor": "Marked cell colour",
     "rowsGroup": "Rows",
     "headerGroup": "Header",
     "pageSize": "Rows per page (0 = all)",
@@ -22,5 +26,10 @@
     "page": "Page {{page}} of {{pages}}",
     "previous": "Previous page",
     "next": "Next page"
+  },
+  "Action": {
+    "match": "Row index or key column",
+    "column": "Column name or index",
+    "keyValue": "Value in the key column"
   }
 }

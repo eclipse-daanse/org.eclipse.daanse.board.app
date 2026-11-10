@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the lamp, a light source.
+
+In the order the decisions are made: its state, the colour of its light,
+how the light falls onto the page, and last where the state comes from
+when a datasource says it. There is no place to set: the light starts at
+the centre of the widget, and its reach, left empty, follows the
+widget's size. A cone's direction and angle are
+only asked for once the light is a cone.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="LampSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="LampSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="lampGroup" layout="VERTICAL" label="lamp:Form.lampGroup">
+      <fields xsi:type="uimodel:CheckboxWidget" name="on"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/on" label="lamp:Form.on" asToggle="true"/>
+      <fields xsi:type="uimodel:NumberWidget" name="brightness"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/brightness" label="lamp:Form.brightness" min="0" max="100" step="5"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="colorGroup" layout="VERTICAL" label="lamp:Form.colorGroup">
+      <fields xsi:type="uimodel:InputWidget" name="color"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/color" label="lamp:Form.color" placeholder="#ffd27f"/>
+      <fields xsi:type="uimodel:NumberWidget" name="colorTemperature"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/colorTemperature" label="lamp:Form.colorTemperature" min="1000" max="10000" step="100"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="lightGroup" layout="VERTICAL" label="lamp:Form.lightGroup">
+      <fields xsi:type="uimodel:NumberWidget" name="radius"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/radius" label="lamp:Form.radius" min="0" max="4000" step="10"/>
+      <fields xsi:type="uimodel:SelectWidget" name="lightShape"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/lightShape" label="lamp:Form.lightShape">
+        <values>round</values>
+        <values>cone</values>
+        <optionLabel language="JS" body="({ round: 'lamp:Options.lightShape.round', cone: 'lamp:Options.lightShape.cone' })[String(option).toLowerCase()] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:NumberWidget" name="direction"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/direction" label="lamp:Form.direction" min="0" max="360" step="5">
+        <visibilityCondition language="JS" body="String(self.lightShape?.value ?? self.lightShape ?? '').toLowerCase() === 'cone'"/>
+      </fields>
+      <fields xsi:type="uimodel:NumberWidget" name="angle"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/angle" label="lamp:Form.angle" min="1" max="360" step="5">
+        <visibilityCondition language="JS" body="String(self.lightShape?.value ?? self.lightShape ?? '').toLowerCase() === 'cone'"/>
+      </fields>
+      <fields xsi:type="uimodel:CheckboxWidget" name="lightsWidgets"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/lightsWidgets" label="lamp:Form.lightsWidgets" asToggle="true"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="sourceGroup" layout="VERTICAL" label="lamp:Form.sourceGroup">
+      <fields xsi:type="uimodel:InputWidget" name="stateField"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.lamp#//LampSettings/stateField" label="lamp:Form.stateField" placeholder="status.light"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

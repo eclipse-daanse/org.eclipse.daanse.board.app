@@ -37,6 +37,9 @@ import {
   type Workspace,
   EventMappingImpl,
   BoardImpl,
+  liftTypedWeatherRegions,
+  completeWeather,
+  completeLighting,
 } from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import {
   type ConnectionRepository,
@@ -172,8 +175,15 @@ export function parseWorkspace(content: unknown): Workspace | undefined {
     if (!isResource(data)) return readLegacyWorkspace(data as never)
 
     const resource = new JSONResource(URI.createURI(WORKSPACE_URI))
-    resource.loadFromString(JSON.stringify(liftPagesIntoBoard(data)))
-    return resource.getContents().get(0) as Workspace
+    /* A weather region typed in before regions were drawn becomes a shape */
+    resource.loadFromString(JSON.stringify(liftTypedWeatherRegions(liftPagesIntoBoard(data))))
+    const workspace = resource.getContents().get(0) as Workspace
+    /* A weather stored before some of its settings existed gets them, or the form cannot offer them */
+    for (const page of workspace.board?.pages.toArray() ?? []) {
+      if (page.weather) completeWeather(page.weather)
+      if (page.lighting) completeLighting(page.lighting)
+    }
+    return workspace
   } catch {
     return undefined
   }
@@ -328,6 +338,11 @@ export function useWorkspaceFile() {
           wrapperConfig: widget.wrapperConfig,
         })),
       )
+      /*
+       * The page's own modelled settings - its weather - hold their
+       * wrappers by containment and came back as the generated class.
+       */
+      variableWrappers?.bindContainedWrappers(page as never)
       opened.push(page.id as string)
     }
     return opened

@@ -131,6 +131,18 @@ pages, and on each page its widgets and where they sit.
                 <details key="documentation" value="Where each widget sits and how big it is. Separate from the widget because the same widget is placed differently by different layouts, and a layout item names its widget by id."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="weather" eType="#//Weather"
+                             lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What falls or drifts across this page and acts with its widgets. On the page rather than the board, because two pages of one board may show different weather; absent means none."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="lighting" eType="#//Lighting"
+                             lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How light this page is where no lamp shines. On the page beside its weather, for the same reason; absent means full daylight, and the lamps on the page only add a glow."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Widget">
@@ -219,6 +231,169 @@ pages, and on each page its widgets and where they sit.
                 <details key="documentation" value="What it is compared with, as text. Compared as a number where both sides read as one."/>
             </eAnnotations>
         </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="WeatherKind">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="What a page's weather is. The literal is what Weather.kind holds, so a variable that says rain or snow drives it directly."/>
+        </eAnnotations>
+        <eLiterals name="NONE" literal="none"/>
+        <eLiterals name="RAIN" literal="rain" value="1"/>
+        <eLiterals name="SNOW" literal="snow" value="2"/>
+        <eLiterals name="FOG" literal="fog" value="3"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="WeatherRegion">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Where a page's weather is drawn. The literal is what Weather.region holds."/>
+        </eAnnotations>
+        <eLiterals name="PAGE" literal="page"/>
+        <eLiterals name="AREA" literal="area" value="1"/>
+        <eLiterals name="WIDGET" literal="widget" value="2"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Weather">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A page's weather layer: one kind at a time, drawn across the page or a region of it. Every setting is a variable wrapper, so a weather source, a rule or a slider can drive it. Kind is a string holding a WeatherKind literal rather than the enum, because a variable delivers a string. The wrappers are contained, unlike those in a widget's settings: a widget's settings are an opaque attribute written out as JSON and rebuilt by the wrapper factory, while these are part of the page's containment tree, which is the only way the resource writes them out and the only way the page's content adapter hears a change inside them. Settings that belong to one kind only (the density of fog, say) are added beside these rather than as a class per kind, so switching the kind keeps the other values."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="kind" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What falls on the page: none, rain, snow or fog. A variable that says one of these words sets it."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="intensity" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How much falls, from 0 to 100."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eGenericType>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="wind" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="How far it drifts sideways, from -100 (to the left) to 100 (to the right)."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eGenericType>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="color" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The colour of what falls, any CSS colour. Left empty, rain is a pale blue and snow white."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="region" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where the weather is drawn: page (the whole page), area (the shapes drawn on the page, taken together) or widget (the area of the widget named by regionWidget, following it when it moves or is resized). A string holding a WeatherRegion literal, like kind. Outside the region nothing is drawn."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="shapes" upperBound="-1" eType="#//RegionShape" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The area region, as drawn on the page: the union of these shapes. Plain values rather than variable wrappers - a shape is drawn, not driven. Contained, so moving a point is a change of the page and is saved with it. No shape is a region of nothing."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="regionWidget" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The id of the widget whose area the widget region is."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="affectsWidgets" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether what falls acts with the widgets: snow settles on their top edges and rain splashes off them. Off, the weather is drawn behind the widgets only and passes them by."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+            </eGenericType>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Lighting">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A page's light layer: how light the page is around the lamps on it. The lamps themselves are widgets and announce their light at run time; only what belongs to the page is here. Every setting is a contained variable wrapper, as in Weather and for the same reasons: a variable, a rule or a slider can drive it, the resource writes it out with the page, and the page's content adapter hears a change inside it."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="ambient" lowerBound="0" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The ambient light, from 0 (dark) to 100 (full daylight, the default). Below 100 the page is darkened and the lamps' light cuts through the dark; at 100 the lamps only add a glow."/>
+            </eAnnotations>
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eGenericType>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="RegionShape" abstract="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="One shape of a drawn weather region. Its coordinates are in grid units of the page&apos;s layout, measured from the board&apos;s top left corner, so the shape stays where it was drawn relative to the widgets when the board is wider or narrower. They are fractional where the shape was drawn without snapping, and never shown as numbers."/>
+        </eAnnotations>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="BoxShape" abstract="true" eSuperTypes="#//RegionShape">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A shape given by the box around it."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Left edge of the box, in grid units."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Top edge of the box, in grid units."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Width of the box, in grid units."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Height of the box, in grid units."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="RectangleShape" eSuperTypes="#//BoxShape">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A rectangle: its box."/>
+        </eAnnotations>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="EllipseShape" eSuperTypes="#//BoxShape">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="An ellipse: the largest that fits its box."/>
+        </eAnnotations>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="PolygonShape" eSuperTypes="#//RegionShape">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A closed polygon through its points, the last joined to the first."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="points" upperBound="-1" eType="#//RegionPoint" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The corners, in the order they are joined. Fewer than three enclose nothing."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="RegionPoint">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="One corner of a polygon, in grid units."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="SelectionPick">

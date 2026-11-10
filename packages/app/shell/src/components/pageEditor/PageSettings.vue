@@ -19,7 +19,7 @@ Contributors:
  * navigation. Every field writes straight through - there is no Save, and
  * no way to lose what you typed by closing the window.
  */
-import { inject, ref, computed, watch, onMounted } from 'vue'
+import { inject, ref, computed, watch, onMounted, shallowRef } from 'vue'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
@@ -38,7 +38,28 @@ import {
   DSwitch,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  DRAW_WEATHER_REGION,
+  WorkspacePackage,
+  createWeather,
+  createLighting,
+  workspaceEcore,
+  type DrawWeatherRegionEvent,
+  type Lighting,
+  type Weather,
+} from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
+import {
+  identifier as WidgetRepositoryIdentifier,
+  type WidgetRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.widget'
+/* The weather's form, written as a model; see the file for why it is here. */
+import weatherFormXmi from '../../../model/weather.ui.xmi?raw'
+import { weatherForm } from './weatherForm'
+/* The lighting's form, beside the weather's. */
+import lightingFormXmi from '../../../model/lighting.ui.xmi?raw'
 
 const pageid = defineModel<string>({ required: true })
 const emit = defineEmits(['close'])
@@ -46,6 +67,8 @@ const { t } = useTranslation('shell')
 
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const widgetRepo = inject<WidgetRepository | undefined>(WidgetRepositoryIdentifier, undefined)
+const eventBus = inject<TinyEmitter | undefined>(identifiers.TINY_EMITTER, undefined)
 const pageSettings = ref<StoredPage | null>(null)
 
 const availableLayouts = computed(() => layoutRepo?.getAllLayouts() ?? [])
@@ -151,9 +174,101 @@ function load() {
     : null
 }
 
-onMounted(load)
+/*
+ * The weather is edited on the page itself, not on the copy above: it is a
+ * modelled object holding wrappers, and a variable bound to one of them has
+ * to be bound on the page that is drawn, not on a copy written back.
+ *
+ * A page without weather is shown a fresh one that is not on the page yet.
+ * It goes onto the page with the first edit, so opening this panel does
+ * not change a page nobody touched - the same rule as for the copy above.
+ */
+const weather = shallowRef<Weather | undefined>()
+
+/* The form, with the page's widgets as the choices for a widget region */
+const weatherFormFor = shallowRef(weatherForm(weatherFormXmi, []))
+
+function loadWeather() {
+  let page: Page | undefined
+  try {
+    page = pageid.value ? pageRepo?.getPage(pageid.value) : undefined
+  } catch {
+    page = undefined
+  }
+  weather.value = page ? (page.weather ?? createWeather()) : undefined
+  const widgets = page?.widgets?.toArray?.() ?? []
+  weatherFormFor.value = weatherForm(
+    weatherFormXmi,
+    widgets.map((widget) => {
+      const type = widget.type ? safeWidgetType(widget.type) : undefined
+      const name = type?.nameKey ? t(type.nameKey) : (type?.name ?? widget.type ?? '')
+      return { id: widget.uid as string, label: `${name} (${String(widget.uid).slice(0, 6)})` }
+    }),
+  )
+}
+
+function safeWidgetType(type: string) {
+  try {
+    return widgetRepo?.getWidget(type)
+  } catch {
+    return undefined
+  }
+}
+
+const watchedWeather = useEObject(() => weather.value)
+watch(watchedWeather, (now, before) => {
+  /* A different draft is a page opened, not an edit made */
+  if (!now || now !== before || now.eContainer()) return
+  const page = pageRepo?.getPage(pageid.value)
+  if (page && !page.weather) page.weather = now
+})
+
+/*
+ * The lighting, edited on the page itself as the weather is and for the
+ * same reasons: a fresh one is shown for a page without, and goes onto the
+ * page with the first edit (#1242).
+ */
+const lighting = shallowRef<Lighting | undefined>()
+
+function loadLighting() {
+  let page: Page | undefined
+  try {
+    page = pageid.value ? pageRepo?.getPage(pageid.value) : undefined
+  } catch {
+    page = undefined
+  }
+  lighting.value = page ? (page.lighting ?? createLighting()) : undefined
+}
+
+const watchedLighting = useEObject(() => lighting.value)
+watch(watchedLighting, (now, before) => {
+  if (!now || now !== before || now.eContainer()) return
+  const page = pageRepo?.getPage(pageid.value)
+  if (page && !page.lighting) page.lighting = now
+})
+
+/*
+ * A region is drawn on the page, which this panel covers: so it closes,
+ * and the layer around the board takes over. Nothing changes by asking -
+ * the drawing writes the shapes when the person is done with it.
+ */
+function drawRegion() {
+  if (!pageid.value) return
+  eventBus?.emit(DRAW_WEATHER_REGION, { pageId: pageid.value } satisfies DrawWeatherRegionEvent)
+  emit('close')
+}
+
+onMounted(() => {
+  load()
+  loadWeather()
+  loadLighting()
+})
 /* Opened again for a different page while still on screen */
-watch(pageid, load)
+watch(pageid, () => {
+  load()
+  loadWeather()
+  loadLighting()
+})
 
 
 /*
@@ -244,6 +359,33 @@ watch(
             :options="backgroundPositions"
           />
         </template>
+      </section>
+
+      <section v-if="weather" class="group">
+        <h3 class="group__label">{{ t('PageSettings.weather.label') }}</h3>
+        <SettingsForm
+          v-model="weather"
+          :create="createWeather as () => any"
+          :ui-model-xmi="weatherFormFor.xmi"
+          :domain-package="WorkspacePackage.eINSTANCE as any"
+          :ui-model-uri="weatherFormFor.uri"
+          :ecore="workspaceEcore"
+        />
+        <DButton class="draw-region" data-action="draw-region" @click="drawRegion">
+          {{ t('PageSettings.weather.drawRegion') }}
+        </DButton>
+      </section>
+
+      <section v-if="lighting" class="group">
+        <h3 class="group__label">{{ t('PageSettings.lighting.label') }}</h3>
+        <SettingsForm
+          v-model="lighting"
+          :create="createLighting as () => any"
+          :ui-model-xmi="lightingFormXmi"
+          :domain-package="WorkspacePackage.eINSTANCE as any"
+          ui-model-uri="/page-lighting.ui.xmi"
+          :ecore="workspaceEcore"
+        />
       </section>
 
       <section class="group">

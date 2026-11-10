@@ -1,0 +1,37 @@
+{
+  "Widget": {
+    "lamp": "Light source"
+  },
+  "Marker": {
+    "label": "Light source",
+    "on": "Light source - on",
+    "off": "Light source - off"
+  },
+  "Action": {
+    "brightness": "Brightness (0-100)",
+    "color": "Colour",
+    "colorTemperature": "Colour temperature (kelvin)"
+  },
+  "Form": {
+    "lampGroup": "Light",
+    "on": "On",
+    "brightness": "Brightness",
+    "colorGroup": "Colour",
+    "color": "Colour (empty: colour temperature)",
+    "colorTemperature": "Colour temperature (kelvin)",
+    "lightGroup": "Light on the page",
+    "radius": "Reach (px, empty: widget size)",
+    "lightShape": "Shape of the light",
+    "direction": "Direction (degrees, 90 = down)",
+    "angle": "Opening angle (degrees)",
+    "lightsWidgets": "Lights the widgets",
+    "sourceGroup": "Data source",
+    "stateField": "Field with the state"
+  },
+  "Options": {
+    "lightShape": {
+      "round": "Round",
+      "cone": "Cone"
+    }
+  }
+}

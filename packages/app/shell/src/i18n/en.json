@@ -36,6 +36,8 @@
     "redoLabel": "Redo the undone change",
     "snap": "Snap to grid",
     "snapLabel": "Snap widgets to the grid",
+    "paste": "Paste",
+    "pasteLabel": "Paste the copied widget beside the original",
     "backdrop": "Show page background",
     "backdropLabel": "Show or hide the page background while editing",
     "palette": "Widgets",
@@ -170,11 +172,9 @@
     }
   },
   "Storage": {
-    "title": "Storage",
     "filter": "Filter workspaces",
     "nothingFound": "Nothing found",
     "noEntry": "No workspace yet",
-    "storeCurrent": "Store current workspace…",
     "noPlaces": "No storage locations set up.",
     "entry": {
       "empty": "empty",
@@ -191,11 +191,11 @@
       "load": "Loading failed: {{reason}}",
       "save": "Saving failed: {{reason}}",
       "create": "Creating failed: {{reason}}",
-      "remove": "Deleting failed: {{reason}}"
+      "remove": "Deleting failed: {{reason}}",
+      "connect": "The folder could not be connected: {{reason}}"
     },
     "create": {
       "title": "Store a new workspace",
-      "in": "in {{place}}",
       "name": "Name",
       "placeholder": "e.g. soil-moisture",
       "submit": "Store",
@@ -210,15 +210,37 @@
     "reading": "Reading…",
     "connectFolder": "Connect folder…",
     "noFolderSupport": "This browser cannot open a folder. States can be downloaded and uploaded again.",
-    "holds": "It holds {{connections}} connections, {{datasources}} sources and {{variables}} variables.",
     "nothing": {
       "title": "Stored states",
       "text": "A state is a whole board as it was: its pages, and the connections, sources and variables behind them.",
-      "open": "Pick one on the left to see what is inside it, then open it.",
+      "open": "Pick a place on the left, then a state in its list to see what is inside it.",
       "store": "Put the board you have open into a place, to come back to it.",
       "carry": "Download a state to carry it to another browser, and upload it there."
     },
-    "back": "Back to the board"
+    "back": "Back to the board",
+    "kind": {
+      "git": "Git repository",
+      "local": "Browser storage",
+      "folder": "Folder on this machine",
+      "rest": "Server"
+    },
+    "entries_one": "{{count}} state",
+    "entries_other": "{{count}} states",
+    "backTo": "Back to {{place}}",
+    "places": "Places",
+    "readingEntry": "Reading the state…",
+    "figure": {
+      "pages": "Pages",
+      "widgets": "Widgets",
+      "connections": "Connections",
+      "sources": "Data sources",
+      "variables": "Variables"
+    },
+    "list": {
+      "title": "States",
+      "emptyWritable": "Store the workspace you have open below, to come back to it later.",
+      "emptyReadOnly": "This place holds no state that can be opened."
+    }
   },
   "Editor": {
     "name": "Name",
@@ -349,7 +371,28 @@
     },
     "navigation": "Navigation",
     "showInNavigation": "Show in navigation",
-    "id": "Identifier"
+    "id": "Identifier",
+    "weather": {
+      "label": "Weather",
+      "kind": "Weather",
+      "none": "None",
+      "rain": "Rain",
+      "snow": "Snow",
+      "intensity": "Intensity",
+      "wind": "Wind",
+      "color": "Colour",
+      "region": "Region",
+      "regionPage": "Whole page",
+      "regionArea": "Drawn area",
+      "regionWidget": "Area of a widget",
+      "regionWidgetChoice": "Widget",
+      "drawRegion": "Draw region",
+      "affectsWidgets": "Affects the widgets"
+    },
+    "lighting": {
+      "label": "Lighting",
+      "ambient": "Ambient light"
+    }
   },
   "Tokens": {
     "role": {

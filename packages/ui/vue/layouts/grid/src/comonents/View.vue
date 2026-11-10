@@ -11,6 +11,9 @@ Contributors:
     Smart City Jena
 -->
 <template>
+  <WeatherLayer :page="board.page.value" scroller=".scroll" :cell="weatherCell">
+  <!-- The lamps' light and the page's dark (#1242) -->
+  <LightLayer :page="board.page.value" scroller=".scroll">
   <div class="scroll max-h-screen ml-15">
     <div ref="wrapper" class="view_grid_layout">
       <GridLayout ref="gridLayout" :key="gridSettingsKey" v-model:layout="layout" :row-height="ROW_HEIGHT" :responsive="true" :vertical-compact="false" :breakpoints="BREAKPOINTS" :cols="COLS as any" :is-draggable="false" :is-resizable="false">
@@ -19,12 +22,16 @@ Contributors:
             :widget="widgets.find((w: any) => w.uid === item.i)"
             :ref="`${item.i}_wrapper`"
             :editEnabled="false"
+            :data-weather-obstacle="item.i"
+            :data-light-box="item.i"
           />
           <span v-else class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
         </template>
       </GridLayout>
     </div>
   </div>
+  </LightLayer>
+  </WeatherLayer>
 </template>
 
 <script setup lang="ts">
@@ -33,6 +40,7 @@ import { GridLayout } from 'grid-layout-plus'
 
 import { useBoard } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import { LightLayer, WeatherLayer } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -79,9 +87,9 @@ function syncLayoutSettings() {
   if (pageRepo && pageId) {
     const page = pageRepo.getPage(pageId)
     /* Copied by the model's names: the settings are a modelled instance
-       once the form has been open, and spreading one gives the private
-       fields its getters sit in - the grid then silently fell back to
-       every default while the form showed what had been set. */
+      once the form has been open, and spreading one gives the private
+      fields its getters sit in - the grid then silently fell back to
+      every default while the form showed what had been set. */
     layoutSettingsRef.value = page?.layoutSettings
       ? { ...plainSettings(page.layoutSettings) }
       : undefined
@@ -101,7 +109,7 @@ onMounted(async () => {
   }
 
   /* One tick, so the widgets this mounts exist before it says so. The
-     second one was waiting for Pinia to finish starting. */
+    second one was waiting for Pinia to finish starting. */
   await nextTick()
   emitPageLoaded()
 })
@@ -128,6 +136,16 @@ function getCurrentCols(width: number) {
   if (width >= BREAKPOINTS.sm) return cols.sm
   if (width >= BREAKPOINTS.xs) return cols.xs
   return cols.xxs
+}
+
+/*
+ * One grid unit for the weather's area region: a column of the board as
+ * wide as it is now, and a row with the gap grid-layout-plus leaves below
+ * it (its default margin, 10 px).
+ */
+const GRID_MARGIN = 10
+function weatherCell(width: number) {
+  return { width: width / Math.max(1, getCurrentCols(width)), height: ROW_HEIGHT.value + GRID_MARGIN }
 }
 
 function getMetrics() {

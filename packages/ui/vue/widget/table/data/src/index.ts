@@ -11,6 +11,13 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
+/* The generated package first: it reaches the factory, the factory every
+  payload class, and DataTableCellPayloadImpl extends the row payload. Entered
+  from the row payload instead (through the widget and its events), the cell
+  class is evaluated while its base class is not yet initialised, and the
+  bundle fails with a ReferenceError (#1221). */
+import './gen/DatatablesettingsPackage'
 import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/data_table.svg'
@@ -30,6 +37,9 @@ import settingsEcore from '../model/model.ecore?raw'
  * null, an instance cannot say what it is, and nothing can render it from
  * the model.
  */
+/* The payloads extend the events model's Payload, which has to be
+  registered before this package can point at it. */
+void EventsPackage.eINSTANCE
 void DatatablesettingsPackage.eINSTANCE
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'

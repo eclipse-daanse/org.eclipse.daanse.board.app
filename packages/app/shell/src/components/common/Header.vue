@@ -44,6 +44,7 @@ import { useWidgetPalette } from '@/composables/useWidgetPalette'
 import { boardCrumb, type Crumb } from '@/composables/boardCrumb'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
 import { useGridSnap } from '@/composables/useGridSnap'
+import { useBoardClipboard } from '@/composables/useBoardClipboard'
 import { useStorageDialog } from '@/composables/useStorageDialog'
 import { useStoreBoard } from '@/composables/useStoreBoard'
 import { useWorkspaceOrigin } from '@/composables/useWorkspaceFile'
@@ -166,6 +167,12 @@ const { shown: backdropShown, toggle: toggleBackdrop } = useBoardBackdrop()
 
 /* Whether a dragged widget lines up with the grid it is dragged over. */
 const { snapping, toggle: toggleSnapping } = useGridSnap()
+
+/*
+ * A copied widget, pasted from up here: offered while there is one, so
+ * the way to paste does not depend on knowing the right click (#1225).
+ */
+const { full: clipboardFull, paste: pasteFromClipboard } = useBoardClipboard()
 
 const hasBackdrop = computed(() => {
   void modelledPages.value
@@ -509,6 +516,18 @@ const openAppearance = () => router.push('/appearance')
         @click="history.redo()"
       >
         <DIcon name="redo" size="sm" />
+      </button>
+
+      <button
+        v-if="isEditing && clipboardFull"
+        type="button"
+        class="icon-action"
+        data-test="header-paste"
+        :title="t('Header.paste')"
+        :aria-label="t('Header.pasteLabel')"
+        @click="pasteFromClipboard"
+      >
+        <DIcon name="content_paste" size="sm" />
       </button>
 
       <button

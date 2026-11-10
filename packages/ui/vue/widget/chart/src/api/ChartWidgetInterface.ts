@@ -16,18 +16,23 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class ChartWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'chart.refresh' })
+  @WidgetAction({ eventType: 'chart.refresh', parameters: [] })
   refresh(): void { throw new Error("refresh not implemented"); }
 
-  @WidgetAction({ eventType: 'chart.zoomIn' })
+  @WidgetAction({ eventType: 'chart.zoomIn', parameters: [] })
   zoomIn(): void { throw new Error("zoomIn not implemented"); }
 
-  @WidgetAction({ eventType: 'chart.zoomOut' })
+  @WidgetAction({ eventType: 'chart.zoomOut', parameters: [] })
   zoomOut(): void { throw new Error("zoomOut not implemented"); }
 
-  @WidgetAction({ eventType: 'chart.resetZoom' })
+  @WidgetAction({ eventType: 'chart.resetZoom', parameters: [] })
   resetZoom(): void { throw new Error("resetZoom not implemented"); }
 
-  @WidgetAction({ eventType: 'chart.exportAsImage' })
+  @WidgetAction({
+    eventType: 'chart.exportAsImage',
+    parameters: [
+      { name: 'format', type: 'string', label: 'chart:Action.format', optional: true },
+    ],
+  })
   exportAsImage(format?: string): void { throw new Error("exportAsImage not implemented"); }
 }

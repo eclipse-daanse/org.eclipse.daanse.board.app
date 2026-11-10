@@ -4,6 +4,10 @@
   },
   "Form": {
     "headerBackground": "Kopfzeilenfarbe",
+    "marksGroup": "Markierungen",
+    "markedRowColor": "Farbe einer markierten Zeile",
+    "markedColumnColor": "Farbe einer markierten Spalte",
+    "markedCellColor": "Farbe einer markierten Zelle",
     "rowsGroup": "Zeilen",
     "headerGroup": "Kopfzeile",
     "pageSize": "Zeilen je Seite (0 = alle)",
@@ -22,5 +26,10 @@
     "page": "Seite {{page}} von {{pages}}",
     "previous": "Vorige Seite",
     "next": "Nächste Seite"
+  },
+  "Action": {
+    "match": "Zeilennummer oder Schlüsselspalte",
+    "column": "Spaltenname oder -nummer",
+    "keyValue": "Wert in der Schlüsselspalte"
   }
 }

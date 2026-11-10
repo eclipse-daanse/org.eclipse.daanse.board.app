@@ -15,7 +15,9 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { WORKSPACE, type Workspace } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { DRAW_WEATHER_REGION, WORKSPACE, type Workspace } from 'org.eclipse.daanse.board.app.lib.model.workspace'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { TinyEmitter } from 'tiny-emitter'
 import * as workspaceModule from 'org.eclipse.daanse.board.app.lib.model.workspace'
 import * as pageModule from 'org.eclipse.daanse.board.app.lib.repository.page'
 import {
@@ -55,16 +57,18 @@ function setUp() {
   page.layoutSettings = { columns: 12 }
 
   changes = trackUnsavedChanges(workspace)
+  const bus = new TinyEmitter()
   const wrapper = mount(PageSettings, {
     props: { modelValue: 'p1' },
     global: {
       provide: {
         [PageIdentifier as symbol]: pages,
         [LayoutRepositoryIdentifier as symbol]: layouts,
+        [identifiers.TINY_EMITTER as symbol]: bus,
       },
     },
   })
-  return { wrapper, page, changes }
+  return { wrapper, page, changes, bus }
 }
 
 describe('PageSettings', () => {
@@ -76,6 +80,57 @@ describe('PageSettings', () => {
 
     expect(wrapper.find('input').exists()).toBe(true)
     expect(page.layoutId).toBeUndefined()
+    expect(page.weather).toBeUndefined()
+    expect(page.lighting).toBeUndefined()
+    expect(changes.dirty).toBe(false)
+  })
+
+  it('puts weather on the page with the first edit to it', async () => {
+    const { wrapper, page, changes } = setUp()
+    await flushPromises()
+
+    await wrapper.find('[data-uim-name="intensity"] input').setValue('70')
+    await flushPromises()
+
+    expect(page.weather?.eContainer()).toBe(page)
+    expect(Number(page.weather?.intensity?.value)).toBe(70)
+    expect(changes.dirty).toBe(true)
+  })
+
+  it('puts lighting on the page with the first edit to its ambient light', async () => {
+    const { wrapper, page, changes } = setUp()
+    await flushPromises()
+
+    await wrapper.find('[data-uim-name="ambient"] input').setValue('40')
+    await flushPromises()
+
+    expect(page.lighting?.eContainer()).toBe(page)
+    expect(Number(page.lighting?.ambient?.value)).toBe(40)
+    expect(changes.dirty).toBe(true)
+  })
+
+  it('offers the region and whether the weather affects the widgets', async () => {
+    const { wrapper } = setUp()
+    await flushPromises()
+
+    expect(wrapper.find('[data-uim-name="region"]').exists()).toBe(true)
+    /* An area is drawn on the page, not typed in */
+    expect(wrapper.find('[data-uim-name="regionWidth"]').exists()).toBe(false)
+    expect(wrapper.find('[data-uim-name="regionWidget"]').exists()).toBe(true)
+    expect(wrapper.find('[data-uim-name="affectsWidgets"]').exists()).toBe(true)
+  })
+
+  it('closes and asks for the region to be drawn on the page, changing nothing', async () => {
+    const { wrapper, page, changes, bus } = setUp()
+    await flushPromises()
+    const asked: unknown[] = []
+    bus.on(DRAW_WEATHER_REGION, (event: unknown) => asked.push(event))
+
+    await wrapper.find('[data-action="draw-region"]').trigger('click')
+
+    expect(asked).toEqual([{ pageId: 'p1' }])
+    expect(wrapper.emitted('close')).toHaveLength(1)
+    expect(page.weather).toBeUndefined()
     expect(changes.dirty).toBe(false)
   })
 

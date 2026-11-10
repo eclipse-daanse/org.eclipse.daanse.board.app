@@ -26,7 +26,34 @@ const log = loggerFactory.createLogger('daanse:events:manager');
 export interface PayloadToArgMapping {
   payloadPath: string;  // z.B. "thingId" oder "location.lat"
   argIndex: number;     // z.B. 0 für ersten Parameter
+  /**
+   * Computes the argument instead of handing the property on unchanged,
+   * e.g. `value * 100`. `value` is the property the path names, `payload`
+   * the whole payload (#1224).
+   */
+  expression?: string;
 }
+
+/**
+ * An expression of a rule's payload mapping that could not be evaluated.
+ * The action it was computing an argument for is not run.
+ */
+export class PayloadExpressionError extends Error {
+  constructor(
+    readonly expression: string,
+    readonly cause: unknown,
+    readonly ruleId?: string,
+  ) {
+    super(
+      `${ruleId ? `Rule ${ruleId}: ` : ''}expression "${expression}" failed: ${
+        cause instanceof Error ? cause.message : String(cause)
+      }`,
+    );
+    this.name = 'PayloadExpressionError';
+  }
+}
+
+type CompiledExpression = (value: any, payload: any) => any;
 
 /**
  * Definition einer einzelnen Action
@@ -66,6 +93,10 @@ export interface EventActionMapping {
 export class EventManager {
   private mappings: Map<string, EventActionMapping[]> = new Map();
   private onMappingsChangedCallback?: () => void;
+  /** The last payload each rule saw, by rule id - what the dialog previews against. */
+  private lastPayloads: Map<string, any> = new Map();
+  /** Compiled expressions by their text; the same rule fires often. */
+  private compiledExpressions: Map<string, CompiledExpression> = new Map();
 
   constructor(
     @inject('EventActionsRegistry') private actionsRegistry: EventActionsRegistry
@@ -208,17 +239,57 @@ export class EventManager {
     }
   }
 
+  /*
+   * The expression engine is the computed variables' one
+   * (ComputedVariable.computeValue): the text is a JavaScript expression
+   * compiled with new Function. Here it gets value and payload as
+   * parameters instead of $-substituted variable values.
+   */
+  private compileExpression(expression: string): CompiledExpression {
+    let compiled = this.compiledExpressions.get(expression);
+    if (!compiled) {
+      compiled = new Function('value', 'payload', `return (\n${expression}\n)`) as CompiledExpression;
+      this.compiledExpressions.set(expression, compiled);
+    }
+    return compiled;
+  }
+
+  /**
+   * The argument one payload mapping hands to its action.
+   *
+   * Without an expression it is the property the path names, unchanged.
+   * With one it is the expression's result; an expression that does not
+   * compile or throws raises a PayloadExpressionError.
+   */
+  evaluatePayloadMapping(mapping: PayloadToArgMapping, payload: any, ruleId?: string): any {
+    const expression = mapping.expression?.trim();
+    if (!expression) {
+      return this.getNestedProperty(payload, mapping.payloadPath);
+    }
+    const value = mapping.payloadPath ? this.getNestedProperty(payload, mapping.payloadPath) : undefined;
+    try {
+      return this.compileExpression(expression)(value, payload);
+    } catch (error) {
+      throw new PayloadExpressionError(expression, error, ruleId);
+    }
+  }
+
+  /** The last payload the rule saw, if it has seen one since it was loaded. */
+  getLastPayload(mappingId: string): any {
+    return this.lastPayloads.get(mappingId);
+  }
+
   /**
    * Baut die Action Arguments basierend auf statischen Args und Payload-Mapping
    */
-  private buildActionArgs(action: ActionDefinition, payload: any): any[] {
+  private buildActionArgs(action: ActionDefinition, payload: any, ruleId?: string): any[] {
     // Start mit statischen Args oder leerem Array
     const args: any[] = [...(action.actionArgs || [])];
 
     // Wende Payload-Mappings an
     if (action.payloadMapping && action.payloadMapping.length > 0) {
       for (const pm of action.payloadMapping) {
-        const value = this.getNestedProperty(payload, pm.payloadPath);
+        const value = this.evaluatePayloadMapping(pm, payload, ruleId);
         args[pm.argIndex] = value;
         log('  Mapped payload.%s -> arg[%d] = %o', pm.payloadPath, pm.argIndex, value);
       }
@@ -230,8 +301,23 @@ export class EventManager {
   /**
    * Führt eine einzelne Action aus
    */
-  private async executeAction(action: ActionDefinition, payload: any): Promise<void> {
-    const args = this.buildActionArgs(action, payload);
+  private async executeAction(action: ActionDefinition, payload: any, ruleId?: string): Promise<void> {
+    const args = this.buildActionArgs(action, payload, ruleId);
+
+    /*
+     * A target a provider names is carried out by that provider. Nothing
+     * registers providers for the widget, page or system contexts, so the
+     * rules stored for those keep taking the path below.
+     */
+    if (action.targetContextId && this.actionsRegistry.hasProvidedTarget?.(action.targetContext, action.targetContextId)) {
+      await this.actionsRegistry.executeProvidedAction(action.targetContext, action.targetContextId, action.actionName, args);
+      return;
+    }
+    /* A provided target is never an instance: one nobody provides is not run. */
+    if (action.targetContext === 'datasource') {
+      console.warn(`No action provider for "${action.targetContextId ?? ''}"; "${action.actionName}" was not run.`);
+      return;
+    }
 
     if (!action.targetContextId) {
       // Wenn keine targetContextId angegeben ist, führe auf allen Instanzen aus
@@ -298,6 +384,7 @@ export class EventManager {
     log('  Payload: %o', payload);
 
     for (const mapping of mappings) {
+      this.lastPayloads.set(mapping.id, payload);
       try {
         // Prüfe Conditions
         if (!this.evaluateConditions(mapping.conditions || [], payload)) {
@@ -318,9 +405,13 @@ export class EventManager {
         // Führe alle Actions sequenziell aus
         for (const action of actions) {
           log('  → Action: %s on %s', action.actionName, action.targetContextId || 'all instances');
-          await this.executeAction(action, payload);
+          await this.executeAction(action, payload, mapping.id);
         }
       } catch (error) {
+        if (error instanceof PayloadExpressionError) {
+          /* A rule written wrongly is worth seeing without a debug flag. */
+          console.error(error.message, error.cause);
+        }
         log('❌ Error executing actions for mapping %s: %o', mapping.id, error);
       }
     }
@@ -384,6 +475,7 @@ export class EventManager {
    */
   clear(): void {
     this.mappings.clear();
+    this.lastPayloads.clear();
   }
 }
 

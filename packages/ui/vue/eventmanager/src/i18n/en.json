@@ -9,7 +9,8 @@
   "Context": {
     "system": "System",
     "page": "Page",
-    "widget": "Widget"
+    "widget": "Widget",
+    "datasource": "Datasource"
   },
   "Rule": {
     "create": "Create rule",
@@ -43,7 +44,15 @@
     "valueFor": "Value for {{name}}",
     "fromEvent": "from the event",
     "fixedValue": "fixed value",
-    "chooseProperty": "Choose property"
+    "chooseProperty": "Choose property",
+    "chooseVariable": "Choose variable",
+    "newVariable": "or the name of a new variable",
+    "freePath": "or a path, e.g. {{example}}",
+    "expression": "Expression",
+    "resultLast": "Last event: {{result}}",
+    "resultSample": "Sample: {{result}}",
+    "resultFailed": "Expression fails: {{message}}",
+    "chooseSource": "Choose datasource"
   },
   "Phrase": {
     "inSystem": "in the system",
@@ -51,7 +60,8 @@
     "onAnyPage": "on any page",
     "at": "at {{target}}",
     "atAnyWidget": "at any widget of this kind",
-    "atAllInstances": "at all instances"
+    "atAllInstances": "at all instances",
+    "atSource": "at datasource {{source}}"
   },
   "Tab": {
     "events": "Events"

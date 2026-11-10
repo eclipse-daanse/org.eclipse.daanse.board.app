@@ -16,9 +16,14 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class ProgressWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'progress.setValue' })
+  @WidgetAction({
+    eventType: 'progress.setValue',
+    parameters: [
+      { name: 'value', type: 'number', label: 'progress:Action.value' },
+    ],
+  })
   setValue(value: number): void { throw new Error("setValue not implemented"); }
 
-  @WidgetAction({ eventType: 'progress.reset' })
+  @WidgetAction({ eventType: 'progress.reset', parameters: [] })
   reset(): void { throw new Error("reset not implemented"); }
 }

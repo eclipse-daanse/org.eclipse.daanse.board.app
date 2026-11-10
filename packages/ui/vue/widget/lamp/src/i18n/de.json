@@ -1,0 +1,37 @@
+{
+  "Widget": {
+    "lamp": "Lichtquelle"
+  },
+  "Marker": {
+    "label": "Lichtquelle",
+    "on": "Lichtquelle - an",
+    "off": "Lichtquelle - aus"
+  },
+  "Action": {
+    "brightness": "Helligkeit (0-100)",
+    "color": "Farbe",
+    "colorTemperature": "Farbtemperatur (Kelvin)"
+  },
+  "Form": {
+    "lampGroup": "Licht",
+    "on": "An",
+    "brightness": "Helligkeit",
+    "colorGroup": "Farbe",
+    "color": "Farbe (leer: Farbtemperatur)",
+    "colorTemperature": "Farbtemperatur (Kelvin)",
+    "lightGroup": "Licht auf der Seite",
+    "radius": "Reichweite (px, leer: Widgetgröße)",
+    "lightShape": "Form des Lichts",
+    "direction": "Richtung (Grad, 90 = nach unten)",
+    "angle": "Öffnungswinkel (Grad)",
+    "lightsWidgets": "Beleuchtet die Widgets",
+    "sourceGroup": "Datenquelle",
+    "stateField": "Feld mit dem Zustand"
+  },
+  "Options": {
+    "lightShape": {
+      "round": "Rund",
+      "cone": "Kegel"
+    }
+  }
+}

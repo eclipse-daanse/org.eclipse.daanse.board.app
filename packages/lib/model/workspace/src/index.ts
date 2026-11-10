@@ -53,12 +53,54 @@ export type { Board } from './gen/Board'
 export type { Page } from './gen/Page'
 export type { Widget } from './gen/Widget'
 export type { LayoutItem } from './gen/LayoutItem'
+export type { Weather } from './gen/Weather'
+export type { Lighting } from './gen/Lighting'
+export type { RegionShape } from './gen/RegionShape'
+export type { BoxShape } from './gen/BoxShape'
+export type { RectangleShape } from './gen/RectangleShape'
+export type { EllipseShape } from './gen/EllipseShape'
+export type { PolygonShape } from './gen/PolygonShape'
+export type { RegionPoint } from './gen/RegionPoint'
 export type { Variable } from './gen/Variable'
 export type { EventMapping } from './gen/EventMapping'
 export type { DataSelection } from './gen/DataSelection'
 export type { DataFilter } from './gen/DataFilter'
 export { SelectionPick } from './gen/SelectionPick'
 export { FilterOperator } from './gen/FilterOperator'
+export { WeatherKind } from './gen/WeatherKind'
+export { WeatherRegion } from './gen/WeatherRegion'
+export {
+  createWeather,
+  completeWeather,
+  weatherKindOf,
+  weatherRegionOf,
+  affectsWidgetsOf,
+  WEATHER_DEFAULTS,
+  WEATHER_KINDS,
+  WEATHER_REGIONS,
+  readShapes,
+  writeShapes,
+  shapeSpecOf,
+  shapeFromSpec,
+  liftTypedWeatherRegions,
+  DRAW_WEATHER_REGION,
+  type DrawWeatherRegionEvent,
+  type ShapeSpec,
+} from './weather'
+/* The Ecore as text, for the sentences a form shows beside its fields. */
+export {
+  createLighting,
+  completeLighting,
+  ambientOf,
+  LIGHTING_DEFAULTS,
+  ANNOUNCE_LIGHT,
+  WITHDRAW_LIGHT,
+  LIGHTS_WANTED,
+  type LightShape,
+  type LightSourceSpec,
+  type WithdrawLightEvent,
+} from './lighting'
+export { default as workspaceEcore } from '../model/workspace.ecore?raw'
 export { WorkspaceImpl } from './gen/WorkspaceImpl'
 export { ConnectionImpl } from './gen/ConnectionImpl'
 export { DatasourceImpl } from './gen/DatasourceImpl'
@@ -66,6 +108,12 @@ export { BoardImpl } from './gen/BoardImpl'
 export { PageImpl } from './gen/PageImpl'
 export { WidgetImpl } from './gen/WidgetImpl'
 export { LayoutItemImpl } from './gen/LayoutItemImpl'
+export { WeatherImpl } from './gen/WeatherImpl'
+export { LightingImpl } from './gen/LightingImpl'
+export { RectangleShapeImpl } from './gen/RectangleShapeImpl'
+export { EllipseShapeImpl } from './gen/EllipseShapeImpl'
+export { PolygonShapeImpl } from './gen/PolygonShapeImpl'
+export { RegionPointImpl } from './gen/RegionPointImpl'
 export { VariableImpl } from './gen/VariableImpl'
 export { EventMappingImpl } from './gen/EventMappingImpl'
 export { DataSelectionImpl } from './gen/DataSelectionImpl'

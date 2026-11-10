@@ -1,6 +1,37 @@
-# .
+# Daanse board app
 
 This template should help get you started developing with Vue 3 in Vite.
+
+## Deployment: extra bundles in `config.json`
+
+A deployment can add bundles without changing the board's source - a widget
+kept in another repository, a customer-specific module. `public/config.json`
+(served as `/config.json`) takes an optional `extraBundles` key:
+
+```json
+"extraBundles": {
+  "manifests": [
+    "/extensions/my.widget/manifest.json",
+    "https://bundles.example.org/other.widget/manifest.json",
+    { "id": "inline.widget", "version": "1.0.0", "entry": "/extensions/inline.widget/index.js" }
+  ],
+  "allowedOrigins": ["https://bundles.example.org"]
+}
+```
+
+- `manifests`: URLs of tsm `manifest.json` files (relative to the page), or
+  manifests written inline. A relative `entry` resolves against the URL of the
+  manifest that names it; an inline manifest's against the page.
+- `allowedOrigins`: origins other than the page's own that manifests and
+  entries may come from. Without an entry here only same-origin is accepted,
+  since a bundle runs with the app's rights.
+
+The launcher (`src/main.ts`, `src/extraBundles.ts`) fetches them at start and
+registers them with the built-in bundles from `src/bundles.ts` before anything
+activates. A manifest that cannot be fetched, is not valid (`id`, `version`,
+`entry` required), reuses a built-in id, or comes from an origin not allowed is
+reported on the console (`extra bundle skipped - ...`) and left out; the board
+starts without it. The shipped `config.json` lists none.
 
 ## Recommended IDE Setup
 

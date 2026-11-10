@@ -33,5 +33,9 @@
       "threeQuarter": "Dreiviertelkreis",
       "half": "Halbkreis"
     }
+  },
+  "Action": {
+    "value": "Wert",
+    "max": "Obere Grenze"
   }
 }

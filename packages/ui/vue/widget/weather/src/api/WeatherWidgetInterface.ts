@@ -16,6 +16,6 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
 export abstract class WeatherWidgetInterface extends WidgetActionInterfaceImpl {
 
-  @WidgetAction({ eventType: 'weather.refresh' })
+  @WidgetAction({ eventType: 'weather.refresh', parameters: [] })
   refresh(): void { throw new Error("refresh not implemented"); }
 }

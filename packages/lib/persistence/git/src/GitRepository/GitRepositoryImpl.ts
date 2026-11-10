@@ -40,6 +40,14 @@ export default class GitRepositoryImpl extends BaseRepository implements Writabl
     auth: null//config.repos[0].token
   }
 
+  /*
+   * The branches and the newest commit are fetched when the repository is
+   * set up. Everything that needs a branch or a commit waits for that, or
+   * it fails when it is asked too early - the storage view lists the
+   * entries right after start.
+   */
+  private ready: Promise<void> = Promise.resolve()
+
   init(url: URL, name: string, settings = {
       provider: 'github',
       owner: ''
@@ -61,13 +69,7 @@ export default class GitRepositoryImpl extends BaseRepository implements Writabl
         this.commitProvider = new CommitProvider(owner, repo, this.fileProvider, this.options)
         this.provider = new BranchProvider(owner, repo, this.commitProvider, this.options)
 
-        this.provider.fetchBranches().then(async () => {
-          this.branch = this.provider?.getBranches()[0]
-          const branch = this.provider?.getBranches().find(b => b.name == 'main' || b.name == 'master')
-          if (branch) this.branch = branch
-          await this.branch?.fetchCommits()
-          this.commit = await this.branch?.getCommits()[0]
-        })
+        this.ready = this.loadBranches()
 
         break
       default:
@@ -85,6 +87,37 @@ export default class GitRepositoryImpl extends BaseRepository implements Writabl
       //.setOptions(this.options);
     }
     return true
+  }
+
+  private async loadBranches(): Promise<void> {
+    try {
+      await this.provider?.fetchBranches()
+      this.branch = this.provider?.getBranches()[0]
+      const branch = this.provider?.getBranches().find(b => b.name == 'main' || b.name == 'master')
+      if (branch) this.branch = branch
+      await this.branch?.fetchCommits()
+      this.commit = this.branch?.getCommits()[0]
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  /*
+   * Waits for the branches. A start that found none - offline, or the
+   * host's request limit used up - is tried again when next asked, rather
+   * than leaving the place empty until a reload.
+   */
+  private async whenReady(): Promise<void> {
+    await this.ready
+    if (!this.branch && this.provider) {
+      this.ready = this.loadBranches()
+      await this.ready
+    }
+  }
+
+  /** Whether a token was given; without one the repository is read only. */
+  isAuthenticated(): boolean {
+    return !!this.options.auth
   }
 
 
@@ -135,7 +168,7 @@ export default class GitRepositoryImpl extends BaseRepository implements Writabl
   async findAll(): Promise<Entity[]> {
 
     try {
-      let branches = await this.provider?.getBranches()
+      await this.whenReady()
       if (!this.branch) {
         throw new Error('Branch not found')
       }
@@ -167,6 +200,7 @@ export default class GitRepositoryImpl extends BaseRepository implements Writabl
   async getEntityByUri(uri: URL): Promise<Entity | null> {
 
     try {
+      await this.whenReady()
       const partsOfPath = uri.pathname.split('/')
       if (partsOfPath.length < 5) {
         throw new Error('cound not find owner branch or commit in the path')
@@ -211,6 +245,7 @@ export default class GitRepositoryImpl extends BaseRepository implements Writabl
   }
 
   async getBranches(): Promise<BranchI[] | undefined> {
+    await this.whenReady()
     return this.provider?.getBranches()
   }
 
@@ -259,7 +294,9 @@ export default class GitRepositoryImpl extends BaseRepository implements Writabl
     }
 
     for (const fileOrFolder of files) {
-      if (fileOrFolder instanceof File) {
+      /* A stored state is a .json file - create() insists on it. A README or
+        a licence beside them is not something that can be opened. */
+      if (fileOrFolder instanceof File && fileOrFolder.path.toLowerCase().endsWith('.json')) {
         resArr.push(this.extractFile(branch, commit, fileOrFolder))
       }
       if (fileOrFolder instanceof Folder) {

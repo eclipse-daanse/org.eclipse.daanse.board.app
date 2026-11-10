@@ -39,5 +39,23 @@
   },
   "Base": {
     "name": "Freies Layout (pixelgenau)"
+  },
+  "Clipboard": {
+    "copied": "Kopiert – {{shortcut}} oder Rechtsklick aufs Board",
+    "pasteKey": "Strg+V",
+    "pasteKeyMac": "⌘V"
+  },
+  "Region": {
+    "toolbar": "Bereich zeichnen",
+    "tool": {
+      "rectangle": "Rechteck",
+      "ellipse": "Ellipse",
+      "polygon": "Vieleck – Punkte setzen, Doppelklick oder Klick auf den ersten Punkt schließt",
+      "select": "Auswählen"
+    },
+    "snap": "Am Raster ausrichten",
+    "delete": "Form löschen",
+    "cancel": "Abbrechen (Esc)",
+    "done": "Fertig"
   }
 }
