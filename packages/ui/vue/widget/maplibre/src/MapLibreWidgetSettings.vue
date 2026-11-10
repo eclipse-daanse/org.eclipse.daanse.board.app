@@ -88,6 +88,15 @@ const offeredOf = (service: { id?: string | null }): { name: string; title: stri
   offered[service.id ?? '']
 /** An example address for the GeoJSON field. */
 const geoJsonExample = 'https://example.org/areas.geojson'
+/**
+ * Example addresses for the fields. They live in the script: a static attribute
+ * with // in the template cuts the scope of a v-for for vue-tsc.
+ */
+const examples = {
+  tiles: 'https://tile.example.org/{z}/{x}/{y}.png',
+  wms: 'https://kartenportal.jena.de/mapproxy/service',
+  model: 'https://example.org/tree.glb',
+}
 const loading = ref('')
 const newServiceUrl = ref('')
 const serviceError = ref('')
@@ -237,7 +246,7 @@ function addColor(layer: ThingLayer) {
       <DInput
         v-model="settings.rasterUrl"
         :label="t('Settings.rasterUrl')"
-        placeholder="https://tile.example.org/{z}/{x}/{y}.png"
+        :placeholder="examples.tiles"
         :hint="t('Settings.rasterUrlHint')"
       />
       <DSlider v-model="settings.rasterOpacity" :label="t('Settings.rasterOpacity')" :min="0" :max="1" :step="0.05" />
@@ -279,7 +288,7 @@ function addColor(layer: ThingLayer) {
       </div>
 
       <div class="row">
-        <DInput v-model="newServiceUrl" :label="t('Settings.wmsUrl')" placeholder="https://kartenportal.jena.de/mapproxy/service"
+        <DInput v-model="newServiceUrl" :label="t('Settings.wmsUrl')" :placeholder="examples.wms"
           :error="serviceError" />
         <DButton :busy="loading === 'new'" :disabled="!newServiceUrl" @click="addService">
           <DIcon name="add" size="sm" />{{ t('Settings.add') }}
@@ -404,7 +413,7 @@ function addColor(layer: ThingLayer) {
         <div class="settings-container">
           <DInput v-model="layer.name" :label="t('Settings.layerName')" />
           <DCheckbox v-model="layer.visible" :label="t('Settings.visible')" />
-          <DInput v-model="layer.url" :label="t('Settings.models.url')" placeholder="https://example.org/tree.glb"
+          <DInput v-model="layer.url" :label="t('Settings.models.url')" :placeholder="examples.model"
             :error="modelError(layer.url)" :hint="modelHint(layer.url)" />
           <DSelect v-model="layer.format" :options="modelFormats" value-key="value" label-key="label"
             :label="t('Settings.models.format')" />
