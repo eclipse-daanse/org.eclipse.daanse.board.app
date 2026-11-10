@@ -22,6 +22,7 @@
 import * as echarts from 'echarts/core'
 import {
   SunburstChart,
+  TreemapChart,
 } from 'echarts/charts'
 import {
   TitleComponent,
@@ -34,6 +35,7 @@ import { Grid3DComponent } from 'echarts-gl/components'
 
 echarts.use([
   SunburstChart,
+  TreemapChart,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
