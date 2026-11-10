@@ -213,9 +213,9 @@ const XSD_TYPES: Record<string, 'number' | 'date' | 'boolean' | 'string'> = {
  * the geometry (a gml type) is left out.
  */
 export function columnTypesOfSchema(schema: string): { column: string; type: 'number' | 'date' | 'boolean' | 'string' }[] {
-  const doc = new DOMParser().parseFromString(schema, 'text/xml')
+  const doc = parseXml(schema)
   const out: { column: string; type: 'number' | 'date' | 'boolean' | 'string' }[] = []
-  for (const element of Array.from(doc.getElementsByTagNameNS('*', 'element'))) {
+  for (const element of doc.getElementsByTagNameNS('*', 'element')) {
     const name = element.getAttribute('name')
     let type = element.getAttribute('type') ?? ''
     if (!type) type = element.getElementsByTagNameNS('*', 'restriction')[0]?.getAttribute('base') ?? ''
