@@ -36,6 +36,16 @@ const text = (value: unknown) => String(value ?? '').trim()
 /** The GeoJSON output format most services name; GeoServer and QGIS Server both take it. */
 export const GEOJSON = 'application/json'
 
+/**
+ * An answer of a server parsed as XML. An answer with a document type
+ * declaration is read as an empty document: WFS and WMS answers have none,
+ * its entities could expand without limit, and an HTML error page has one.
+ */
+export function parseXml(answer: string): Document {
+  const xml = /<!DOCTYPE/i.test(answer) ? '<refused/>' : answer
+  return new DOMParser().parseFromString(xml, 'text/xml')
+}
+
 /** A box as west,south,east,north - four numbers - or null. */
 export function boxOf(bbox: unknown): [number, number, number, number] | null {
   const parts = text(bbox).split(',').map((part) => Number(part.trim()))
@@ -86,7 +96,7 @@ export function getCapabilitiesPath(request: WfsRequest): string {
  */
 export function exceptionOf(answer: string): string | null {
   if (!/Exception(Report)?/.test(answer.slice(0, 2000))) return null
-  const doc = new DOMParser().parseFromString(answer, 'text/xml')
+  const doc = parseXml(answer)
   const node = doc.getElementsByTagNameNS('*', 'ExceptionText')[0] ?? doc.getElementsByTagNameNS('*', 'ServiceException')[0]
   return node?.textContent?.trim() || (doc.documentElement?.localName?.includes('Exception') ? 'WFS exception' : null)
 }
@@ -135,7 +145,7 @@ const GEOMETRY_KINDS = new Set(['Point', 'LineString', 'Polygon', 'MultiPoint', 
  * child elements its properties, its first geometry its geometry.
  */
 export function featuresOfGml(answer: string, srsName = 'EPSG:4326'): FeatureCollection {
-  const doc = new DOMParser().parseFromString(answer, 'text/xml')
+  const doc = parseXml(answer)
   const members = [
     ...Array.from(doc.getElementsByTagNameNS('*', 'member')),
     ...Array.from(doc.getElementsByTagNameNS('*', 'featureMember')),
