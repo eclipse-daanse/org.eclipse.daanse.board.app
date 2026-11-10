@@ -152,7 +152,10 @@ async function start() {
   const all = loader.getManifests()
   const active = all.filter((m) => loader.getModule(m.id)?.state === 'active').length
   const parked = loader.getUnsatisfiedModules()
-  console.log(`✅ ${active}/${all.length} modules active (${bundles.length} URL bundles, ${extras.length} extra)`)
+  console.log(
+    `✅ ${active}/${all.length} modules active ` +
+      `(${bundles.length} URL bundles, ${extras.length} extra)`,
+  )
   if (parked.length > 0) {
     const waiting = parked.map((p) => `${p.moduleId} <- ${p.waitingFor.join(',')}`)
     console.warn('⏸ unsatisfied:', waiting.join('; '))

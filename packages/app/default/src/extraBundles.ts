@@ -68,7 +68,9 @@ function invalidity(manifest: unknown): string | null {
     return 'not a manifest object'
   }
   const candidate = manifest as Record<string, unknown>
-  const missing = (['id', 'version', 'entry'] as const).filter((key) => !nonEmptyString(candidate[key]))
+  const missing = (['id', 'version', 'entry'] as const).filter(
+    (key) => !nonEmptyString(candidate[key]),
+  )
   if (missing.length > 0) return `missing ${missing.join(', ')}`
   const notLists = OPTIONAL_LISTS.filter(
     (key) => candidate[key] !== undefined && !Array.isArray(candidate[key]),
