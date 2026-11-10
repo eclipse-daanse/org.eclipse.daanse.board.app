@@ -20,6 +20,7 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 import VisualWidget from '../VisualWidget.vue'
 import { VisualSettingsImpl } from '../gen/VisualSettingsImpl'
 import { VisualwidgetsPackage } from '../gen/VisualwidgetsPackage'
+import { VisualKind } from '../gen/VisualKind'
 
 void VisualwidgetsPackage.eINSTANCE
 
@@ -122,6 +123,16 @@ describe('VisualWidget', () => {
    * The kind is set on the very instance the widget holds - which is what
    * the settings form does - so nothing but EMF can say it changed.
    */
+  it('draws the kind chosen in the settings, started afresh', async () => {
+    const settings = new VisualSettingsImpl()
+    await show(settings)
+
+    settings.kind = VisualKind.SUNBURST
+    await flushPromises()
+
+    expect(lastDrawn().series[0].type).toBe('sunburst')
+    expect(chart.setOption.mock.calls.at(-1)?.[1]).toMatchObject({ notMerge: true })
+  })
 
   it('moves to a new answer of the same shape rather than drawing it afresh', async () => {
     await show(new VisualSettingsImpl())

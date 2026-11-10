@@ -21,6 +21,9 @@
  */
 import * as echarts from 'echarts/core'
 import {
+  SunburstChart,
+} from 'echarts/charts'
+import {
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
@@ -30,6 +33,7 @@ import { Bar3DChart, SurfaceChart, Scatter3DChart } from 'echarts-gl/charts'
 import { Grid3DComponent } from 'echarts-gl/components'
 
 echarts.use([
+  SunburstChart,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,

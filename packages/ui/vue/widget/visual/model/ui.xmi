@@ -37,6 +37,7 @@ name, a board written by hand may hold the literal, and both read the same.
         <values>BARS3D</values>
         <values>SURFACE</values>
         <values>SCATTER3D</values>
+        <values>SUNBURST</values>
         <optionLabel language="JS" body="'visual:Options.kind.' + String(option).toLowerCase()"/>
       </fields>
       <fields xsi:type="uimodel:InputWidget" name="title"
@@ -69,6 +70,12 @@ name, a board written by hand may hold the literal, and both read the same.
       <fields xsi:type="uimodel:InputWidget" name="sizeColumn"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/sizeColumn" label="visual:Form.sizeColumn">
         <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <fields xsi:type="uimodel:InputWidget" name="valueColumn"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/valueColumn" label="visual:Form.valueColumn" placeholder="visual:Placeholder.column">
+        <visibilityCondition language="JS" body="['SUNBURST'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <fields xsi:type="uimodel:InputWidget" name="pathSeparator"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/pathSeparator" label="visual:Form.pathSeparator">
+        <visibilityCondition language="JS" body="['SUNBURST'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 
@@ -81,10 +88,14 @@ name, a board written by hand may hold the literal, and both read the same.
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="visual:Form.displayGroup">
-      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'SUNBURST'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showScale"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showScale" label="visual:Form.showScale">
         <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
+        <visibilityCondition language="JS" body="['SUNBURST'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 
