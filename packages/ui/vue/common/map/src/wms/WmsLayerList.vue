@@ -19,7 +19,9 @@ Contributors:
  * as the list belongs to the settings that own it.
  */
 import { ref } from 'vue'
-import Draggable from 'vuedraggable-es'
+import VueDraggable from 'vuedraggable-es'
+// vuedraggable-es declares no slots, so under vue 3.5.45 its #item slot does not type-check.
+const Draggable = VueDraggable as any
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { DButton, DIcon, DSlider } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import type { ListedLayer } from './listedLayer'
