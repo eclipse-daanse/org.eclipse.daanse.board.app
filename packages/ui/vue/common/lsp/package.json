@@ -41,7 +41,7 @@
     "typescript": "~5.9.2",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
-    "vitest": "^4.0.16",
+    "vitest": "5.0.5",
     "vue-tsc": "^3.2.2"
   },
   "exports": {
