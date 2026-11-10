@@ -44,7 +44,11 @@ describe('extra bundles from config.json', () => {
     expect(manifests[0]!.entry).toBe('https://board.example/extras/index.js')
 
     const activate = vi.fn()
-    const builtIn: ModuleManifest = { id: 'built.in', version: '1.0.0', entry: '/bundles/built.in/index.js' }
+    const builtIn: ModuleManifest = {
+      id: 'built.in',
+      version: '1.0.0',
+      entry: '/bundles/built.in/index.js',
+    }
     const containers: Record<string, unknown> = {
       'built.in': { activate: () => {} },
       'deployment.extra': { activate },
@@ -108,12 +112,19 @@ describe('extra bundles from config.json', () => {
     const foreign = 'https://bundles.other.example/x/manifest.json'
 
     const refused = await loadExtraManifests(
-      { manifests: [foreign, { ...extra, id: 'inline.foreign', entry: 'https://bundles.other.example/y.js' }] },
+      {
+        manifests: [
+          foreign,
+          { ...extra, id: 'inline.foreign', entry: 'https://bundles.other.example/y.js' },
+        ],
+      },
       { base: BASE, fetch: fetchSpy as unknown as typeof fetch },
     )
     expect(refused.manifests).toEqual([])
     expect(refused.problems[0]).toMatch(/origin https:\/\/bundles\.other\.example is not allowed/)
-    expect(refused.problems[1]).toMatch(/entry origin https:\/\/bundles\.other\.example is not allowed/)
+    expect(refused.problems[1]).toMatch(
+      /entry origin https:\/\/bundles\.other\.example is not allowed/,
+    )
     // Refused before anything is fetched from there
     expect(fetchSpy).not.toHaveBeenCalled()
 
@@ -126,6 +137,9 @@ describe('extra bundles from config.json', () => {
   })
 
   it('adds nothing when config.json has no extraBundles', async () => {
-    expect(await loadExtraManifests(undefined, { base: BASE })).toEqual({ manifests: [], problems: [] })
+    expect(await loadExtraManifests(undefined, { base: BASE })).toEqual({
+      manifests: [],
+      problems: [],
+    })
   })
 })
