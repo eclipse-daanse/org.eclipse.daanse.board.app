@@ -160,7 +160,7 @@
     "eslint-plugin-playwright": "^2.2.0",
     "eslint-plugin-vue": "~10.8.0",
     "jiti": "^2.4.2",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.1.1",
     "npm-run-all2": "^8.0.1",
     "oxlint": "^1.1.0",
     "prettier": "3.8.1",
@@ -168,7 +168,7 @@
     "terser": "^5.36.0",
     "typescript": "~5.9.2",
     "vite-plugin-vue-devtools": "^8.0.5",
-    "vitest": "^4.0.16",
+    "vitest": "5.0.5",
     "vue-tsc": "^3.2.2"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
