@@ -34,6 +34,7 @@ import { calendar } from './kinds/calendar'
 import { stream } from './kinds/stream'
 import { waterfall } from './kinds/waterfall'
 import { chord } from './kinds/chord'
+import { cube } from './kinds/cube'
 
 export { HOME_VIEW, homeOf, SMALL, WORDS, type Drawing, type Look, type Option, type Problem, type Word } from './context'
 export { dayOf } from './kinds/calendar'
@@ -53,11 +54,12 @@ export const KINDS = [
 import { boxplot } from './kinds/boxplot'
 export { summaryOf } from './kinds/boxplot'
   'boxplot',
+  'cube',
 ] as const
 export type Kind = (typeof KINDS)[number]
 
 /** The kinds drawn in a 3D box, which turn and take the lighting. */
-export const SPATIAL: ReadonlySet<Kind> = new Set(['bars3d', 'surface', 'scatter3d'])
+export const SPATIAL: ReadonlySet<Kind> = new Set(['bars3d', 'surface', 'scatter3d', 'cube'])
 
 /** How each kind is drawn: one module each, under kinds/. */
 const DRAWERS: Record<Kind, (context: Context) => Drawing> = {
@@ -73,6 +75,7 @@ const DRAWERS: Record<Kind, (context: Context) => Drawing> = {
   waterfall,
   chord,
   boxplot,
+  cube,
 }
 
 /** A kind by what is stored: the enum's name (BARS3D) or its literal (bars3d). */

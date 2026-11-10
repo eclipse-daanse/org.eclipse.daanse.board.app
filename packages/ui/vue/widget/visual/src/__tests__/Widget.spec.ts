@@ -73,6 +73,10 @@ const chart = {
 }
 vi.mock('../echarts', () => ({ createChart: () => chart }))
 
+/* Nor does it have three.js's WebGL: the cube is a recorder too. */
+const cube = { show: vi.fn(), resize: vi.fn(), on: vi.fn(), dispose: vi.fn() }
+vi.mock('../cube-view', () => ({ createCubeView: () => cube }))
+
 globalThis.ResizeObserver ??= class {
   observe() {}
   disconnect() {}
@@ -223,6 +227,23 @@ describe('VisualWidget', () => {
     )
   })
 
+  it('builds the cube from the table when the cube is chosen, and lets it go for another kind', async () => {
+    answered = { headers: ['Caption', '1997', '1998'], rows: [['Drink - USA', 1, 2], ['Food - USA', 3, 4]] }
+    const settings = new VisualSettingsImpl()
+    await show(settings)
+    cube.show.mockClear()
+    cube.dispose.mockClear()
+
+    settings.kind = VisualKind.CUBE
+    // three.js is fetched as its own chunk the first time a cube is asked for.
+    await vi.waitFor(() => expect(cube.show).toHaveBeenCalledTimes(1))
+    expect(cube.show.mock.calls[0][0].axes).toEqual([['Drink', 'Food'], ['USA'], ['1997', '1998']])
+
+    settings.kind = VisualKind.BARS3D
+    await flushPromises()
+    expect(cube.dispose).toHaveBeenCalled()
+    expect(lastDrawn().series[0].type).toBe('bar3D')
+  })
 
   it('stands still until the reader turns it, and a double click brings it back', async () => {
     const wrapper = await show()

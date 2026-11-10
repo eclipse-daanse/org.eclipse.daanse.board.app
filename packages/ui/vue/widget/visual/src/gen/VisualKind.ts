@@ -34,7 +34,8 @@ export const VisualKind = {
   STREAM: 'STREAM',
   WATERFALL: 'WATERFALL',
   CHORD: 'CHORD',
-  BOXPLOT: 'BOXPLOT'
+  BOXPLOT: 'BOXPLOT',
+  CUBE: 'CUBE'
 } as const;
 
 export type VisualKind = typeof VisualKind[keyof typeof VisualKind];
@@ -62,5 +63,6 @@ export function getVisualKindByLiteral(literal: string): VisualKind | undefined 
   if (literal === 'waterfall') return VisualKind.WATERFALL;
   if (literal === 'chord') return VisualKind.CHORD;
   if (literal === 'boxplot') return VisualKind.BOXPLOT;
+  if (literal === 'cube') return VisualKind.CUBE;
   return undefined;
 }
