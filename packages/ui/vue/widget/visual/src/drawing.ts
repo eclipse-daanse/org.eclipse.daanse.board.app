@@ -30,8 +30,10 @@ import { sunburst } from './kinds/sunburst'
 import { treemap } from './kinds/treemap'
 import { sankey } from './kinds/sankey'
 import { race } from './kinds/race'
+import { calendar } from './kinds/calendar'
 
 export { HOME_VIEW, homeOf, SMALL, WORDS, type Drawing, type Look, type Option, type Problem, type Word } from './context'
+export { dayOf } from './kinds/calendar'
 
 export const KINDS = [
   'bars3d',
@@ -41,6 +43,7 @@ export const KINDS = [
   'treemap',
   'sankey',
   'race',
+  'calendar',
 ] as const
 export type Kind = (typeof KINDS)[number]
 
@@ -56,6 +59,7 @@ const DRAWERS: Record<Kind, (context: Context) => Drawing> = {
   treemap,
   sankey,
   race,
+  calendar,
 }
 
 /** A kind by what is stored: the enum's name (BARS3D) or its literal (bars3d). */

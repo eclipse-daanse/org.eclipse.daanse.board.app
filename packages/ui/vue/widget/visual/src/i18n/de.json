@@ -30,7 +30,8 @@
       "sunburst": "Ringe (Sunburst)",
       "treemap": "Kacheln (Treemap)",
       "sankey": "Flüsse (Sankey)",
-      "race": "Balkenrennen"
+      "race": "Balkenrennen",
+      "calendar": "Kalender"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -51,7 +52,8 @@
     "needsThreeNumbers": "Punkte im Raum brauchen drei Zahlenspalten.",
     "needsValues": "Keine Zeile hat einen Wert über null, der sich zeichnen ließe.",
     "needsValues": "Keine Zeile hat einen Wert über null, der sich zeichnen ließe.",
-    "needsFlows": "Keine Zeile führt von einem zum anderen. Nehmen Sie zwei Beschriftungsspalten oder Beschriftungen mit Ebenen."
+    "needsFlows": "Keine Zeile führt von einem zum anderen. Nehmen Sie zwei Beschriftungsspalten oder Beschriftungen mit Ebenen.",
+    "needsDates": "Keine Beschriftung in der Tabelle lässt sich als Tag lesen."
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"

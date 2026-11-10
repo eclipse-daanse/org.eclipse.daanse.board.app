@@ -41,6 +41,7 @@ name, a board written by hand may hold the literal, and both read the same.
         <values>TREEMAP</values>
         <values>SANKEY</values>
         <values>RACE</values>
+        <values>CALENDAR</values>
         <optionLabel language="JS" body="'visual:Options.kind.' + String(option).toLowerCase()"/>
       </fields>
       <fields xsi:type="uimodel:InputWidget" name="title"
@@ -83,6 +84,7 @@ name, a board written by hand may hold the literal, and both read the same.
         <visibilityCondition language="JS" body="['TREEMAP'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
         <visibilityCondition language="JS" body="['SANKEY'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
         <visibilityCondition language="JS" body="['SANKEY'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+        <visibilityCondition language="JS" body="['CALENDAR'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 
@@ -123,6 +125,8 @@ name, a board written by hand may hold the literal, and both read the same.
       <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
         <visibilityCondition language="JS" body="['RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'CALENDAR'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+        <visibilityCondition language="JS" body="['BARS3D', 'CALENDAR'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 

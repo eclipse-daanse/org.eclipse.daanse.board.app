@@ -30,7 +30,8 @@
       "sunburst": "Rings (sunburst)",
       "treemap": "Tiles (treemap)",
       "sankey": "Flows (Sankey)",
-      "race": "Bar race"
+      "race": "Bar race",
+      "calendar": "Calendar"
     },
     "palette": {
       "aurora": "Aurora",
@@ -51,7 +52,8 @@
     "needsThreeNumbers": "Points in space need three columns of numbers.",
     "needsValues": "No row has a value above zero to draw.",
     "needsValues": "No row has a value above zero to draw.",
-    "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels."
+    "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels.",
+    "needsDates": "No label in the table reads as a day."
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"
