@@ -20,7 +20,7 @@
  */
 
 import type { Feature, FeatureCollection } from 'geojson'
-import { boxOf } from './wfs'
+import { boxOf, parseXml } from './wfs'
 
 /** What of the configuration this mode reads - the model's names. */
 export interface FeatureInfoRequest {
@@ -99,7 +99,7 @@ const valueOf = (raw: string): string | number => {
  * A feature without a box is left out - it cannot stand on the map.
  */
 export function featuresOfFeatureInfo(answer: string): Feature[] {
-  const doc = new DOMParser().parseFromString(answer, 'text/xml')
+  const doc = parseXml(answer)
   const features: Feature[] = []
   for (const node of Array.from(doc.getElementsByTagName('Feature'))) {
     const properties: Record<string, unknown> = {}
