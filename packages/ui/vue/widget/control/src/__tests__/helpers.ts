@@ -12,7 +12,7 @@
  * ********************************************************************/
 
 /* What every control's tests need: a variable, settings and a mounted control. */
-import { vi } from 'vitest'
+import { vi, type Mock } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
@@ -59,7 +59,7 @@ export function settingsOf(make: () => any, overrides: Record<string, unknown> =
 }
 
 export async function show(component: any, settings: any, provide: Record<symbol | string, unknown> = {}) {
-  const emit = vi.fn()
+  const emit: Mock = vi.fn()
   const wrapper = mount(component, {
     props: { id: 'w1', configv: settings },
     attachTo: document.body,
