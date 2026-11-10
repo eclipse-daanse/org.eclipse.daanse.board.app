@@ -26,6 +26,10 @@ import {
   SankeyChart,
 } from 'echarts/charts'
 import {
+  BarChart,
+  GraphicComponent,
+  GridComponent,
+  TimelineComponent,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
@@ -38,6 +42,10 @@ echarts.use([
   SunburstChart,
   TreemapChart,
   SankeyChart,
+  BarChart,
+  GraphicComponent,
+  GridComponent,
+  TimelineComponent,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,

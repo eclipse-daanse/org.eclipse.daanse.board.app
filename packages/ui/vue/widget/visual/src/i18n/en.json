@@ -16,6 +16,8 @@
     "pathSeparator": "Levels in a label split at",
     "motionGroup": "Motion",
     "autoRotate": "Turn slowly by itself",
+    "topN": "Bars at once",
+    "frameDuration": "Time per step (ms)",
     "displayGroup": "Display",
     "showScale": "Show the scale of values",
     "showLabels": "Show names"
@@ -27,7 +29,8 @@
       "scatter3d": "Points in 3D",
       "sunburst": "Rings (sunburst)",
       "treemap": "Tiles (treemap)",
-      "sankey": "Flows (Sankey)"
+      "sankey": "Flows (Sankey)",
+      "race": "Bar race"
     },
     "palette": {
       "aurora": "Aurora",

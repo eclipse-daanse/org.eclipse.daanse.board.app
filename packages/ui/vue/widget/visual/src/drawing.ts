@@ -29,6 +29,7 @@ import { scatter3d } from './kinds/scatter3d'
 import { sunburst } from './kinds/sunburst'
 import { treemap } from './kinds/treemap'
 import { sankey } from './kinds/sankey'
+import { race } from './kinds/race'
 
 export { HOME_VIEW, homeOf, SMALL, WORDS, type Drawing, type Look, type Option, type Problem, type Word } from './context'
 
@@ -39,6 +40,7 @@ export const KINDS = [
   'sunburst',
   'treemap',
   'sankey',
+  'race',
 ] as const
 export type Kind = (typeof KINDS)[number]
 
@@ -53,6 +55,7 @@ const DRAWERS: Record<Kind, (context: Context) => Drawing> = {
   sunburst,
   treemap,
   sankey,
+  race,
 }
 
 /** A kind by what is stored: the enum's name (BARS3D) or its literal (bars3d). */

@@ -28,7 +28,8 @@ export const VisualKind = {
   SCATTER3D: 'SCATTER3D',
   SUNBURST: 'SUNBURST',
   TREEMAP: 'TREEMAP',
-  SANKEY: 'SANKEY'
+  SANKEY: 'SANKEY',
+  RACE: 'RACE'
 } as const;
 
 export type VisualKind = typeof VisualKind[keyof typeof VisualKind];
@@ -50,5 +51,6 @@ export function getVisualKindByLiteral(literal: string): VisualKind | undefined 
   if (literal === 'sunburst') return VisualKind.SUNBURST;
   if (literal === 'treemap') return VisualKind.TREEMAP;
   if (literal === 'sankey') return VisualKind.SANKEY;
+  if (literal === 'race') return VisualKind.RACE;
   return undefined;
 }

@@ -16,6 +16,8 @@
     "pathSeparator": "Ebenen einer Beschriftung trennen bei",
     "motionGroup": "Bewegung",
     "autoRotate": "Langsam von selbst drehen",
+    "topN": "Balken gleichzeitig",
+    "frameDuration": "Zeit je Schritt (ms)",
     "displayGroup": "Anzeige",
     "showScale": "Werteskala zeigen",
     "showLabels": "Namen zeigen"
@@ -27,7 +29,8 @@
       "scatter3d": "Punkte in 3D",
       "sunburst": "Ringe (Sunburst)",
       "treemap": "Kacheln (Treemap)",
-      "sankey": "Flüsse (Sankey)"
+      "sankey": "Flüsse (Sankey)",
+      "race": "Balkenrennen"
     },
     "palette": {
       "aurora": "Polarlicht",
