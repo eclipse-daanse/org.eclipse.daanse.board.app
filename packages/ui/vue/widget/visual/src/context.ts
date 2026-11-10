@@ -71,7 +71,7 @@ export interface Look {
 }
 
 /** The words a drawing says in its tooltips; the widget has them translated. */
-export const WORDS = ['change', 'runningTotal'] as const
+export const WORDS = ['change', 'runningTotal', 'lowest', 'lowerQuartile', 'median', 'upperQuartile', 'highest'] as const
 export type Word = (typeof WORDS)[number]
 
 export type Problem =

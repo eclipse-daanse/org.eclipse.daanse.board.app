@@ -41,6 +41,7 @@ Empty, each kind takes the columns it needs from the left.
         <eLiterals name="STREAM" literal="stream" value="8"/>
         <eLiterals name="WATERFALL" literal="waterfall" value="9"/>
         <eLiterals name="CHORD" literal="chord" value="10"/>
+        <eLiterals name="BOXPLOT" literal="boxplot" value="11"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="VisualPalette">

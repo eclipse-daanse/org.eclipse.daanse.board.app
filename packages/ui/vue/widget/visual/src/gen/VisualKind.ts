@@ -33,7 +33,8 @@ export const VisualKind = {
   CALENDAR: 'CALENDAR',
   STREAM: 'STREAM',
   WATERFALL: 'WATERFALL',
-  CHORD: 'CHORD'
+  CHORD: 'CHORD',
+  BOXPLOT: 'BOXPLOT'
 } as const;
 
 export type VisualKind = typeof VisualKind[keyof typeof VisualKind];
@@ -60,5 +61,6 @@ export function getVisualKindByLiteral(literal: string): VisualKind | undefined 
   if (literal === 'stream') return VisualKind.STREAM;
   if (literal === 'waterfall') return VisualKind.WATERFALL;
   if (literal === 'chord') return VisualKind.CHORD;
+  if (literal === 'boxplot') return VisualKind.BOXPLOT;
   return undefined;
 }

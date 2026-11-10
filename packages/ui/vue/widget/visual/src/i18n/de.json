@@ -34,7 +34,8 @@
       "calendar": "Kalender",
       "stream": "Strom (Streamgraph)",
       "waterfall": "Wasserfall",
-      "chord": "Beziehungen im Kreis (Chord)"
+      "chord": "Beziehungen im Kreis (Chord)",
+      "boxplot": "Streuung (Boxplot)"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -65,6 +66,11 @@
   },
   "Words": {
     "change": "Veränderung",
-    "runningTotal": "Laufende Summe"
+    "runningTotal": "Laufende Summe",
+    "lowest": "Kleinster Wert",
+    "lowerQuartile": "Unteres Quartil",
+    "median": "Median",
+    "upperQuartile": "Oberes Quartil",
+    "highest": "Größter Wert"
   }
 }

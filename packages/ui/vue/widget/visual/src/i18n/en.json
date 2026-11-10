@@ -34,7 +34,8 @@
       "calendar": "Calendar",
       "stream": "Stream (streamgraph)",
       "waterfall": "Waterfall",
-      "chord": "Ties around a circle (chord)"
+      "chord": "Ties around a circle (chord)",
+      "boxplot": "Spread (box plot)"
     },
     "palette": {
       "aurora": "Aurora",
@@ -65,6 +66,11 @@
   },
   "Words": {
     "change": "Change",
-    "runningTotal": "Running total"
+    "runningTotal": "Running total",
+    "lowest": "Lowest",
+    "lowerQuartile": "Lower quartile",
+    "median": "Median",
+    "upperQuartile": "Upper quartile",
+    "highest": "Highest"
   }
 }

@@ -50,6 +50,9 @@ export const KINDS = [
   'stream',
   'waterfall',
   'chord',
+import { boxplot } from './kinds/boxplot'
+export { summaryOf } from './kinds/boxplot'
+  'boxplot',
 ] as const
 export type Kind = (typeof KINDS)[number]
 
@@ -69,6 +72,7 @@ const DRAWERS: Record<Kind, (context: Context) => Drawing> = {
   stream,
   waterfall,
   chord,
+  boxplot,
 }
 
 /** A kind by what is stored: the enum's name (BARS3D) or its literal (bars3d). */
