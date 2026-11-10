@@ -23,6 +23,19 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { OGCSTAToChartComposerActions } from '../gen/OGCSTAToChartComposerActions'
 
+/**
+ * What this composer needs from an OGC STA source. Stated here rather than
+ * imported, so the composer does not depend on the source's package.
+ */
+interface ThingListSource {
+  listThings(): Promise<{ id: string; name: string }[]>
+  listDatastreamsOfThing(thingId: string): Promise<any[]>
+}
+
+interface DatastreamWindowSource {
+  loadDatastreamWindow(datastreamId: string): Promise<{ datastream?: any; observations: any[] }>
+}
+
 export interface IOGCSTAToChartComposerConfiguration extends ConfigurationOf<IBaseConnectionConfiguration> {
   connectedDatasources: string[]
   thingIds: (string | number)[]
@@ -98,7 +111,6 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
   private pendingUpdate: boolean = false
   private cachedData: any = null
   private cachedThingsStructure: any[] = []  // Cache Things structure for operation mode
-  private loadingPromises: Map<string, Promise<any>> = new Map()  // Track ongoing loads to prevent duplicates
   private requestSessionId: number = 0  // Incremented on each thing switch to invalidate old requests
 
   public static availableTypes = ['ogcsta']
@@ -133,9 +145,6 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       try {
         console.log('📊 OGCSTAToChartComposer: Datasource updated, notifying widgets...')
 
-        // Clear loading promises to force fresh data load (e.g., when time variables change)
-        this.loadingPromises.clear()
-
         // Add small delay to ensure datasource has finished loading observations
         await new Promise(resolve => setTimeout(resolve, 50))
 
@@ -169,138 +178,38 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
 
   async getData(type: string, options?: any): Promise<any> {
     const datasourceRepository = this.datasourceRepository
+    if (!datasourceRepository) {
+      throw new Error('DatasourceRepository is not provided to DataSource Classes')
+    }
 
-    // Check if datasource has history enabled
-    // If not, we need to load observations ourselves for the chart
+    /*
+     * Each configured datastream is loaded directly, with its window, all at
+     * once. The catalogue of the source is not touched: the chart knows its
+     * datastream ids, and waiting for every thing of the server first cost
+     * about a minute (#1250).
+     */
     const data = await Promise.all(
       this.connectedDatasources
         .filter((datasourceId) => datasourceId)
         .map(async (datasourceId) => {
-          if (!datasourceRepository) {
-            throw new Error('DatasourceRepository is not provided to DataSource Classes')
-          }
-          const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
-
-          if (this.datastreams.length === 0) {
-            console.log('⚠️ No datastreams configured yet')
+          const source = datasourceRepository.getDatasource(datasourceId) as unknown as Partial<DatastreamWindowSource>
+          if (this.datastreams.length === 0 || typeof source.loadDatastreamWindow !== 'function') {
             return { things: [], datastreams: [], observations: [] }
           }
 
-          // Ensure datasource is initialized by calling getData() at least once
-          // This sets up baseConfigration which is needed for getHistoricalObservations()
-          let resultMap = (datasourceInstance as any).resultMap
-          if (!resultMap?.datastreams || resultMap.datastreams.length === 0) {
-            console.log('📊 OGCSTAToChartComposer: Initializing datasource...')
-            try {
-              await datasourceInstance.getData('OGCSTAData', { reload: true })
-              // Re-read resultMap after initialization
-              resultMap = (datasourceInstance as any).resultMap
-              console.log('📊 OGCSTAToChartComposer: Datasource initialized')
-            } catch (error) {
-              console.error('Failed to initialize datasource:', error)
-            }
-          }
-
-          // Read observations from datastreams in resultMap
-          // The OGC STA datasource stores observations in datastreams after processing
-          console.log(`📊 Reading observations from datastreams in cache`)
-          const dsConfig = (datasourceInstance as any).configuration
-          const allObservations: any[] = []
-          const missingDatastreams: any[] = []
-
-          if (resultMap?.datastreams) {
-            console.log(`✅ Found ${resultMap.datastreams.length} datastreams in cache`)
-
-            for (const ds of this.datastreams) {
-              const datastream = resultMap.datastreams.find((d: any) => d.iotId == ds.datastreamId)
-
-              if (datastream?.observations && datastream.observations.length > 0) {
-                console.log(`📊 Found ${datastream.observations.length} observations in datastream ${ds.datastreamId}`)
-
-                // Add ds_source to observations
-                datastream.observations.forEach((obs: any) => {
-                  obs.ds_source = ds.datastreamId
-                  allObservations.push(obs)
-                })
-              } else {
-                console.log(`⚠️ No observations in cache for datastream ${ds.datastreamId}, will load directly`)
-                missingDatastreams.push(ds)
-              }
-            }
-          } else {
-            console.log(`⚠️ No datastreams in cache, will load all directly`)
-            missingDatastreams.push(...this.datastreams)
-          }
-
-          // Load missing datastreams directly
-          if (missingDatastreams.length > 0) {
-            console.log(`📊 Loading ${missingDatastreams.length} missing datastreams directly`)
-
-            const historyConfig = dsConfig?.history || {
-              enabled: true,
-              phenomenonTime: {
-                startVariable: dsConfig?.history?.phenomenonTime?.startVariable,
-                endVariable: dsConfig?.history?.phenomenonTime?.endVariable
-              }
-            }
-
-            for (const ds of missingDatastreams) {
-              try {
-                // Check if already loading this datastream
-                const loadKey = `${datasourceId}:${ds.datastreamId}`
-
-                if (this.loadingPromises.has(loadKey)) {
-                  console.log(`⏳ Already loading datastream ${ds.datastreamId}, reusing promise`)
-                  const observations = await this.loadingPromises.get(loadKey)!
-                  observations.forEach((obs: any) => {
-                    allObservations.push(obs)
-                  })
-                } else {
-                  console.log(`📊 Loading observations for missing datastream ${ds.datastreamId}`)
-
-                  // Create loading promise
-                  const loadPromise = (datasourceInstance as any).getHistoricalObservations(
-                    ds.datastreamId,
-                    historyConfig
-                  ).then((observations: any[]) => {
-                    // Add ds_source to observations
-                    observations.forEach((obs: any) => {
-                      obs.ds_source = ds.datastreamId
-                    })
-                    console.log(`✅ Loaded ${observations.length} observations for ${ds.datastreamId}`)
-
-                    // Remove from loading map after a short delay to allow concurrent calls to use it
-                    setTimeout(() => this.loadingPromises.delete(loadKey), 100)
-
-                    return observations
-                  }).catch((error: any) => {
-                    // Remove failed promise from cache immediately so next call can retry
-                    this.loadingPromises.delete(loadKey)
-                    console.error(`❌ Failed to load observations for ${ds.datastreamId}:`, error)
-                    throw error  // Re-throw to propagate error
-                  })
-
-                  // Store promise
-                  this.loadingPromises.set(loadKey, loadPromise)
-
-                  // Wait for result
-                  const observations = await loadPromise
-                  observations.forEach((obs: any) => {
-                    allObservations.push(obs)
-                  })
-                }
-              } catch (error) {
-                console.error(`Error loading observations for ${ds.datastreamId}:`, error)
-              }
-            }
-          }
-
-          console.log(`✅ Total observations collected: ${allObservations.length}`)
+          const windows = await Promise.all(
+            this.datastreams.map((selection) =>
+              source.loadDatastreamWindow!(selection.datastreamId).catch((error: unknown) => {
+                console.error(`Error loading observations for ${selection.datastreamId}:`, error)
+                return { datastream: undefined, observations: [] }
+              }),
+            ),
+          )
 
           return {
-            things: resultMap?.things || [],
-            datastreams: resultMap?.datastreams || [],
-            observations: allObservations
+            things: [],
+            datastreams: windows.map((w) => w.datastream).filter((ds) => ds),
+            observations: windows.flatMap((w) => w.observations),
           }
         })
     )
@@ -404,32 +313,20 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       return  // Cache is already populated
     }
 
+    /*
+     * Ids and names only (`Things?$select=@iot.id,name`). This used to read
+     * the source's private catalogue, or else send a filter the source did
+     * not act on, so it found things only after a map had loaded them all.
+     * Datastreams of the chosen thing come later, by navigation.
+     */
     const datasourceRepository = this.datasourceRepository
-
     for (const datasourceId of this.connectedDatasources) {
       if (!datasourceId) continue
-
       try {
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
-        const resultMap = (datasourceInstance as any).resultMap
-
-        if (resultMap?.things && resultMap.things.length > 0) {
-          this.allThingsCache.push(...resultMap.things)
-        } else {
-          // Try to load things directly
-          const data = await datasourceInstance.getData('OGCSTAData', {
-            isolatedRequest: true,
-            filter: {
-              things: {
-                includeDatastreams: true,
-                includeLocations: false
-              }
-            }
-          })
-
-          if (data?.things) {
-            this.allThingsCache.push(...data.things)
-          }
+        const source = datasourceRepository.getDatasource(datasourceId) as unknown as Partial<ThingListSource>
+        if (typeof source.listThings !== 'function') continue
+        for (const thing of await source.listThings()) {
+          this.allThingsCache.push({ iotId: thing.id, name: thing.name })
         }
       } catch (error) {
         console.error(`Error loading things from datasource ${datasourceId}:`, error)
@@ -464,6 +361,19 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
 
       try {
         const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
+
+        // By navigation, Things(id)/Datastreams: complete on every server.
+        const source = datasourceInstance as unknown as Partial<ThingListSource>
+        if (typeof source.listDatastreamsOfThing === 'function') {
+          const datastreams = await source.listDatastreamsOfThing(String(thingId))
+          if (thing) {
+            thing.datastreams = datastreams
+            return thing
+          }
+          const loaded = { iotId: thingId, datastreams }
+          this.allThingsCache.push(loaded)
+          return loaded
+        }
 
         const data = await datasourceInstance.getData('OGCSTAData', {
           isolatedRequest: true,
@@ -508,9 +418,6 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
     // Increment session ID to invalidate any in-flight requests from previous thing
     this.requestSessionId++
     console.log(`🔄 New request session: ${this.requestSessionId}`)
-
-    // Clear all loading promises from previous thing
-    this.loadingPromises.clear()
 
     // Update thingIds
     this.thingIds = [thingId]
@@ -732,11 +639,12 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
             return obsDatastreamId == datastreamSelection.datastreamId  // Use == to handle string/number comparison
           })
 
+          const datastream = ogcStaData.datastreams?.find((ds: any) => ds?.iotId == datastreamSelection.datastreamId)
           relevantObservations.forEach((observation: any) => {
             const item = {
-              datastream: datastreamSelection.label || datastreamSelection.datastreamId,
+              datastream: datastreamSelection.label || datastream?.name || datastreamSelection.datastreamId,
               value: observation.result,
-              unit: '', // Unit not available in observation-only mode
+              unit: datastream?.unitOfMeasurement?.symbol || '',
               timestamp: observation.phenomenonTime || observation.resultTime || ''
             }
 

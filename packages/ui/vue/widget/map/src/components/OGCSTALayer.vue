@@ -21,6 +21,7 @@ import {
   isLabelVisible as labelVisible,
 } from '../iconZoom'
 import MapMarker from './MapMarker.vue'
+import { latestObservation } from '../utils/helpers'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import type { ThingClickPayload } from '../gen/ThingClickPayload'
@@ -217,9 +218,8 @@ const emitDatastreamClick = (datastream: BoxedDatastream, thing: any, subrendere
   payload.unitOfMeasurement = datastream.unitOfMeasurement ?? ''
   payload.observedProperty = datastream.observedProperty?.name ?? ''
 
-  const observations = datastream.observations || []
-  if (observations.length > 0) {
-    const latestObs = observations[observations.length - 1]
+  const latestObs = latestObservation(datastream.observations)
+  if (latestObs) {
     payload.latestObservationResult = latestObs.result ?? ''
     payload.latestObservationTime = latestObs.phenomenonTime ?? ''
   }
@@ -294,9 +294,8 @@ const handleDatastreamHover = (datastream: BoxedDatastream, thing: any) => {
   payload.unitOfMeasurement = datastream.unitOfMeasurement ?? ''
   payload.observedProperty = datastream.observedProperty?.name ?? ''
 
-  const observations = datastream.observations || []
-  if (observations.length > 0) {
-    const latestObs = observations[observations.length - 1]
+  const latestObs = latestObservation(datastream.observations)
+  if (latestObs) {
     payload.latestObservationResult = latestObs.result ?? ''
     payload.latestObservationTime = latestObs.phenomenonTime ?? ''
   }
@@ -328,9 +327,8 @@ const getDatastreamTooltip = (datastream: any, thing: any) => {
   const parts = []
   if (thing.name) parts.push(thing.name)
   if (datastream.name) parts.push(datastream.name)
-  const observations = datastream.observations || []
-  if (observations.length > 0) {
-    const latest = observations[observations.length - 1]
+  const latest = latestObservation(datastream.observations)
+  if (latest) {
     const unit = datastream.unitOfMeasurement?.symbol || ''
     parts.push(`${latest.result} ${unit}`)
   }
@@ -662,8 +660,8 @@ const datastreamAreas = computed(() => {
                   :is="getById(obsRenderer.component)?.component"
                   v-if="getById(obsRenderer.component) && !getById(obsRenderer.component)?.isLayerRenderer"
                   :config="obsRenderer.setting"
-                  :data="item.datastream.observations[item.subrenderer.renderer.point_render_as === 'none' ? 0 : item.datastream.observations.length-1]?.result"
-                  :key="item.datastream.observations[item.subrenderer.renderer.point_render_as === 'none' ? 0 : item.datastream.observations.length-1]?.phenomenonTime"
+                  :data="latestObservation(item.datastream.observations)?.result"
+                  :key="latestObservation(item.datastream.observations)?.phenomenonTime"
                   :marker-size="item.subrenderer.renderer.point_render_as === 'image' ? 0 : item.subrenderer.renderer.point_render_as === 'none' ? (item.renderer.renderer.point_image_size||32) : 45"
                 />
               </template>
