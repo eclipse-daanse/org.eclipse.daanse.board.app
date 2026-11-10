@@ -18,6 +18,7 @@
  */
 
 import type { Feature, FeatureCollection, Geometry } from 'geojson'
+import { parseXml, type XmlNode } from './xml'
 
 /** What of the configuration a request is made from - the model's names. */
 export interface WfsRequest {
@@ -35,16 +36,6 @@ const text = (value: unknown) => String(value ?? '').trim()
 
 /** The GeoJSON output format most services name; GeoServer and QGIS Server both take it. */
 export const GEOJSON = 'application/json'
-
-/**
- * An answer of a server parsed as XML. An answer with a document type
- * declaration is read as an empty document: WFS and WMS answers have none,
- * its entities could expand without limit, and an HTML error page has one.
- */
-export function parseXml(answer: string): Document {
-  const xml = /<!DOCTYPE/i.test(answer) ? '<refused/>' : answer
-  return new DOMParser().parseFromString(xml, 'text/xml')
-}
 
 /** A box as west,south,east,north - four numbers - or null. */
 export function boxOf(bbox: unknown): [number, number, number, number] | null {
@@ -105,7 +96,7 @@ export function exceptionOf(answer: string): string | null {
 const latitudeFirst = (srs: string) => /urn:ogc:def:crs:EPSG:[^:]*:4326$|opengis\.net\/def\/crs\/EPSG\/0\/4326$/i.test(srs.trim())
 
 /** Numbers of a gml:pos, gml:posList or gml:coordinates, as positions [x, y]. */
-function positionsOf(node: Element, swap: boolean): number[][] {
+function positionsOf(node: XmlNode, swap: boolean): number[][] {
   const pos = node.getElementsByTagNameNS('*', 'posList')[0] ?? node.getElementsByTagNameNS('*', 'pos')[0]
   let numbers: number[]
   if (pos) {
@@ -120,7 +111,7 @@ function positionsOf(node: Element, swap: boolean): number[][] {
 }
 
 /** A GML geometry as GeoJSON: Point, LineString or Polygon (its outer ring), or null. */
-function geometryOf(node: Element, swap: boolean): Geometry | null {
+function geometryOf(node: XmlNode, swap: boolean): Geometry | null {
   const kind = node.localName
   if (kind === 'Point') {
     const [position] = positionsOf(node, swap)
