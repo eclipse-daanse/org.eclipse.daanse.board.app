@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "vue": "^3.5.13",
-    "@codemirror/commands": "^6.9.0",
-    "@codemirror/language": "^6.12.4",
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/language": "^6.13.1",
     "@codemirror/state": "^6.7.2",
     "@codemirror/view": "^6.43.10",
     "@lezer/highlight": "^1.2.3",

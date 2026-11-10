@@ -28,14 +28,14 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 /** Must match the actually bundled versions; checked in index.test.ts. */
 const VERSIONS = {
-  '@codemirror/state': '6.7.2',
-  '@codemirror/view': '6.43.10',
-  '@codemirror/language': '6.12.4',
-  '@codemirror/commands': '6.9.0',
-  '@codemirror/search': '6.5.11',
+  '@codemirror/state': '6.7.4',
+  '@codemirror/view': '6.43.11',
+  '@codemirror/language': '6.13.1',
+  '@codemirror/commands': '6.11.1',
+  '@codemirror/search': '6.7.2',
   '@codemirror/lint': '6.9.7',
   '@codemirror/autocomplete': '6.20.3',
-  '@codemirror/lsp-client': '6.2.5',
+  '@codemirror/lsp-client': '6.3.0',
   '@lezer/highlight': '1.2.3',
 } as const
 
