@@ -559,10 +559,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-1.0.2.tgz"
   integrity sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==
 
-"@braintree/sanitize-url@^7.1.1":
-  version "7.1.1"
-  resolved "https://registry.npmjs.org/@braintree/sanitize-url/-/sanitize-url-7.1.1.tgz"
-  integrity sha512-i1L7noDNxtFyL5DmZafWy1wRVhGehQmzZaz1HiN5e7iylJMSZR7ekOV7NsIqa5qBldlLrsKv4HbgFUVlQrz8Mw==
+"@braintree/sanitize-url@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.npmjs.org/@braintree/sanitize-url/-/sanitize-url-7.1.2.tgz#ca2035b0fefe956a8676ff0c69af73e605fcd81f"
+  integrity sha512-jigsZK+sMF/cuiB7sERuo9V7N9jx+dhmHHnQyDSVdpZwVutaBu7WvNYqMDLSgFgfB30n452TP3vjDAvFC973mA==
 
 "@bramus/specificity@^2.4.2":
   version "2.4.2"
@@ -616,9 +616,9 @@
   resolved "https://registry.npmjs.org/@chevrotain/types/-/types-13.2.0.tgz#546500791f9713e8c7bcd1a090fdc232374cf832"
   integrity sha512-7qrYHRlKfWf2AvBfJi5eVOrKAkbxvMFsy/iIHTGIiApNcEecCaVIdR+mIQhyCBsTDJxBz4JWXHMo6krbhR9hVg==
 
-"@chevrotain/types@~11.1.1":
+"@chevrotain/types@~11.1.2":
   version "11.1.2"
-  resolved "https://registry.yarnpkg.com/@chevrotain/types/-/types-11.1.2.tgz#e83a1a2704f0c5e49e7592b214031a0f4a34d7e5"
+  resolved "https://registry.npmjs.org/@chevrotain/types/-/types-11.1.2.tgz#e83a1a2704f0c5e49e7592b214031a0f4a34d7e5"
   integrity sha512-U+HFai5+zmJCkK86QsaJtoITlboZHBqrVketcO2ROv865xfCMSFpELQoz1GkX5GzME8pTa+3kbKrZHQtI0gdbw==
 
 "@chevrotain/utils@13.2.0":
@@ -1830,12 +1830,12 @@
   resolved "https://registry.yarnpkg.com/@marijn/find-cluster-break/-/find-cluster-break-1.0.4.tgz#42c2aea61cda307cdb1347444792452d7b5dbfb4"
   integrity sha512-Wy0V7+SGUjnF9/TkiM1hKVDPj7jKXduPNboMVtHTA8dySMURWqfg/JZ9E2Sq8JgSJmkl7k7Qe9FLeMSrSraWmQ==
 
-"@mermaid-js/parser@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@mermaid-js/parser/-/parser-1.1.1.tgz#30f3ab68d816912e43f245a72a0d4081bf69d966"
-  integrity sha512-VuHdsYMK1bT6X2JbcAaWAhugTRvRBRyuZgd+c22swUeI9g/ntaxF7CY7dYarhZovofCbUNO0G7JesfmNtjYOCw==
+"@mermaid-js/parser@^1.2.0":
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/@mermaid-js/parser/-/parser-1.2.1.tgz#94cc40416137bb10d2bc1b0a49c623d716e76233"
+  integrity sha512-n12NohV3mrUyUL2o93IgG/ifeW9FTyeJn3zDxkhwa8MJ9Fxg3HQMlA3RiGmD/3UnJvheztkjjQAjA2T4LmUcpw==
   dependencies:
-    "@chevrotain/types" "~11.1.1"
+    "@chevrotain/types" "~11.1.2"
 
 "@microsoft/api-extractor-model@7.31.3":
   version "7.31.3"
@@ -6558,10 +6558,10 @@ cytoscape-fcose@^2.2.0:
   dependencies:
     cose-base "^2.2.0"
 
-cytoscape@^3.33.1:
-  version "3.33.2"
-  resolved "https://registry.npmjs.org/cytoscape/-/cytoscape-3.33.2.tgz#3a58906b4002b7c237f54dfc9b971983757da791"
-  integrity sha512-sj4HXd3DokGhzZAdjDejGvTPLqlt84vNFN8m7bGsOzDY5DyVcxIb2ejIXat2Iy7HxWhdT/N1oKyheJ5YdpsGuw==
+cytoscape@^3.33.3:
+  version "3.34.4"
+  resolved "https://registry.npmjs.org/cytoscape/-/cytoscape-3.34.4.tgz#20cbd1b1f8cb2e25699bdf68887564fc3c74b375"
+  integrity sha512-msY99tMY8iWTg+sIPGfSqDcPNOt4xcj+v/K/7qUFaCUxxlqnMkUYLBjRUzn9W5CU/R2hrmtJa5+UtovrEM2ctg==
 
 "d3-array@1 - 2":
   version "2.12.1"
@@ -6888,10 +6888,10 @@ dateformat@^3.0.3:
   resolved "https://registry.npmjs.org/dateformat/-/dateformat-3.0.3.tgz"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
 
-dayjs@^1.11.19:
-  version "1.11.20"
-  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.20.tgz#88d919fd639dc991415da5f4cb6f1b6650811938"
-  integrity sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==
+dayjs@^1.11.20:
+  version "1.11.23"
+  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.23.tgz#b0a363506dde5f36cf5075e42ebe8115165a8c79"
+  integrity sha512-QDTCU0M0MxR3hQfnlDJfwekQiaanm1ubOD231u73WBckQ/fsamwRLiE2GBz6D3a/xF1NgfiDLJjXBa1hYOYTtQ==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -7039,7 +7039,7 @@ dompurify@^2.0.7:
   resolved "https://registry.npmjs.org/dompurify/-/dompurify-2.5.8.tgz"
   integrity sha512-o1vSNgrmYMQObbSSvF/1brBYEQPHhV1+gsmrusO7/GXtp1T9rCS8cXFqVxK/9crT1jA6Ccv+5MTSjBNqr7Sovw==
 
-dompurify@^3.2.7, dompurify@^3.3.1:
+dompurify@^3.2.7, dompurify@^3.3.3:
   version "3.4.17"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.4.17.tgz#074bbb24eaa419535ac19ffe7f663104b0e1543d"
   integrity sha512-B/pSlYVHQ58kqISD/yDjuJ1yfzI34m1gF4lAod2bwSRhiN4K5Cl3H8Af7hqB2PmTL911tdEudnnXn5FnhRoz0w==
@@ -8869,10 +8869,10 @@ just-diff@^6.0.0:
   resolved "https://registry.npmjs.org/just-diff/-/just-diff-6.0.2.tgz"
   integrity sha512-S59eriX5u3/QhMNq3v/gm8Kd0w8OS6Tz2FS1NG4blv+z0MuQcBRJyFWjdovM0Rad4/P4aUPFtnkNjMjyMlMSYA==
 
-katex@^0.16.25:
-  version "0.16.45"
-  resolved "https://registry.npmjs.org/katex/-/katex-0.16.45.tgz#ba60d39c54746b6b8d39ce0e7f6eace07143149c"
-  integrity sha512-pQpZbdBu7wCTmQUh7ufPmLr0pFoObnGUoL/yhtwJDgmmQpbkg/0HSVti25Fu4rmd1oCR6NGWe9vqTWuWv3GcNA==
+katex@^0.16.45:
+  version "0.16.47"
+  resolved "https://registry.npmjs.org/katex/-/katex-0.16.47.tgz#0a13a42c2deb4f74e61f162d440b9165a548030f"
+  integrity sha512-Eeo8Ys1doU1z+x8AZsPpQu+p/QcZBI5PeOo7QGQdy2x2m0MU/hYagBbGOmXwr5KVbEfVuWv9LpnQWeehogurjg==
   dependencies:
     commander "^8.3.0"
 
@@ -9488,26 +9488,26 @@ merge2@^1.3.0:
   resolved "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-mermaid@11.15.0:
-  version "11.15.0"
-  resolved "https://registry.yarnpkg.com/mermaid/-/mermaid-11.15.0.tgz#b485c13ea5e1e74f3328c4bb00427bda87fa1c1e"
-  integrity sha512-pTMbcf3rWdtLiYGpmoTjHEpeY8seiy6sR+9nD7LOs8KfUbHE4lOUAprTRqRAcWSQ6MQpdX+YEsxShtGsINtPtw==
+mermaid@11.16.1:
+  version "11.16.1"
+  resolved "https://registry.npmjs.org/mermaid/-/mermaid-11.16.1.tgz#57ae2342f6c45b967113b04c9258430bdd057ee8"
+  integrity sha512-TQsq6u22fAn3rek5VOubrhKPo1g5hwC3FXUN9hiyupTckcYiGuuKGkNQrKYwGJkXUxZdojwRG46gsSCFZMDp4g==
   dependencies:
-    "@braintree/sanitize-url" "^7.1.1"
+    "@braintree/sanitize-url" "^7.1.2"
     "@iconify/utils" "^3.0.2"
-    "@mermaid-js/parser" "^1.1.1"
+    "@mermaid-js/parser" "^1.2.0"
     "@types/d3" "^7.4.3"
     "@upsetjs/venn.js" "^2.0.0"
-    cytoscape "^3.33.1"
+    cytoscape "^3.33.3"
     cytoscape-cose-bilkent "^4.1.0"
     cytoscape-fcose "^2.2.0"
     d3 "^7.9.0"
     d3-sankey "^0.12.3"
     dagre-d3-es "7.0.14"
-    dayjs "^1.11.19"
-    dompurify "^3.3.1"
+    dayjs "^1.11.20"
+    dompurify "^3.3.3"
     es-toolkit "^1.45.1"
-    katex "^0.16.25"
+    katex "^0.16.45"
     khroma "^2.1.0"
     marked "^16.3.0"
     roughjs "^4.6.6"
