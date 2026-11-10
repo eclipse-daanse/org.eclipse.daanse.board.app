@@ -47,14 +47,14 @@ const model: ModelRef<(IDSRenderer | IRenderer)[]> = defineModel<(IDSRenderer | 
   default:
     () => {
       return (
-        reactive([]
+        reactive<(IDSRenderer | IRenderer)[]>([]
         ))
     }
 })
 
 const showModal = defineModel<boolean>('show', { default: () => false })
 
-const layerModel = defineModel<LayerI | undefined>('layer', { default: () => undefined })
+const layerModel = defineModel<LayerI>('layer')
 const props = defineProps<{ services: Service[], allLayers?: LayerI[] }>()
 const { services, allLayers } = toRefs(props)
 const styles = ref<any[]>([])

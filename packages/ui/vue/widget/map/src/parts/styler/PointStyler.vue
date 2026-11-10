@@ -29,6 +29,7 @@ const { t } = useTranslation('map')
 
 const model: ModelRef<IPointAndAreaSettings> = defineModel<IPointAndAreaSettings>({
   default: () => {
+    // The default icon is a plain object, not a modelled IconSettings yet.
     return reactive({
 
       show_SubElements: false,
@@ -46,7 +47,7 @@ const model: ModelRef<IPointAndAreaSettings> = defineModel<IPointAndAreaSettings
       pointPin: {
         color: '#ccc'
       }
-    })
+    }) as unknown as IPointAndAreaSettings
   }
 })
 
