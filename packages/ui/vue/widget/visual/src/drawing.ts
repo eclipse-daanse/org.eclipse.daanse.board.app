@@ -33,6 +33,7 @@ import { race } from './kinds/race'
 import { calendar } from './kinds/calendar'
 import { stream } from './kinds/stream'
 import { waterfall } from './kinds/waterfall'
+import { chord } from './kinds/chord'
 
 export { HOME_VIEW, homeOf, SMALL, WORDS, type Drawing, type Look, type Option, type Problem, type Word } from './context'
 export { dayOf } from './kinds/calendar'
@@ -48,6 +49,7 @@ export const KINDS = [
   'calendar',
   'stream',
   'waterfall',
+  'chord',
 ] as const
 export type Kind = (typeof KINDS)[number]
 
@@ -66,6 +68,7 @@ const DRAWERS: Record<Kind, (context: Context) => Drawing> = {
   calendar,
   stream,
   waterfall,
+  chord,
 }
 
 /** A kind by what is stored: the enum's name (BARS3D) or its literal (bars3d). */

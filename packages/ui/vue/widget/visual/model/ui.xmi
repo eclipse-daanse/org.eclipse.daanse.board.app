@@ -44,6 +44,7 @@ name, a board written by hand may hold the literal, and both read the same.
         <values>CALENDAR</values>
         <values>STREAM</values>
         <values>WATERFALL</values>
+        <values>CHORD</values>
         <optionLabel language="JS" body="'visual:Options.kind.' + String(option).toLowerCase()"/>
       </fields>
       <fields xsi:type="uimodel:InputWidget" name="title"
@@ -90,6 +91,8 @@ name, a board written by hand may hold the literal, and both read the same.
         <visibilityCondition language="JS" body="['STREAM'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
         <visibilityCondition language="JS" body="['STREAM'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
         <visibilityCondition language="JS" body="['WATERFALL'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+        <visibilityCondition language="JS" body="['CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+        <visibilityCondition language="JS" body="['CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 
@@ -110,7 +113,7 @@ name, a board written by hand may hold the literal, and both read the same.
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="visual:Form.displayGroup">
-      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'SUNBURST', 'TREEMAP', 'SANKEY', 'RACE', 'STREAM', 'WATERFALL'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'SUNBURST', 'TREEMAP', 'SANKEY', 'RACE', 'STREAM', 'WATERFALL', 'CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showScale"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showScale" label="visual:Form.showScale">
         <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
@@ -140,6 +143,10 @@ name, a board written by hand may hold the literal, and both read the same.
       <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
         <visibilityCondition language="JS" body="['WATERFALL'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
+        <visibilityCondition language="JS" body="['CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 

@@ -33,7 +33,8 @@
       "race": "Balkenrennen",
       "calendar": "Kalender",
       "stream": "Strom (Streamgraph)",
-      "waterfall": "Wasserfall"
+      "waterfall": "Wasserfall",
+      "chord": "Beziehungen im Kreis (Chord)"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -56,7 +57,8 @@
     "needsValues": "Keine Zeile hat einen Wert über null, der sich zeichnen ließe.",
     "needsFlows": "Keine Zeile führt von einem zum anderen. Nehmen Sie zwei Beschriftungsspalten oder Beschriftungen mit Ebenen.",
     "needsDates": "Keine Beschriftung in der Tabelle lässt sich als Tag lesen.",
-    "needsSteps": "Ein Strom braucht seine Schichten über mindestens zwei Schritte: mehrere Zahlenspalten oder Beschriftungen, deren letzte Ebene der Schritt ist."
+    "needsSteps": "Ein Strom braucht seine Schichten über mindestens zwei Schritte: mehrere Zahlenspalten oder Beschriftungen, deren letzte Ebene der Schritt ist.",
+    "needsFlows": "Keine Zeile führt von einem zum anderen. Nehmen Sie zwei Beschriftungsspalten oder Beschriftungen mit Ebenen."
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"
