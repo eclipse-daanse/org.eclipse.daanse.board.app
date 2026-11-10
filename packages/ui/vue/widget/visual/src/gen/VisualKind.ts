@@ -29,7 +29,8 @@ export const VisualKind = {
   SUNBURST: 'SUNBURST',
   TREEMAP: 'TREEMAP',
   SANKEY: 'SANKEY',
-  RACE: 'RACE'
+  RACE: 'RACE',
+  CALENDAR: 'CALENDAR'
 } as const;
 
 export type VisualKind = typeof VisualKind[keyof typeof VisualKind];
@@ -52,5 +53,6 @@ export function getVisualKindByLiteral(literal: string): VisualKind | undefined 
   if (literal === 'treemap') return VisualKind.TREEMAP;
   if (literal === 'sankey') return VisualKind.SANKEY;
   if (literal === 'race') return VisualKind.RACE;
+  if (literal === 'calendar') return VisualKind.CALENDAR;
   return undefined;
 }

@@ -37,6 +37,7 @@ Empty, each kind takes the columns it needs from the left.
         <eLiterals name="TREEMAP" literal="treemap" value="4"/>
         <eLiterals name="SANKEY" literal="sankey" value="5"/>
         <eLiterals name="RACE" literal="race" value="6"/>
+        <eLiterals name="CALENDAR" literal="calendar" value="7"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="VisualPalette">
