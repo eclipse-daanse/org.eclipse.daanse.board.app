@@ -50,6 +50,11 @@ if (typeof document !== 'undefined') {
     return r;
   } as any;
 }
+// shiki loads its WASM engine through Blob.stream(), which jsdom does not have.
+// The test checks that the widget mounts, not the highlighting.
+vi.mock('shiki', () => ({
+  codeToHtml: async (code: string) => `<pre class="shiki"><code>${code}</code></pre>`,
+}));
 vi.mock('vue-router', () => {
   return {
     useRoute: () => ({
