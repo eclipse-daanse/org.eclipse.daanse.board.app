@@ -32,7 +32,8 @@
       "sankey": "Flüsse (Sankey)",
       "race": "Balkenrennen",
       "calendar": "Kalender",
-      "stream": "Strom (Streamgraph)"
+      "stream": "Strom (Streamgraph)",
+      "waterfall": "Wasserfall"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -59,5 +60,9 @@
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"
+  },
+  "Words": {
+    "change": "Veränderung",
+    "runningTotal": "Laufende Summe"
   }
 }

@@ -31,7 +31,8 @@ export const VisualKind = {
   SANKEY: 'SANKEY',
   RACE: 'RACE',
   CALENDAR: 'CALENDAR',
-  STREAM: 'STREAM'
+  STREAM: 'STREAM',
+  WATERFALL: 'WATERFALL'
 } as const;
 
 export type VisualKind = typeof VisualKind[keyof typeof VisualKind];
@@ -56,5 +57,6 @@ export function getVisualKindByLiteral(literal: string): VisualKind | undefined 
   if (literal === 'race') return VisualKind.RACE;
   if (literal === 'calendar') return VisualKind.CALENDAR;
   if (literal === 'stream') return VisualKind.STREAM;
+  if (literal === 'waterfall') return VisualKind.WATERFALL;
   return undefined;
 }
