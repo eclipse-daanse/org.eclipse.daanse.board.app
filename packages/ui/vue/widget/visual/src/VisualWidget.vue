@@ -17,7 +17,8 @@ Contributors:
  *
  * Everything that decides what is drawn is in drawing.ts and runs without
  * a canvas; this component reads the settings and the data, hands the
- * result to ECharts and keeps it the size of its tile.
+ * result to ECharts - or, for the cube, to the three.js view - and keeps
+ * it the size of its tile.
  */
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, toRefs, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -31,6 +32,7 @@ import { VisualWidgetInterface } from './api/VisualWidgetInterface'
 import { asTable } from './table'
 import { draw, homeOf, kindOf, shapeOf, SMALL, SPATIAL, WORDS, type Look, type Word } from './drawing'
 import { createChart, type Chart } from './echarts'
+import type { CubeView } from './cube-view'
 
 const WIDGET_TYPE = 'VisualWidget'
 
@@ -148,11 +150,35 @@ const look = computed<Look>(() => ({
 const drawing = computed(() => draw(asTable(data.value), look.value))
 /* Said in words, one text per problem drawing.ts can name. i18n-keys: visual:Problem.* */
 const problem = computed(() => ('problem' in drawing.value ? drawing.value.problem : undefined))
+const isCube = computed(() => 'cube' in drawing.value)
 
 /* --------------------------------------------------------------- chart */
 
 const canvas = ref<HTMLElement>()
+const cubeHost = ref<HTMLElement>()
 const chart = shallowRef<Chart>()
+/*
+ * Made when the cube is first asked for and let go when another kind is:
+ * WebGL contexts are few. three.js is fetched only then, as its own chunk -
+ * a board without a cube never loads it.
+ */
+let cubeView: CubeView | undefined
+let cubeLoading: Promise<void> | undefined
+let unmounted = false
+
+function startCube(): Promise<void> {
+  cubeLoading ??= import('./cube-view')
+    .then(({ createCubeView }) => {
+      if (unmounted || !cubeHost.value || !('cube' in drawing.value)) return
+      cubeView = createCubeView(cubeHost.value)
+      cubeView.on('click', (params) => emit('click', params))
+      cubeView.on('contextmenu', (params) => emit('right_click', params))
+    })
+    .catch((error) => console.warn('The visual widget could not start its cube', error))
+    .finally(() => (cubeLoading = undefined))
+  return cubeLoading
+}
+let resizing: ResizeObserver | undefined
 let charting: ResizeObserver | undefined
 /** The kind and the shape last drawn: a new kind or shape starts from nothing, a new value of the same moves to it. */
 let drawnKind: string | undefined
@@ -160,6 +186,15 @@ let drawnShape: string | undefined
 
 function render() {
   const now = drawing.value
+  if ('cube' in now) {
+    drawnKind = 'cube'
+    // Drawn once it is there; by then the cube shown is whatever is current.
+    if (cubeView) cubeView.show(now.cube)
+    else void startCube().then(() => 'cube' in drawing.value && cubeView?.show(drawing.value.cube))
+    return
+  }
+  cubeView?.dispose()
+  cubeView = undefined
   if (!chart.value || !('option' in now)) return
   const kind = look.value.kind
   // A tooltip left standing would name what the new answer has at the old place, until the mouse moves.
@@ -172,7 +207,7 @@ function render() {
 
 watch(drawing, () => nextTick(render))
 
-/* A double click on a 3D box brings its camera back to where it started. */
+/* A double click on a 3D box brings its camera back to where it started; the cube does the same by itself. */
 function home() {
   if (chart.value && SPATIAL.has(look.value.kind) && 'option' in drawing.value) {
     chart.value.setOption({ grid3D: { viewControl: homeOf(look.value) } })
@@ -205,6 +240,10 @@ onMounted(() => {
   if (!config.value) config.value = new VisualSettingsImpl()
   readTextColor()
   readShape()
+  if (cubeHost.value) {
+    resizing = new ResizeObserver(() => cubeView?.resize())
+    resizing.observe(cubeHost.value)
+  }
   if (canvas.value) {
     try {
       chart.value = createChart(canvas.value)
@@ -225,8 +264,12 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  unmounted = true
   if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value)
+  resizing?.disconnect()
   charting?.disconnect()
+  cubeView?.dispose()
+  cubeView = undefined
   chart.value?.dispose()
   chart.value = undefined
 })
@@ -239,12 +282,15 @@ const spatial = computed(() => SPATIAL.has(look.value.kind))
     <div
       ref="canvas"
       class="visual__canvas"
-      :class="{ 'visual__canvas--hidden': problem }"
+      :class="{ 'visual__canvas--hidden': problem || isCube }"
       @contextmenu.prevent
       @dblclick="home"
     />
     <p v-if="problem && !waiting" class="visual__problem">{{ t(`Problem.${problem}`) }}</p>
     <p v-else-if="spatial && !problem" class="visual__hint">{{ t('Hint.turn') }}</p>
+    <div ref="cubeHost" class="visual__canvas" :class="{ 'visual__canvas--hidden': !isCube }" @contextmenu.prevent />
+    <p v-if="problem" class="visual__problem">{{ t(`Problem.${problem}`) }}</p>
+    <p v-else-if="spatial" class="visual__hint">{{ t('Hint.turn') }}</p>
   </div>
 </template>
 

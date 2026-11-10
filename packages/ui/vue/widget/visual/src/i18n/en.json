@@ -35,7 +35,8 @@
       "stream": "Stream (streamgraph)",
       "waterfall": "Waterfall",
       "chord": "Ties around a circle (chord)",
-      "boxplot": "Spread (box plot)"
+      "boxplot": "Spread (box plot)",
+      "cube": "Cube"
     },
     "palette": {
       "aurora": "Aurora",
@@ -59,7 +60,8 @@
     "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels.",
     "needsDates": "No label in the table reads as a day.",
     "needsSteps": "A stream needs its layers over at least two steps: several columns of numbers, or labels whose last level is the step.",
-    "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels."
+    "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels.",
+    "needsThreeAxes": "A cube needs three axes: labels with two levels and several columns of numbers, or labels with three levels and a column of values."
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"
