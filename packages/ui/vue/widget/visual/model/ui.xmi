@@ -45,6 +45,7 @@ name, a board written by hand may hold the literal, and both read the same.
         <values>STREAM</values>
         <values>WATERFALL</values>
         <values>CHORD</values>
+        <values>BOXPLOT</values>
         <optionLabel language="JS" body="'visual:Options.kind.' + String(option).toLowerCase()"/>
       </fields>
       <fields xsi:type="uimodel:InputWidget" name="title"
@@ -93,6 +94,8 @@ name, a board written by hand may hold the literal, and both read the same.
         <visibilityCondition language="JS" body="['WATERFALL'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
         <visibilityCondition language="JS" body="['CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
         <visibilityCondition language="JS" body="['CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+        <visibilityCondition language="JS" body="['BOXPLOT'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+        <visibilityCondition language="JS" body="['BOXPLOT'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 
