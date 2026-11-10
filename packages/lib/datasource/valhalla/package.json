@@ -28,7 +28,7 @@
   "devDependencies": {
     "@eclipse-daanse/tsm": "0.1.0-next.1",
     "typescript": "^5.8.2",
-    "vite": "6.4.2",
+    "vite": "6.4.5",
     "vite-plugin-dts": "4.5.4"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
