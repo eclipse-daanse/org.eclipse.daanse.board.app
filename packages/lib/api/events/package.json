@@ -28,6 +28,6 @@
   "devDependencies": {
     "@eclipse-daanse/tsm": "0.1.0-next.1",
     "typescript": "^5.8.2",
-    "vite": "6.4.2"
+    "vite": "6.4.5"
   }
 }
