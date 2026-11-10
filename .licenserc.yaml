@@ -18,6 +18,7 @@ header:
       which is available at https://www.eclipse.org/legal/epl-2.0/
 
   paths-ignore:
+    - '**/__tests__/fixtures/**'
     - 'dist'
     - 'licenses'
     - '**/*.md'
