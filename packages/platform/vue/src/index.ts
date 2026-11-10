@@ -32,8 +32,8 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 /** Must match the actually bundled versions; checked in index.test.ts. */
 const VERSIONS = {
-  vue: '3.5.24',
-  'vue-router': '5.0.6',
+  vue: '3.5.45',
+  'vue-router': '5.4.0',
   vuedraggable: '4.1.0',
 } as const
 

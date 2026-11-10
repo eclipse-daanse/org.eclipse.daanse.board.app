@@ -11,14 +11,14 @@
       "namespace": "tsm.library",
       "attributes": {
         "library": "vue",
-        "version": "3.5.24"
+        "version": "3.5.45"
       }
     },
     {
       "namespace": "tsm.library",
       "attributes": {
         "library": "vue-router",
-        "version": "5.0.6"
+        "version": "5.4.0"
       }
     },
     {
