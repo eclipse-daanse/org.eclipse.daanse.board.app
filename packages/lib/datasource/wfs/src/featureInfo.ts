@@ -20,7 +20,8 @@
  */
 
 import type { Feature, FeatureCollection } from 'geojson'
-import { boxOf, parseXml } from './wfs'
+import { boxOf } from './wfs'
+import { parseXml } from './xml'
 
 /** What of the configuration this mode reads - the model's names. */
 export interface FeatureInfoRequest {
