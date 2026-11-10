@@ -32,6 +32,7 @@ Empty, each kind takes the columns it needs from the left.
         </eAnnotations>
         <eLiterals name="BARS3D" literal="bars3d"/>
         <eLiterals name="SURFACE" literal="surface" value="1"/>
+        <eLiterals name="SCATTER3D" literal="scatter3d" value="2"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="VisualPalette">

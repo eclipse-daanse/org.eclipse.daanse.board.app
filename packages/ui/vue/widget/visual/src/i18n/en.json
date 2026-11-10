@@ -7,6 +7,11 @@
     "kind": "Drawn as",
     "title": "Title",
     "palette": "Colours",
+    "columnsGroup": "Columns",
+    "xColumn": "Across",
+    "yColumn": "Into the depth",
+    "zColumn": "Upwards",
+    "sizeColumn": "Point size from",
     "motionGroup": "Motion",
     "autoRotate": "Turn slowly by itself",
     "displayGroup": "Display",
@@ -15,7 +20,8 @@
   "Options": {
     "kind": {
       "bars3d": "Bars in 3D",
-      "surface": "Surface in 3D"
+      "surface": "Surface in 3D",
+      "scatter3d": "Points in 3D"
     },
     "palette": {
       "aurora": "Aurora",
@@ -29,7 +35,8 @@
     "noData": "No data yet. Give this widget a source that answers a table.",
     "noValues": "The query answered, but every cell in it is empty.",
     "needsNumbers": "The table has no column of numbers to draw.",
-    "needsGrid": "A surface needs at least two rows and two columns of numbers."
+    "needsGrid": "A surface needs at least two rows and two columns of numbers.",
+    "needsThreeNumbers": "Points in space need three columns of numbers."
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"
