@@ -31,7 +31,8 @@
       "treemap": "Kacheln (Treemap)",
       "sankey": "Flüsse (Sankey)",
       "race": "Balkenrennen",
-      "calendar": "Kalender"
+      "calendar": "Kalender",
+      "stream": "Strom (Streamgraph)"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -53,7 +54,8 @@
     "needsValues": "Keine Zeile hat einen Wert über null, der sich zeichnen ließe.",
     "needsValues": "Keine Zeile hat einen Wert über null, der sich zeichnen ließe.",
     "needsFlows": "Keine Zeile führt von einem zum anderen. Nehmen Sie zwei Beschriftungsspalten oder Beschriftungen mit Ebenen.",
-    "needsDates": "Keine Beschriftung in der Tabelle lässt sich als Tag lesen."
+    "needsDates": "Keine Beschriftung in der Tabelle lässt sich als Tag lesen.",
+    "needsSteps": "Ein Strom braucht seine Schichten über mindestens zwei Schritte: mehrere Zahlenspalten oder Beschriftungen, deren letzte Ebene der Schritt ist."
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"
