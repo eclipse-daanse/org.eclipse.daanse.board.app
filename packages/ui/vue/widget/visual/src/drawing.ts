@@ -26,6 +26,7 @@ import { Context, type Drawing, type Look, type Option } from './context'
 import { bars3d } from './kinds/bars3d'
 import { surface } from './kinds/surface'
 import { scatter3d } from './kinds/scatter3d'
+import { sunburst } from './kinds/sunburst'
 
 export { HOME_VIEW, homeOf, SMALL, WORDS, type Drawing, type Look, type Option, type Problem, type Word } from './context'
 
@@ -33,6 +34,7 @@ export const KINDS = [
   'bars3d',
   'surface',
   'scatter3d',
+  'sunburst',
 ] as const
 export type Kind = (typeof KINDS)[number]
 
@@ -44,6 +46,7 @@ const DRAWERS: Record<Kind, (context: Context) => Drawing> = {
   bars3d,
   surface,
   scatter3d,
+  sunburst,
 }
 
 /** A kind by what is stored: the enum's name (BARS3D) or its literal (bars3d). */
