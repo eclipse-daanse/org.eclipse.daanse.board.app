@@ -26,6 +26,7 @@ import {
   type PageRegistryI,
 } from 'org.eclipse.daanse.board.app.lib.api.page'
 import { identifier as LayoutRepositoryIdentifier } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import { identifier as VariableRepositoryIdentifier } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { trackUnsavedChanges, type UnsavedChanges } from '../../composables/unsavedChanges'
 import PageSettings from './PageSettings.vue'
 
@@ -36,6 +37,14 @@ const layouts = {
   getAllLayouts: () => [{ id: BASE, name: 'Free layout' }],
   getLayout: (id: string) => (id === BASE ? { id: BASE, name: 'Free layout' } : undefined),
 }
+
+/*
+ * The page settings carry fields that can take their value from a variable;
+ * each renders a VariableInput, which injects the variable repository. The
+ * shell provides it from the service registry; without it here, each field
+ * logged a Vue warning that printed the page in full (#1404).
+ */
+const noVariables = { getVariable: () => undefined, getAllVariables: () => [] }
 
 let changes: UnsavedChanges | undefined
 
@@ -65,6 +74,7 @@ function setUp() {
         [PageIdentifier as symbol]: pages,
         [LayoutRepositoryIdentifier as symbol]: layouts,
         [identifiers.TINY_EMITTER as symbol]: bus,
+        [VariableRepositoryIdentifier]: noVariables,
       },
     },
   })
