@@ -19,13 +19,13 @@ export function scatter3d(context: Context): Drawing {
   const size = columnNamed(table, look.sizeColumn)
   const named = [look.xColumn, look.yColumn, look.zColumn].map((name) => columnNamed(table, name))
   /* An axis the settings leave open takes a column no other axis shows, so
-     that naming one axis does not draw a column twice; the size column only
-     when there is nothing else left. A column with no number in it at all - a
-     measure nobody has a value of - would leave no point standing. */
+    that naming one axis does not draw a column twice; the size column only
+    when there is nothing else left. A column with no number in it at all - a
+    measure nobody has a value of - would leave no point standing. */
   const filled = (column: number) => table.rows.some((row) => toNumber(row[column]) !== null)
   /* Captions that read as numbers - the months of a year are 1 to 12 - still
-     name the points, and become an axis only when three are not found
-     elsewhere. A table of numbers and nothing else is read the same way. */
+    name the points, and become an axis only when three are not found
+    elsewhere. A table of numbers and nothing else is read the same way. */
   const first = columns.labels[0]
   const caption = first !== undefined && columns.numeric.includes(first) ? first : undefined
   const free = columns.numeric.filter(
@@ -35,14 +35,14 @@ export function scatter3d(context: Context): Drawing {
   if (size !== undefined && !named.includes(size)) free.push(size)
   const [x, y, z] = named.map((column) => column ?? free.shift())
   /* Three measures that came back without a single value - a year nobody
-     sold in - are a query that found nothing, not one that asked wrongly. */
+    sold in - are a query that found nothing, not one that asked wrongly. */
   const measures = columns.numeric.filter((column) => column !== caption)
   const nothing = measures.length >= 3 && !measures.some(filled)
   const missing = { problem: nothing ? 'noValues' : 'needsThreeNumbers' } as const
   if (x === undefined || y === undefined || z === undefined) return missing
   const axes = [x, y, z]
   /* Points are named by what names a row and is not an axis; with nothing
-     left to name them by, by their place. */
+    left to name them by, by their place. */
   const hasNames = columns.labels.some((column) => !axes.includes(column))
 
   const points: { name: string; value: number[] }[] = []
@@ -57,7 +57,7 @@ export function scatter3d(context: Context): Drawing {
 
   const heights = points.map((point) => point.value[2])
   /* The upright axis has its name beside its ticks, and 800.000 is wider than
-     8.000: the name stands as far off as the widest tick reaches. */
+    8.000: the name stands as far off as the widest tick reaches. */
   const widest = Math.max(...[Math.min(...heights), Math.max(...heights)].map((value) => context.format(Math.round(value)).length))
   const upright = Math.max(30, 20 + 5 * widest)
   const option = context.base()
@@ -68,7 +68,7 @@ export function scatter3d(context: Context): Drawing {
   option.visualMap = context.scale(Math.min(...heights), Math.max(...heights), { dimension: 2 })
 
   /* A tile squeezed beside others has a box a third the size, and points as
-     large as in a full one would cover each other and the ticks. */
+    large as in a full one would cover each other and the ticks. */
   const [smallest, spread] = look.small ? [3, 11] : [5, 23]
   let symbolSize: number | ((value: number[]) => number) = look.small ? 6 : 10
   if (size !== undefined) {
@@ -78,10 +78,10 @@ export function scatter3d(context: Context): Drawing {
   }
 
   /* Ticks are written as the board writes numbers - 50.000 on a German one -
-     and the names stand clear of them, which at the default gap they do not.
-     The axes span the points rather than reach down to zero: twelve months of
-     sales lie between 16.000 and 26.000, and from zero they would sit huddled
-     in one far corner of the box. */
+    and the names stand clear of them, which at the default gap they do not.
+    The axes span the points rather than reach down to zero: twelve months of
+    sales lie between 16.000 and 26.000, and from zero they would sit huddled
+    in one far corner of the box. */
   const axis = (dimension: number) =>
     context.axis3d({
       type: 'value',
@@ -89,8 +89,8 @@ export function scatter3d(context: Context): Drawing {
       scale: true,
       nameGap: dimension === 2 ? upright : 30,
       /* Fewer and smaller ticks in a small tile, where eight to an axis run
-         into each other - and the usual ones again in a large tile, which a
-         redraw is merged into and would otherwise keep the small ones. */
+        into each other - and the usual ones again in a large tile, which a
+        redraw is merged into and would otherwise keep the small ones. */
       splitNumber: look.small ? 3 : 5,
       axisLabel: {
         textStyle: { color: context.text, fontSize: look.small ? 9 : 12 },
