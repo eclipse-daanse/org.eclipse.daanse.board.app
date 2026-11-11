@@ -369,6 +369,13 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
     items: [],
     headers: ['Caption'],
     rowProperties: {},
+    /*
+     * The members a column header stands for, by header, as rowProperties
+     * has them for a row: a header joins its tuple's captions with ' - ',
+     * and a caption may hold ' - ' itself ($30K - $50K), so only these say
+     * where one member ends and the next begins.
+     */
+    columnProperties: {},
   } as any
 
   const getCaption = (member: any) => {
@@ -376,7 +383,11 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
   }
 
   if (mainAxis === 0) {
-    table.headers.push(...tableCaptions(axis1))
+    const columnCaptions = tableCaptions(axis1)
+    table.headers.push(...columnCaptions)
+    axis1.forEach((item, j) => {
+      table.columnProperties[columnCaptions[j]] = item.Member
+    })
 
     const rowCaptions = tableCaptions(axis0)
     axis0.forEach((item, i) => {
@@ -389,7 +400,9 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
     })
   } else if (mainAxis === 1) {
     axis0.forEach((item, index) => {
-      table.headers.push(getCaption(item.Member))
+      const caption = getCaption(item.Member)
+      table.headers.push(caption)
+      table.columnProperties[caption] = item.Member
     })
 
     axis1.forEach((item, i) => {

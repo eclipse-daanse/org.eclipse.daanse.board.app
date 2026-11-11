@@ -185,6 +185,29 @@ describe('the table', () => {
     const table = parseRequestToTable(answer([[{ u: '[M].[a]', c: 'a' }], quarters], { 3: '5' }), 0)
     expect(table.headers.map((h: string) => table.items[0][h])).toEqual(['a', undefined, undefined, undefined, '5'])
   })
+
+  it('keeps the members of each column header by header, as it keeps those of each row', () => {
+    const tuple = (...members: MemberSpec[]) => ({ Member: members.map(m => ({ UName: m.u, Caption: m.c })) })
+    const income = { u: '[Yearly Income].[$30K - $50K]', c: '$30K - $50K' }
+    const response = answer([[{ u: '[Measures].[Unit Sales]', c: 'Unit Sales' }], []], { 0: '1', 1: '2' })
+    response.Body.ExecuteResponse.return.root.Axes.Axis[1].Tuples.Tuple = [
+      tuple({ u: '[Gender].[F]', c: 'F' }, income),
+      tuple({ u: '[Gender].[M]', c: 'M' }, income),
+    ] as never
+    const table = parseRequestToTable(response, 0)
+
+    expect(table.headers).toEqual(['Caption', 'F - $30K - $50K', 'M - $30K - $50K'])
+    expect(table.columnProperties['F - $30K - $50K'].map((m: { Caption: string }) => m.Caption)).toEqual(['F', '$30K - $50K'])
+    expect(table.columnProperties['M - $30K - $50K'][0].UName).toBe('[Gender].[M]')
+    // What was there before stays as it was.
+    expect(table.rowProperties['Unit Sales'].UName).toBe('[Measures].[Unit Sales]')
+  })
+
+  it('keeps the members of each column header when the rows come from the other axis', () => {
+    const table = parseRequestToTable(answer([quarters, [{ u: '[Measures].[Unit Sales]', c: 'Unit Sales' }]], {}), 1)
+    expect(table.columnProperties['Q1'].UName).toBe('[Time].[1998].[Q1]')
+    expect(table.columnProperties['1997'].UName).toBe('[Time].[1997]')
+  })
 })
 
 describe('the pivot table', () => {
