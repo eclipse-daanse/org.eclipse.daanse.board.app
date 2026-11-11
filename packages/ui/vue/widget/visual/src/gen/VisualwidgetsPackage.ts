@@ -246,6 +246,16 @@ export class VisualwidgetsPackage extends BasicEPackage {
       visualKindEnumType.addLiteral(literal);
     }
     {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("CHORD");
+      literal.setValue(10);
+      literal.setLiteral("chord");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(VisualKind.CHORD);
+      visualKindEnumType.addLiteral(literal);
+    }
+    {
       const annotation = new BasicEAnnotation();
       annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
       annotation.getDetails().putByKey("documentation", "What the table is drawn as.");
