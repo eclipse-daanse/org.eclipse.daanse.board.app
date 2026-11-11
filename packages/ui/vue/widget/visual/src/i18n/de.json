@@ -7,6 +7,8 @@
     "kind": "Darstellung",
     "title": "Titel",
     "palette": "Farben",
+    "columnsGroup": "Spalten",
+    "valueColumn": "Werte aus der Spalte",
     "motionGroup": "Bewegung",
     "autoRotate": "Langsam von selbst drehen",
     "displayGroup": "Anzeige",
@@ -14,7 +16,8 @@
   },
   "Options": {
     "kind": {
-      "bars3d": "Balken in 3D"
+      "bars3d": "Balken in 3D",
+      "calendar": "Kalender"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -24,10 +27,14 @@
       "mono": "Grautöne"
     }
   },
+  "Placeholder": {
+    "column": "erste Zahlenspalte"
+  },
   "Problem": {
     "noData": "Noch keine Daten. Geben Sie diesem Widget eine Quelle, die eine Tabelle liefert.",
     "noValues": "Die Abfrage hat geantwortet, aber jede Zelle darin ist leer.",
-    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen."
+    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen.",
+    "needsDates": "Keine Beschriftung in der Tabelle lässt sich als Tag lesen."
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"

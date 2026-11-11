@@ -24,11 +24,14 @@
 import type { Table } from './table'
 import { Context, type Drawing, type Look, type Option } from './context'
 import { bars3d } from './kinds/bars3d'
+import { calendar } from './kinds/calendar'
 
 export { HOME_VIEW, homeOf, SMALL, WORDS, type Drawing, type Look, type Option, type Problem, type Word } from './context'
+export { dayOf } from './kinds/calendar'
 
 export const KINDS = [
   'bars3d',
+  'calendar',
 ] as const
 export type Kind = (typeof KINDS)[number]
 
@@ -38,6 +41,7 @@ export const SPATIAL: ReadonlySet<Kind> = new Set(['bars3d'])
 /** How each kind is drawn: one module each, under kinds/. */
 const DRAWERS: Record<Kind, (context: Context) => Drawing> = {
   bars3d,
+  calendar,
 }
 
 /** A kind by what is stored: the enum's name (BARS3D) or its literal (bars3d). */
