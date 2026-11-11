@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A table drawn as something to look at, in one of several kinds.
+
+One widget rather than one per kind, because all of them read the same
+table - a column of labels and columns of numbers - and a board switching
+from one kind to another should not have to be set up again. What only some kinds use is
+asked for only when that kind is chosen.
+
+Columns are named, not numbered: a column is found by its header, so the
+setting still means the same column when the query gains one in front.
+Empty, each kind takes the columns it needs from the left.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="visualwidgets"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.visual" nsPrefix="visualwidgets">
+
+    <eClassifiers xsi:type="ecore:EEnum" name="VisualKind">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="What the table is drawn as."/>
+        </eAnnotations>
+        <eLiterals name="BARS3D" literal="bars3d"/>
+        <eLiterals name="SURFACE" literal="surface" value="1"/>
+        <eLiterals name="SCATTER3D" literal="scatter3d" value="2"/>
+        <eLiterals name="SUNBURST" literal="sunburst" value="3"/>
+        <eLiterals name="TREEMAP" literal="treemap" value="4"/>
+        <eLiterals name="SANKEY" literal="sankey" value="5"/>
+        <eLiterals name="RACE" literal="race" value="6"/>
+        <eLiterals name="CALENDAR" literal="calendar" value="7"/>
+        <eLiterals name="STREAM" literal="stream" value="8"/>
+        <eLiterals name="WATERFALL" literal="waterfall" value="9"/>
+        <eLiterals name="CHORD" literal="chord" value="10"/>
+        <eLiterals name="BOXPLOT" literal="boxplot" value="11"/>
+        <eLiterals name="CUBE" literal="cube" value="12"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="VisualPalette">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The colours: a scale for values, and a set for things told apart."/>
+        </eAnnotations>
+        <eLiterals name="AURORA" literal="aurora"/>
+        <eLiterals name="OCEAN" literal="ocean" value="1"/>
+        <eLiterals name="SUNSET" literal="sunset" value="2"/>
+        <eLiterals name="FOREST" literal="forest" value="3"/>
+        <eLiterals name="MONO" literal="mono" value="4"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="VisualSettings">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="How a table is drawn: as what, in which colours, from which of its columns, and how it moves."/>
+        </eAnnotations>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//VisualKind" defaultValueLiteral="bars3d">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="What the table is drawn as. The form asks only for what the chosen kind reads."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="title" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper"><eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/></eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="Written above the drawing. Empty, nothing is written."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="palette" eType="#//VisualPalette" defaultValueLiteral="aurora">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="The colours, as a scale for the values and a set for the things told apart."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="valueColumn" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper"><eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/></eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="The column whose numbers the drawing is sized and coloured by, for a kind that takes one value per row. Empty, the first column of numbers."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="xColumn" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper"><eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/></eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="For the points: the column along the first axis. Empty, the first column of numbers."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="yColumn" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper"><eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/></eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="For the points: the column along the second axis. Empty, the second column of numbers."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="zColumn" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper"><eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/></eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="For the points: the column along the height. Empty, the third column of numbers."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="sizeColumn" containment="false" defaultValueLiteral="">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.variables#//VariableWrapper"><eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/></eGenericType>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="For the points: the column the size of a point follows. Empty, every point the same size."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pathSeparator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=" - ">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="Where a label splits into levels, for the kinds that read levels. A row of 1997 - Q1 - Drink becomes three levels; the label columns from the left are levels too."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="autoRotate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="Whether the 3D kinds turn slowly by themselves. Off unless asked for: the reader turns them, by dragging, and a double click brings them back to where they started."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showScale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="Whether the scale from the lowest value to the highest is shown beside the drawing. Dragging its handles hides what lies outside."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showLabels" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="Whether the parts of the drawing carry their names - the rings, the tiles, the flows, the layers, the bars, the arcs and the cells. Without them the tooltip still names each one."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="topN" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="10">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="How many bars the race shows at once - the largest of each step."/></eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="frameDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1500">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"><details key="documentation" value="How long the race stays on one step, in milliseconds."/></eAnnotations>
+        </eStructuralFeatures>
+
+    </eClassifiers>
+</ecore:EPackage>
