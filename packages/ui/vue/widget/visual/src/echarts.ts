@@ -21,6 +21,10 @@
  */
 import * as echarts from 'echarts/core'
 import {
+  CustomChart,
+} from 'echarts/charts'
+import {
+  GridComponent,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
@@ -30,6 +34,8 @@ import { Bar3DChart } from 'echarts-gl/charts'
 import { Grid3DComponent } from 'echarts-gl/components'
 
 echarts.use([
+  CustomChart,
+  GridComponent,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
