@@ -165,7 +165,7 @@ function render() {
   // A tooltip left standing would name what the new answer has at the old place, until the mouse moves.
   chart.value.dispatchAction({ type: 'hideTip' })
   const shape = shapeOf(now.option)
-  chart.value.setOption(now.option, { notMerge: kind !== drawnKind || shape !== drawnShape })
+  chart.value.setOption(now.option, { notMerge: kind !== drawnKind || shape !== drawnShape || kind === 'race' })
   drawnKind = kind
   drawnShape = shape
 }

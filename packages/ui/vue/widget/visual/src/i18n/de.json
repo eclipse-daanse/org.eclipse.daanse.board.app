@@ -9,12 +9,16 @@
     "palette": "Farben",
     "motionGroup": "Bewegung",
     "autoRotate": "Langsam von selbst drehen",
+    "topN": "Balken gleichzeitig",
+    "frameDuration": "Zeit je Schritt (ms)",
     "displayGroup": "Anzeige",
-    "showScale": "Werteskala zeigen"
+    "showScale": "Werteskala zeigen",
+    "showLabels": "Namen zeigen"
   },
   "Options": {
     "kind": {
-      "bars3d": "Balken in 3D"
+      "bars3d": "Balken in 3D",
+      "race": "Balkenrennen"
     },
     "palette": {
       "aurora": "Polarlicht",

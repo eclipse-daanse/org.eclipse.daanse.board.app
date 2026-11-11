@@ -35,6 +35,7 @@ name, a board written by hand may hold the literal, and both read the same.
       <fields xsi:type="uimodel:SelectWidget" name="kind"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/kind" label="visual:Form.kind">
         <values>BARS3D</values>
+        <values>RACE</values>
         <optionLabel language="JS" body="'visual:Options.kind.' + String(option).toLowerCase()"/>
       </fields>
       <fields xsi:type="uimodel:InputWidget" name="title"
@@ -52,18 +53,30 @@ name, a board written by hand may hold the literal, and both read the same.
 
 
     <fields xsi:type="uimodel:GroupWidget" name="motionGroup" layout="VERTICAL" label="visual:Form.motionGroup">
-      <visibilityCondition language="JS" body="['BARS3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="autoRotate"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/autoRotate" label="visual:Form.autoRotate">
         <visibilityCondition language="JS" body="['BARS3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
+      <fields xsi:type="uimodel:NumberWidget" name="topN"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/topN" label="visual:Form.topN" min="1" max="50" step="1">
+        <visibilityCondition language="JS" body="['RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:NumberWidget" name="frameDuration"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/frameDuration" label="visual:Form.frameDuration" min="200" max="20000" step="100">
+        <visibilityCondition language="JS" body="['RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="visual:Form.displayGroup">
-      <visibilityCondition language="JS" body="['BARS3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       <fields xsi:type="uimodel:CheckboxWidget" name="showScale"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showScale" label="visual:Form.showScale">
         <visibilityCondition language="JS" body="['BARS3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
+        <visibilityCondition language="JS" body="['RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
 

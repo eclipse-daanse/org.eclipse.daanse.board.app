@@ -9,12 +9,16 @@
     "palette": "Colours",
     "motionGroup": "Motion",
     "autoRotate": "Turn slowly by itself",
+    "topN": "Bars at once",
+    "frameDuration": "Time per step (ms)",
     "displayGroup": "Display",
-    "showScale": "Show the scale of values"
+    "showScale": "Show the scale of values",
+    "showLabels": "Show names"
   },
   "Options": {
     "kind": {
-      "bars3d": "Bars in 3D"
+      "bars3d": "Bars in 3D",
+      "race": "Bar race"
     },
     "palette": {
       "aurora": "Aurora",
