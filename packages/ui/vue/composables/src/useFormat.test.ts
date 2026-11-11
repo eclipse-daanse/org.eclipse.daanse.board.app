@@ -48,6 +48,14 @@ describe('useFormat', () => {
     expect(view.text()).toBe('1,234.5|9/23/2026')
   })
 
+  it('formats in English when the browser language has no texts', async () => {
+    const i18n = await fresh('ru')
+    i18n.addResourceBundle('en', 'demo', { a: 'A' })
+    i18n.addResourceBundle('de', 'demo', { a: 'A' })
+    const view = mount(screen, { global: { provide: { i18n } } })
+    expect(view.text()).toBe('1,234.5|9/23/2026')
+  })
+
   it('falls back to English without a translator', () => {
     const view = mount(screen)
     expect(view.text()).toBe('1,234.5|9/23/2026')

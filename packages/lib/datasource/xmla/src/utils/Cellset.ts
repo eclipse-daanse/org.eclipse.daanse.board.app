@@ -188,8 +188,21 @@ function numberOf(text: string): number | null {
   return Number.isFinite(value) ? value : null
 }
 
-/** The cell at the given position on each axis, or null when it is empty. */
-export function getCell(cellset: Cellset, coords: number[]): CellValue | null {
+/*
+ * The locale a number without FmtValue is written in. This package cannot
+ * know the board's language (that is lib.i18next's, and a view's through
+ * useFormat), so a caller that shows the text passes it in. Without one the
+ * text is English - fixed, rather than whatever the browser is set to.
+ */
+const DEFAULT_LOCALE = 'en'
+
+/**
+ * The cell at the given position on each axis, or null when it is empty.
+ *
+ * @param locale for `formatted` when the server sent no FmtValue - the
+ *   board's language, as useFormat().locale gives it.
+ */
+export function getCell(cellset: Cellset, coords: number[], locale: string = DEFAULT_LOCALE): CellValue | null {
   const ordinal = cellOrdinal(cellset, coords)
   if (ordinal < 0) return null
   const raw = cellset.cells[ordinal]
@@ -200,7 +213,7 @@ export function getCell(cellset: Cellset, coords: number[]): CellValue | null {
   return {
     value,
     // Not every server sends FmtValue; a number then reads as the table shows it.
-    formatted: textOf(raw.FmtValue) ?? (typeof value === 'number' ? value.toLocaleString() : text),
+    formatted: textOf(raw.FmtValue) ?? (typeof value === 'number' ? value.toLocaleString(locale) : text),
     formatString: textOf(raw.FormatString),
     foreColor: textOf(raw.FORE_COLOR) ?? textOf(raw.ForeColor),
     backColor: textOf(raw.BACK_COLOR) ?? textOf(raw.BackColor),
@@ -219,14 +232,14 @@ export interface SliceMatrix {
   cells: (CellValue | null)[][]
 }
 
-/** The table of axes 0 and 1 at one page and chapter. */
-export function getSlice(cellset: Cellset, slice: SliceRef): SliceMatrix {
+/** The table of axes 0 and 1 at one page and chapter; `locale` as for getCell. */
+export function getSlice(cellset: Cellset, slice: SliceRef, locale: string = DEFAULT_LOCALE): SliceMatrix {
   const columns = positionsOf(cellset, 0)
   const rows = cellset.axes.length > 1 ? positionsOf(cellset, 1) : []
   const rest = [slice.axis2, slice.axis3].slice(0, Math.max(0, cellset.axes.length - 2))
   const rowCoords = rows.length ? rows.map(r => r.index) : [0]
   const cells = rowCoords.map(row =>
-    columns.map(column => getCell(cellset, [column.index, row, ...rest])),
+    columns.map(column => getCell(cellset, [column.index, row, ...rest], locale)),
   )
   return { columns, rows, cells }
 }

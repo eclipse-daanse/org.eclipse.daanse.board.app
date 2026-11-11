@@ -88,21 +88,25 @@ describe('cellStyle', () => {
 })
 
 describe('cellText', () => {
+  const german = new Intl.NumberFormat('de').format
+  const english = new Intl.NumberFormat('en').format
+
   it('prefers the formatted value', () => {
-    expect(cellText({ Value: 1234.5, FmtValue: '$1,234.50' })).toBe('$1,234.50')
+    expect(cellText({ Value: 1234.5, FmtValue: '$1,234.50' }, german)).toBe('$1,234.50')
   })
 
-  it('formats numbers in German notation', () => {
-    expect(cellText({ Value: 1234.5 })).toBe('1.234,5')
-    expect(cellText({ FmtValue: '1234.567' })).toBe('1.234,567')
+  it('formats numbers in the language the caller passes', () => {
+    expect(cellText({ Value: 1234.5 }, german)).toBe('1.234,5')
+    expect(cellText({ FmtValue: '1234.567' }, german)).toBe('1.234,567')
+    expect(cellText({ Value: 1234.5 }, english)).toBe('1,234.5')
   })
 
   it('keeps text and blank values as they are', () => {
-    expect(cellText({ Value: 'n/a' })).toBe('n/a')
-    expect(cellText({ Value: '' })).toBe('')
-    expect(cellText({ Value: '  ' })).toBe('  ')
-    expect(cellText({})).toBe('')
-    expect(cellText({ Value: null })).toBe('')
+    expect(cellText({ Value: 'n/a' }, german)).toBe('n/a')
+    expect(cellText({ Value: '' }, german)).toBe('')
+    expect(cellText({ Value: '  ' }, german)).toBe('  ')
+    expect(cellText({}, german)).toBe('')
+    expect(cellText({ Value: null }, german)).toBe('')
   })
 })
 
