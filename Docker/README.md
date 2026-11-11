@@ -48,7 +48,7 @@ The image is built once and configured where it runs. The board reads `/config.j
 The image carries three profiles under `/etc/daanse/profiles/`: `dev`, `staging` and `prod`. It serves `prod` unless told otherwise.
 
 | Variable | Effect |
-|---|---|
+| --- | --- |
 | `DAANSE_PROFILE` | Serve `/etc/daanse/profiles/<name>.config.json`, e.g. `staging`. |
 | `DAANSE_CONFIG_FILE` | Serve this file instead, e.g. one mounted into the container. |
 | `DAANSE_*` | Replaces `${DAANSE_...}` of the same name in the chosen file. |

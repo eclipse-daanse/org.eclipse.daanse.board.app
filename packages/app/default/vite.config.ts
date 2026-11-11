@@ -152,8 +152,10 @@ function tsmBundles(): Plugin {
        * the shell keeps the warning.
        */
       if (process.env.REQUIRE_ALL_BUNDLES === '1' && missing.length) {
+        const names = missing.join(', ')
         throw new Error(
-          `[tsm-bundles] ${missing.length} bundle(s) without build output: ${missing.join(', ')} - run \`yarn bundles\``,
+          `[tsm-bundles] ${missing.length} bundle(s) without build output: ${names}` +
+            ' - run `yarn bundles`',
         )
       }
     },
