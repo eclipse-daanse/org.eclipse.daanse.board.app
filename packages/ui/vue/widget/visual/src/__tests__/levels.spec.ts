@@ -21,7 +21,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '../context'
 import { asTable } from '../table'
-import { LOOK } from './fixtures'
+import { LOOK, option } from './fixtures'
 
 const member = (hierarchy: string, caption: string, path = caption) => ({ Caption: caption, UName: `[${hierarchy}].[${path}]` })
 const gender = (caption: string) => member('Gender', caption)
@@ -109,4 +109,27 @@ describe('levels from the members a caption stands for', () => {
     expect(at.headerLevels(1)).toEqual(['F', '$30K - $50K'])
     expect(at.headerLevels(2)).toEqual(['1997', 'Q1'])
   })
+})
+
+describe('every kind that reads levels', () => {
+  it('rings a crossjoin by its members in the sunburst', () => {
+    const rings = option('sunburst', CROSSJOIN).series[0].data
+    expect(rings.map((ring: { name: string }) => ring.name)).toEqual(['F', 'M'])
+    expect(rings[0].children.map((ring: { name: string }) => ring.name)).toEqual(['$30K - $50K', '$50K - $70K'])
+  })
+
+  it('rings a single row by its headers members, the measure on the other axis', () => {
+    const data = {
+      headers: ['Caption', 'F - $30K - $50K', 'M - $30K - $50K'],
+      rows: [['Unit Sales', 1, 2]],
+      columnProperties: {
+        'F - $30K - $50K': [gender('F'), income('$30K - $50K')],
+        'M - $30K - $50K': [gender('M'), income('$30K - $50K')],
+      },
+    }
+    const rings = option('sunburst', data).series[0].data
+    expect(rings.map((ring: { name: string }) => ring.name)).toEqual(['F', 'M'])
+    expect(rings[0].children.map((ring: { name: string }) => ring.name)).toEqual(['$30K - $50K'])
+  })
+
 })

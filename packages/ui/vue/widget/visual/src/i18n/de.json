@@ -7,14 +7,19 @@
     "kind": "Darstellung",
     "title": "Titel",
     "palette": "Farben",
+    "columnsGroup": "Spalten",
+    "valueColumn": "Werte aus der Spalte",
+    "pathSeparator": "Ebenen einer Beschriftung trennen bei",
     "motionGroup": "Bewegung",
     "autoRotate": "Langsam von selbst drehen",
     "displayGroup": "Anzeige",
-    "showScale": "Werteskala zeigen"
+    "showScale": "Werteskala zeigen",
+    "showLabels": "Namen zeigen"
   },
   "Options": {
     "kind": {
-      "bars3d": "Balken in 3D"
+      "bars3d": "Balken in 3D",
+      "sunburst": "Ringe (Sunburst)"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -24,10 +29,14 @@
       "mono": "Grautöne"
     }
   },
+  "Placeholder": {
+    "column": "erste Zahlenspalte"
+  },
   "Problem": {
     "noData": "Noch keine Daten. Geben Sie diesem Widget eine Quelle, die eine Tabelle liefert.",
     "noValues": "Die Abfrage hat geantwortet, aber jede Zelle darin ist leer.",
-    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen."
+    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen.",
+    "needsValues": "Keine Zeile hat einen Wert über null, der sich zeichnen ließe."
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"

@@ -20,6 +20,7 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 import VisualWidget from '../VisualWidget.vue'
 import { VisualSettingsImpl } from '../gen/VisualSettingsImpl'
 import { VisualwidgetsPackage } from '../gen/VisualwidgetsPackage'
+import { VisualKind } from '../gen/VisualKind'
 
 void VisualwidgetsPackage.eINSTANCE
 
@@ -122,6 +123,16 @@ describe('VisualWidget', () => {
    * The kind is set on the very instance the widget holds - which is what
    * the settings form does - so nothing but EMF can say it changed.
    */
+  it('draws the kind chosen in the settings, started afresh', async () => {
+    const settings = new VisualSettingsImpl()
+    await show(settings)
+
+    settings.kind = VisualKind.SUNBURST
+    await flushPromises()
+
+    expect(lastDrawn().series[0].type).toBe('sunburst')
+    expect(chart.setOption.mock.calls.at(-1)?.[1]).toMatchObject({ notMerge: true })
+  })
 
   it('moves to a new answer of the same shape rather than drawing it afresh', async () => {
     await show(new VisualSettingsImpl())
@@ -202,6 +213,32 @@ describe('VisualWidget', () => {
     expect(wrapper.find('.visual__problem').exists()).toBe(false)
   })
 
+  it('takes the levels of a crossjoin from its members, not from a caption that holds the separator', async () => {
+    const tuple = (gender: string, income: string) => [
+      { Caption: gender, UName: `[Gender].[${gender}]` },
+      { Caption: income, UName: `[Yearly Income].[${income}]` },
+    ]
+    answered = {
+      headers: ['Caption', 'Unit Sales'],
+      rows: [
+        ['F - $30K - $50K', 10],
+        ['F - $50K - $70K', 20],
+        ['M - $30K - $50K', 30],
+      ],
+      rowProperties: {
+        'F - $30K - $50K': tuple('F', '$30K - $50K'),
+        'F - $50K - $70K': tuple('F', '$50K - $70K'),
+        'M - $30K - $50K': tuple('M', '$30K - $50K'),
+      },
+    }
+    const settings = new VisualSettingsImpl()
+    settings.kind = VisualKind.SUNBURST
+    await show(settings)
+
+    const rings = lastDrawn().series[0].data
+    expect(rings.map((ring: { name: string }) => ring.name)).toEqual(['F', 'M'])
+    expect(rings[0].children.map((ring: { name: string }) => ring.name)).toEqual(['$30K - $50K', '$50K - $70K'])
+  })
 
   it('tells the board what was clicked', async () => {
     await show()

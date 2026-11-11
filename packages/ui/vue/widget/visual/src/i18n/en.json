@@ -7,14 +7,19 @@
     "kind": "Drawn as",
     "title": "Title",
     "palette": "Colours",
+    "columnsGroup": "Columns",
+    "valueColumn": "Values from the column",
+    "pathSeparator": "Levels in a label split at",
     "motionGroup": "Motion",
     "autoRotate": "Turn slowly by itself",
     "displayGroup": "Display",
-    "showScale": "Show the scale of values"
+    "showScale": "Show the scale of values",
+    "showLabels": "Show names"
   },
   "Options": {
     "kind": {
-      "bars3d": "Bars in 3D"
+      "bars3d": "Bars in 3D",
+      "sunburst": "Rings (sunburst)"
     },
     "palette": {
       "aurora": "Aurora",
@@ -24,10 +29,14 @@
       "mono": "Greys"
     }
   },
+  "Placeholder": {
+    "column": "first column of numbers"
+  },
   "Problem": {
     "noData": "No data yet. Give this widget a source that answers a table.",
     "noValues": "The query answered, but every cell in it is empty.",
-    "needsNumbers": "The table has no column of numbers to draw."
+    "needsNumbers": "The table has no column of numbers to draw.",
+    "needsValues": "No row has a value above zero to draw."
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"
