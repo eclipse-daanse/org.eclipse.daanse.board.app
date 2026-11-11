@@ -46,7 +46,7 @@ import {
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { describeClass, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { kindOf, labelOf } from './buildForm'
-import { useLabel } from './useLabel'
+import { useHelp, useLabel } from './useLabel'
 
 const props = defineProps<{
   eObject?: EObject
@@ -66,6 +66,7 @@ const { t } = useTranslation('uimodel')
  * sent through t('uimodel') came back with that namespace in front of it.
  */
 const localized = useLabel()
+const helpFor = useHelp()
 
 /*
  * The object the field belongs to, as Vue sees it change.
@@ -271,7 +272,12 @@ const featureDoc = computed(() => {
   return describeClass(nsURI, className)?.features.find((f) => f.name === name)
 })
 
-const modelHint = computed(() => featureDoc.value?.documentation)
+/*
+ * The model's sentence is English; a package that translates the field's
+ * label can translate its help beside it (see helpKeyOf), and the sentence
+ * stays what is shown where it does not.
+ */
+const modelHint = computed(() => helpFor(props.custom?.rawWidget?.label, featureDoc.value?.documentation))
 
 /* Where it is bound, that is the more urgent thing to say. */
 const fieldHint = computed(() => boundHint.value ?? modelHint.value)
