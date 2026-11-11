@@ -295,18 +295,30 @@ const memberPath = (uniqueName: string): string => {
 
 /**
  * The captions a table is keyed by - its headers, its item fields and its
- * rowProperties. A caption that turns up twice (Q1 of 1997 and of 1998) is
- * told apart by its members' paths; otherwise one would overwrite the other
- * and its values would be lost.
+ * rowProperties. A member whose caption stands for two members (Q1 of 1997
+ * and of 1998) is told apart by its path; otherwise one would overwrite the
+ * other and its values would be lost.
  */
 const tableCaptions = (tuples: { Member: unknown }[]): string[] => {
-  const plain = tuples.map(t => optionalArrayToArray(t.Member).map(m => m.Caption).join(' - '))
-  const seen = new Map<string, number>()
-  for (const caption of plain) seen.set(caption, (seen.get(caption) ?? 0) + 1)
-  const distinct = plain.map((caption, i) =>
-    (seen.get(caption) ?? 0) > 1
-      ? optionalArrayToArray(tuples[i].Member).map(m => memberPath(m.UName ?? m.Caption)).join(' - ')
-      : caption,
+  const members = tuples.map(t => optionalArrayToArray(t.Member))
+  /*
+   * Only the members whose caption stands for more than one member at their
+   * place in the tuple get their path: in Department × State, Dairy is both
+   * Drink's and Food's, but CA is one state and stays CA - spelt out as
+   * USA › CA it would read as a second state beside the plain one.
+   */
+  const meanings = new Map<string, Set<string>>()
+  members.forEach(tuple =>
+    tuple.forEach((m, at) => {
+      const key = `${at}\u0000${m.Caption}`
+      if (!meanings.has(key)) meanings.set(key, new Set())
+      meanings.get(key)!.add(m.UName ?? m.Caption)
+    }),
+  )
+  const shared = (m: { Caption: string }, at: number) => (meanings.get(`${at}\u0000${m.Caption}`)?.size ?? 0) > 1
+  // Whether or not its tuple's caption repeats: Dairy - Berkeley beside Food › Dairy - Altadena would read as a third Dairy.
+  const distinct = members.map(tuple =>
+    tuple.map((m, at) => (shared(m, at) ? memberPath(m.UName ?? m.Caption) : m.Caption)).join(' - '),
   )
   // Two tuples of the very same members: numbered, rather than lost.
   const used = new Map<string, number>()
@@ -357,6 +369,13 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
     items: [],
     headers: ['Caption'],
     rowProperties: {},
+    /*
+     * The members a column header stands for, by header, as rowProperties
+     * has them for a row: a header joins its tuple's captions with ' - ',
+     * and a caption may hold ' - ' itself ($30K - $50K), so only these say
+     * where one member ends and the next begins.
+     */
+    columnProperties: {},
   } as any
 
   const getCaption = (member: any) => {
@@ -364,7 +383,11 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
   }
 
   if (mainAxis === 0) {
-    table.headers.push(...tableCaptions(axis1))
+    const columnCaptions = tableCaptions(axis1)
+    table.headers.push(...columnCaptions)
+    axis1.forEach((item, j) => {
+      table.columnProperties[columnCaptions[j]] = item.Member
+    })
 
     const rowCaptions = tableCaptions(axis0)
     axis0.forEach((item, i) => {
@@ -377,7 +400,9 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
     })
   } else if (mainAxis === 1) {
     axis0.forEach((item, index) => {
-      table.headers.push(getCaption(item.Member))
+      const caption = getCaption(item.Member)
+      table.headers.push(caption)
+      table.columnProperties[caption] = item.Member
     })
 
     axis1.forEach((item, i) => {

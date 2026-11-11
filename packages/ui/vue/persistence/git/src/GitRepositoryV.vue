@@ -21,7 +21,7 @@ Contributors: Smart City Jena
  */
 import { computed, ref, watch } from 'vue'
 import { DButton, DChip, DIcon, DInput, DModal, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { GitWritableRepository } from 'org.eclipse.daanse.board.app.lib.persistence.git'
 
 /* Whether a token is set is newer than some builds of the library; a
@@ -34,6 +34,7 @@ const props = defineProps<{ repo: GitPlace }>()
 const emit = defineEmits<{ refresh: [] }>()
 
 const { t } = useTranslation('persistence')
+const format = useFormat()
 
 type CommitLike = { hash: string; creation_date: string; message?: string }
 
@@ -47,7 +48,7 @@ const authenticated = ref(false)
 function when(iso: string): string {
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return iso
-  return date.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+  return format.date(date, { dateStyle: 'medium', timeStyle: 'short' })
 }
 
 const commitChoices = computed(() =>

@@ -54,6 +54,15 @@ async function translator() {
 }
 
 /*
+ * Every field that can take its value from a variable renders a
+ * VariableInput, which injects the variable repository. The shell provides
+ * it from the service registry; without it here, each field logged a Vue
+ * warning that printed the settings EObjects in full (#1404). No variables:
+ * nothing in this test binds one.
+ */
+const noVariables = { getVariable: () => undefined, getAllVariables: () => [] }
+
+/*
  * The settings form bound the way the shell binds it: v-model on the
  * widget's config, which the form replaces with the modelled instance. The
  * config is held shallowly, as the shell's useEObject holds the widget.
@@ -83,6 +92,7 @@ async function settingsForm(form: { xmi: string; uri: string; create: () => any;
         i18n: await translator(),
         [identifiers.TINY_EMITTER as symbol]: { emit: vi.fn(), on: vi.fn(), off: vi.fn() },
         [EVENT_ACTIONS_REGISTRY as unknown as symbol]: { registerInstance: vi.fn(), unregisterInstance: vi.fn() },
+        [Symbol.for('VariableRepository')]: noVariables,
       },
     },
     attachTo: document.body,

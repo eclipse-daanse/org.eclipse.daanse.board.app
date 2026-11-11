@@ -29,9 +29,10 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
 import type { NavigationStore } from './store'
 import { formatSliceValue, heatColor, memberValue, scaleMatrix } from './values'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { t } = useTranslation('tablePivot')
+const { locale } = useFormat()
 
 const props = defineProps<{
   cellset: Cellset
@@ -289,7 +290,7 @@ const axisName = (axis: Axis) => (axis === 3 ? t('Navigation.chapters') : t('Nav
             class="cascade__tile"
             :class="{ 'is-empty': tileValues[i].value === null, 'is-whole': tile.whole }"
             :style="{ backgroundColor: heatColor(tileColours[i]) }"
-            :title="t('Navigation.tileTitle', { label: tile.position.label, value: formatSliceValue(tileValues[i]) })"
+            :title="t('Navigation.tileTitle', { label: tile.position.label, value: formatSliceValue(tileValues[i], locale) })"
             @click="open(tile, $event)"
             @mouseenter="emit('hover', currentAxis!, tile.position.key)"
             @mouseleave="emit('hover', currentAxis!, null)"
@@ -298,7 +299,7 @@ const axisName = (axis: Axis) => (axis === 3 ? t('Navigation.chapters') : t('Nav
               {{ tile.whole ? `${tile.position.label} (gesamt)` : tile.position.label }}
               <span v-if="tile.descends" :aria-label="t('Navigation.hasChildren')">▸</span>
             </span>
-            <span class="cascade__value">{{ formatSliceValue(tileValues[i]) }}</span>
+            <span class="cascade__value">{{ formatSliceValue(tileValues[i], locale) }}</span>
             <span
               v-if="store.isSelected(sliceOf(currentAxis, tile.position.index))"
               class="cascade__check"

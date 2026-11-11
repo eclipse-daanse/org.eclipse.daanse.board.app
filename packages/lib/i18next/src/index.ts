@@ -64,9 +64,38 @@ function isDevelopment(): boolean {
   return host === 'localhost' || host === '127.0.0.1'
 }
 
-/* The page says which language it is in, for screen readers and hyphenation. */
-function markDocument(language: string) {
-  if (globalThis.document?.documentElement) globalThis.document.documentElement.lang = language
+/**
+ * The language the texts are actually in.
+ *
+ * i18next keeps the language it was asked for - a browser's 'ru' - even
+ * when no package holds a word of it and everything shows in English. So
+ * the wanted language counts only if texts exist for it; else the one
+ * sharing its primary subtag ('de-AT' finds 'de'), else English. With
+ * nothing held yet nothing is known, and the wanted one stands.
+ *
+ * The same rule as languageShown in ui.vue.composables (useTranslation),
+ * which reaches i18next through Vue's provides and does not depend on this
+ * package; the two must agree.
+ */
+function shownLanguage(): string {
+  const wanted = i18next.language
+  /* A language whose packs have all left keeps an empty entry - not held. */
+  const held = Object.entries(i18next.store?.data ?? {})
+    .filter(([, namespaces]) => Object.keys(namespaces ?? {}).length > 0)
+    .map(([tag]) => tag)
+  if (!wanted) return FALLBACK_LANGUAGE
+  if (held.length === 0 || held.includes(wanted)) return wanted
+  const primary = (tag: string) => tag.split('-')[0].toLowerCase()
+  return held.find((tag) => primary(tag) === primary(wanted)) ?? FALLBACK_LANGUAGE
+}
+
+/*
+ * The page says which language it is in, for screen readers and
+ * hyphenation - the one on screen, so it is marked again when a pack
+ * arrives or leaves, not only when the language is switched.
+ */
+function markDocument() {
+  if (globalThis.document?.documentElement) globalThis.document.documentElement.lang = shownLanguage()
 }
 
 /**
@@ -92,8 +121,10 @@ export function activate({ services }: ActivationContext) {
     saveMissing: development,
     missingKeyHandler: development ? reportMissing : undefined,
   })
-  markDocument(i18next.language)
+  markDocument()
   i18next.on('languageChanged', markDocument)
+  i18next.store.on('added', markDocument)
+  i18next.store.on('removed', markDocument)
   services.register(I18NEXT, i18next)
 }
 
@@ -102,13 +133,15 @@ export function translate(key: string, options?: Record<string, unknown>): strin
   return i18next.t(key, options) as string
 }
 
-/** The language in use, for Intl formatters outside a component. */
+/** The language on screen, for Intl formatters outside a component. */
 export function currentLanguage(): string {
-  return i18next.resolvedLanguage ?? i18next.language ?? FALLBACK_LANGUAGE
+  return shownLanguage()
 }
 
 export function deactivate({ services }: ActivationContext) {
   i18next.off('languageChanged', markDocument)
+  i18next.store.off('added', markDocument)
+  i18next.store.off('removed', markDocument)
   services.unregister(I18NEXT)
 }
 export {

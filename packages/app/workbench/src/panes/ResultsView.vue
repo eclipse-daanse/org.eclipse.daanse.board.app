@@ -22,7 +22,7 @@ Contributors:
 <script setup lang="ts">
 import { computed, inject, provide, ref, watch } from 'vue'
 import { DButton, DIcon, DTabs } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable, RowsetGrid, SlicePicker } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla'
 import {
   axisOptions,
@@ -45,6 +45,7 @@ const emit = defineEmits<{ (event: 'open-statement', text: string): void }>()
 // i18n-keys: workbench:Results.zone.*
 const wb = inject(WORKBENCH)!
 const { t } = useTranslation('workbench')
+const { locale } = useFormat()
 
 /* The pivot table's drillthrough asks "the datasource" for its connection. */
 provide('datasource', computed(() => ({ getConnection: () => wb.connection() })))
@@ -145,7 +146,7 @@ const pivotData = computed(() => {
   }
 })
 
-const matrix = computed(() => (turned.value && !tooMany.value ? getSlice(turned.value, slice.value) : null))
+const matrix = computed(() => (turned.value && !tooMany.value ? getSlice(turned.value, slice.value, locale.value) : null))
 
 /* `SELECT {} ON COLUMNS`: an answer with an axis that holds nothing has no cell to draw. */
 const noPositions = computed(() => !!cellset.value?.axes.some(axis => axis.positions.length === 0))
@@ -163,7 +164,7 @@ const listRows = computed(() => {
   for (const tail of rest) {
     for (const column of columns) {
       const coords = [column.index, ...tail]
-      const cell = getCell(c, coords)
+      const cell = getCell(c, coords, locale.value)
       const row: Record<string, unknown> = {}
       coords.forEach((at, axis) => (row[axisName(axis)] = c.axes[axis].positions[at]?.label ?? ''))
       row.Value = cell?.value ?? ''

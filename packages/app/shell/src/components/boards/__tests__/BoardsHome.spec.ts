@@ -33,6 +33,25 @@ import en from '../../../i18n/en.json'
 
 const push = vi.fn()
 
+
+/*
+ * The services useWorkspaceFile asks for and goes on without - each is
+ * used through ?. there. The shell provides them from the service
+ * registry; left out here, each mount logged one Vue warning per service,
+ * with the workspace printed in full (#1404). Provided as absent, which is
+ * what the board is opened with in this test.
+ */
+const withoutServices = Object.fromEntries(
+  [
+    'ConnectionRepository',
+    'DatasourceRepository',
+    'VariableRepository',
+    'VariableWrapperFactory',
+    'EventManager',
+    'RepositoryRegistry',
+  ].map((service) => [Symbol.for(service), undefined]),
+)
+
 vi.mock('vue-router', () => ({
   useRoute: () => ({ query: {} }),
   useRouter: () => ({ push }),
@@ -118,6 +137,7 @@ function setUp({
     props: { pageRepo, layoutRepo: {} },
     global: {
       provide: {
+        ...withoutServices,
         [WORKSPACE]: workspace,
         [RepoManagerId]: {
           getAvailableReposetories: async () => (places ? [place] : []),
