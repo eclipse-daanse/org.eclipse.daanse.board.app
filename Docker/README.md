@@ -50,11 +50,29 @@ docker run -d -p 8080:8080 eclipsedaanse/board
 
 This maps port **8080** of the container to port **8080** on your host machine.
 
+## Board or Workbench
+
+One Dockerfile builds two images, chosen by the build argument `APP`:
+
+| `APP` | Serves | Bundles |
+| --- | --- | --- |
+| `board` (default) | The board at `/`, the MDX workbench at `/workbench` | All of them |
+| `workbench` | The MDX workbench alone, at `/` | Only those the workbench needs |
+
+Each one is built from its own browser build. In `packages/app/default`, `yarn build:prod` writes `dist-board/` and `yarn build:prod:workbench` writes `dist-workbench/`. Run `VITE_APP=workbench yarn bundles` first to build only the workbench's bundles. Then, from the repository root:
+
+```bash
+docker build -f Docker/Dockerfile -t board .
+docker build -f Docker/Dockerfile --build-arg APP=workbench -t workbench .
+```
+
+Only the board image is published for now.
+
 ## Configuration Profiles
 
 The image is built once and configured where it runs. The board reads `/config.json` when it starts, so deployments differ by that file alone.
 
-The image carries three profiles under `/etc/daanse/profiles/`: `dev`, `staging` and `prod`. It serves `prod` unless told otherwise.
+The image carries three profiles under `/etc/daanse/profiles/`: `dev`, `staging` and `prod`. It serves `prod` unless told otherwise. They come from `Docker/profiles/<app>/`. The workbench reads `extraBundles` alone, so its profiles hold nothing else.
 
 | Variable | Effect |
 | --- | --- |
