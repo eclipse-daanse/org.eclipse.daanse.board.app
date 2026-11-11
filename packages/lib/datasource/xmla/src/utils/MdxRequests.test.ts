@@ -165,6 +165,22 @@ describe('the table', () => {
     expect(table.rowProperties[captions[3]].UName).toBe('[Time].[1998].[Q1]')
   })
 
+  it('spells out the path only of the member whose caption is shared, not of the others in its tuple', () => {
+    const tuple = (...members: MemberSpec[]) => ({ Member: members.map(m => ({ UName: m.u, Caption: m.c })) })
+    const dairy = (family: string) => ({ u: `[Product].[${family}].[Dairy]`, c: 'Dairy' })
+    const ca = { u: '[Store].[USA].[CA]', c: 'CA' }
+    const response = answer([[], [{ u: '[Measures].[Unit Sales]', c: 'Unit Sales' }]], { 0: '1', 1: '2', 2: '3', 3: '4' })
+    response.Body.ExecuteResponse.return.root.Axes.Axis[0].Tuples.Tuple = [
+      tuple(dairy('Drink'), ca),
+      tuple(dairy('Food'), ca),
+      tuple({ u: '[Product].[Food].[Eggs]', c: 'Eggs' }, ca),
+      tuple(dairy('Food'), { u: '[Store].[USA].[OR]', c: 'OR' }),
+    ] as never
+    const captions = parseRequestToTable(response, 0).items.map((row: Record<string, string>) => row.Caption)
+    // Food's Dairy in OR is one tuple of its kind, and still told from Drink's.
+    expect(captions).toEqual(['Drink › Dairy - CA', 'Food › Dairy - CA', 'Eggs - CA', 'Food › Dairy - OR'])
+  })
+
   it('puts a cell where its ordinal says, with others left out', () => {
     const table = parseRequestToTable(answer([[{ u: '[M].[a]', c: 'a' }], quarters], { 3: '5' }), 0)
     expect(table.headers.map((h: string) => table.items[0][h])).toEqual(['a', undefined, undefined, undefined, '5'])

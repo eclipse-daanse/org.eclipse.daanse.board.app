@@ -29,9 +29,10 @@ import {
 import { sliceId, type CompareLayout, type DiffType, type NavigationStore } from './store'
 import CompareTable, { type TableSizes } from './CompareTable.vue'
 import SliceMinimap from './SliceMinimap.vue'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { t } = useTranslation('tablePivot')
+const { locale } = useFormat()
 // i18n-keys: tablePivot:Navigation.layout.*
 // i18n-keys: tablePivot:Navigation.diff.*
 
@@ -96,7 +97,7 @@ const marks = computed(() =>
 
 const aligned = computed(() =>
   pair.value.a && pair.value.b
-    ? alignSlices(getSlice(props.cellset, pair.value.a), getSlice(props.cellset, pair.value.b))
+    ? alignSlices(getSlice(props.cellset, pair.value.a, locale.value), getSlice(props.cellset, pair.value.b, locale.value))
     : null,
 )
 const rowIndexes = computed(() => {

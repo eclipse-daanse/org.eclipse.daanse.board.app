@@ -46,6 +46,9 @@
  *   - t('ns:Key'), and any other string literal of the exact shape ns:Key
  *     whose namespace exists - which covers .xmi labels and keys kept in
  *     metadata, such as a widget's name,
+ *   - the help text of a form field, ns:FormHelp.x beside the label
+ *     ns:Form.x an .xmi names - optional, the model's documentation stands
+ *     in for it,
  *   - keys built at runtime cannot be seen, so a file declares them:
  *       i18n-keys: ns:Prefix.*   (in a comment; the * matches the rest)
  *
@@ -250,6 +253,14 @@ const LITERAL = /(['"`])((?:(?!\1)[^\\\n]|\\.)*)\1/g
 const QUALIFIED = /^([a-z][A-Za-z0-9]*):([A-Za-z][\w]*(?:\.[\w]+)*)$/
 /* A placeholder is drawn through the same t as the label, and may be a key too. */
 const XMI_LABEL = /\b(?:label|placeholder)="([^"]*)"/g
+/*
+ * A field's help text goes with its label, under a key the settings form
+ * derives - packages/ui/vue/uimodel/src/useLabel.ts, helpKeyOf:
+ * ns:Form.fillColor -> ns:FormHelp.fillColor. It is optional: the model's
+ * documentation is shown where a pack has none.
+ */
+const XMI_FIELD_LABEL = /\blabel="([^"]*)"/g
+const helpKeyOf = (key) => key.replace(/^([^:]+:[^.]+)\./, '$1Help.')
 const DEFAULT_NS = /useTranslation\(\s*['"]([A-Za-z0-9]+)['"]\s*\)/
 /* t('Key'), t("Key"), also $t / tt / i18n.t - anything named t right before the paren */
 const CALL = /(?<![\w$])t\(\s*(['"])([^'"\n]+)\1/g
@@ -277,6 +288,7 @@ function usedKeys(known) {
   const uses = [] // [key, package dir, file]
   const prefixes = []
   const unqualified = [] // [file, key] - t('Key') without any namespace to resolve it against
+  const optional = new Set() // keys a package may hold without anything naming them - help texts
   for (const pkg of packageDirs(SOURCES)) {
     for (const file of files(pkg)) {
       const note = (key) => uses.push([key, pkg, relative(ROOT, file)])
@@ -286,6 +298,10 @@ function usedKeys(known) {
         for (const [, label] of model.matchAll(XMI_LABEL)) {
           const m = QUALIFIED.exec(label)
           if (m && known.has(m[1])) note(label)
+        }
+        for (const [, label] of model.matchAll(XMI_FIELD_LABEL)) {
+          const m = QUALIFIED.exec(label)
+          if (m && known.has(m[1]) && label.includes('.')) optional.add(helpKeyOf(label))
         }
         /*
          * An option's label is an expression inside an attribute, with
@@ -314,7 +330,7 @@ function usedKeys(known) {
       }
     }
   }
-  return { uses, prefixes, unqualified }
+  return { uses, prefixes, unqualified, optional }
 }
 
 /* ---------- check ---------- */
@@ -365,7 +381,7 @@ function check() {
   }
 
   const known = new Set(ownerOf.keys())
-  const { uses, prefixes, unqualified } = usedKeys(known)
+  const { uses, prefixes, unqualified, optional } = usedKeys(known)
   const usedBase = new Set()
   const reported = new Set()
   for (const [key, dir, file] of uses) {
@@ -387,7 +403,7 @@ function check() {
     problems.push(`${file}: t('${key}') has no namespace - pass one to useTranslation or write ns:${key}`)
   }
   for (const key of held) {
-    if (usedBase.has(key)) continue
+    if (usedBase.has(key) || optional.has(key)) continue
     if (prefixes.some(([prefix]) => key.startsWith(prefix))) continue
     problems.push(`${relative(ROOT, ownerOf.get(key.split(':')[0]))}: ${key} is there but nothing uses it`)
   }

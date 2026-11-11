@@ -106,6 +106,43 @@ describe('useLanguage', () => {
     expect(i18n.language).toBe('de')
   })
 
+  it('shows the language the texts are in, not the browser one nobody translated', async () => {
+    /* A Russian browser: i18next starts in 'ru', and only de and en exist. */
+    const instance = i18next.createInstance()
+    await instance.init({ fallbackLng: 'en', lng: 'ru', resources: {} })
+    instance.addResourceBundle('en', 'demo', { a: 'A' })
+    instance.addResourceBundle('de', 'demo', { a: 'A' })
+
+    const view = mount(switcher(), { global: { provide: { i18n: instance } } })
+
+    expect(view.find('.current').text()).toBe('en')
+    expect(view.findAll('.lang').map((n) => n.text())).toEqual(['de:Deutsch', 'en:English'])
+  })
+
+  it('takes the pack of the same language for a regional browser language', async () => {
+    const instance = i18next.createInstance()
+    await instance.init({ fallbackLng: 'en', lng: 'de-AT', resources: {} })
+    instance.addResourceBundle('en', 'demo', { a: 'A' })
+    instance.addResourceBundle('de', 'demo', { a: 'A' })
+
+    const view = mount(switcher(), { global: { provide: { i18n: instance } } })
+
+    expect(view.find('.current').text()).toBe('de')
+  })
+
+  it('moves to the wanted language once a pack for it arrives', async () => {
+    const instance = i18next.createInstance()
+    await instance.init({ fallbackLng: 'en', lng: 'ru', resources: {} })
+    instance.addResourceBundle('en', 'demo', { a: 'A' })
+    const view = mount(switcher(), { global: { provide: { i18n: instance } } })
+    expect(view.find('.current').text()).toBe('en')
+
+    instance.addResourceBundle('ru', 'demo', { a: 'A' })
+    await nextTick()
+
+    expect(view.find('.current').text()).toBe('ru')
+  })
+
   it('offers nothing rather than failing when there is no translator', () => {
     const view = mount(switcher())
     expect(view.findAll('.lang')).toHaveLength(0)
