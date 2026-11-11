@@ -1,0 +1,78 @@
+{
+  "Widget": {
+    "name": "Visual chart"
+  },
+  "Form": {
+    "drawGroup": "What it draws",
+    "kind": "Drawn as",
+    "title": "Title",
+    "palette": "Colours",
+    "columnsGroup": "Columns",
+    "xColumn": "Across",
+    "yColumn": "Into the depth",
+    "zColumn": "Upwards",
+    "sizeColumn": "Point size from",
+    "valueColumn": "Values from the column",
+    "pathSeparator": "Levels in a label split at",
+    "motionGroup": "Motion",
+    "autoRotate": "Turn slowly by itself",
+    "topN": "Bars at once",
+    "frameDuration": "Time per step (ms)",
+    "displayGroup": "Display",
+    "showScale": "Show the scale of values",
+    "showLabels": "Show names"
+  },
+  "Options": {
+    "kind": {
+      "bars3d": "Bars in 3D",
+      "surface": "Surface in 3D",
+      "scatter3d": "Points in 3D",
+      "sunburst": "Rings (sunburst)",
+      "treemap": "Tiles (treemap)",
+      "sankey": "Flows (Sankey)",
+      "race": "Bar race",
+      "calendar": "Calendar",
+      "stream": "Stream (streamgraph)",
+      "waterfall": "Waterfall",
+      "chord": "Ties around a circle (chord)",
+      "boxplot": "Spread (box plot)",
+      "cube": "Cube"
+    },
+    "palette": {
+      "aurora": "Aurora",
+      "ocean": "Ocean",
+      "sunset": "Sunset",
+      "forest": "Forest",
+      "mono": "Greys"
+    }
+  },
+  "Placeholder": {
+    "column": "first column of numbers"
+  },
+  "Problem": {
+    "noData": "No data yet. Give this widget a source that answers a table.",
+    "noValues": "The query answered, but every cell in it is empty.",
+    "needsNumbers": "The table has no column of numbers to draw.",
+    "needsGrid": "A surface needs at least two rows and two columns of numbers.",
+    "needsThreeNumbers": "Points in space need three columns of numbers.",
+    "needsValues": "No row has a value above zero to draw.",
+    "needsValues": "No row has a value above zero to draw.",
+    "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels.",
+    "needsDates": "No label in the table reads as a day.",
+    "needsSteps": "A stream needs its layers over at least two steps: several columns of numbers, or labels whose last level is the step.",
+    "needsFlows": "No row leads from one thing to another. Use two label columns, or labels with levels.",
+    "needsThreeAxes": "A cube needs three axes: labels with two levels and several columns of numbers, or labels with three levels and a column of values."
+  },
+  "Hint": {
+    "turn": "Drag to turn, scroll to zoom, double-click to go back"
+  },
+  "Words": {
+    "change": "Change",
+    "runningTotal": "Running total",
+    "lowest": "Lowest",
+    "lowerQuartile": "Lower quartile",
+    "median": "Median",
+    "upperQuartile": "Upper quartile",
+    "highest": "Highest"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "Widget": {
+    "name": "Visualisierung"
+  },
+  "Form": {
+    "drawGroup": "Was gezeichnet wird",
+    "kind": "Darstellung",
+    "title": "Titel",
+    "palette": "Farben",
+    "columnsGroup": "Spalten",
+    "xColumn": "Quer",
+    "yColumn": "In die Tiefe",
+    "zColumn": "Nach oben",
+    "sizeColumn": "Punktgröße aus",
+    "valueColumn": "Werte aus der Spalte",
+    "pathSeparator": "Ebenen einer Beschriftung trennen bei",
+    "motionGroup": "Bewegung",
+    "autoRotate": "Langsam von selbst drehen",
+    "topN": "Balken gleichzeitig",
+    "frameDuration": "Zeit je Schritt (ms)",
+    "displayGroup": "Anzeige",
+    "showScale": "Werteskala zeigen",
+    "showLabels": "Namen zeigen"
+  },
+  "Options": {
+    "kind": {
+      "bars3d": "Balken in 3D",
+      "surface": "Fläche in 3D",
+      "scatter3d": "Punkte in 3D",
+      "sunburst": "Ringe (Sunburst)",
+      "treemap": "Kacheln (Treemap)",
+      "sankey": "Flüsse (Sankey)",
+      "race": "Balkenrennen",
+      "calendar": "Kalender",
+      "stream": "Strom (Streamgraph)",
+      "waterfall": "Wasserfall",
+      "chord": "Beziehungen im Kreis (Chord)",
+      "boxplot": "Streuung (Boxplot)",
+      "cube": "Würfel"
+    },
+    "palette": {
+      "aurora": "Polarlicht",
+      "ocean": "Ozean",
+      "sunset": "Abendrot",
+      "forest": "Wald",
+      "mono": "Grautöne"
+    }
+  },
+  "Placeholder": {
+    "column": "erste Zahlenspalte"
+  },
+  "Problem": {
+    "noData": "Noch keine Daten. Geben Sie diesem Widget eine Quelle, die eine Tabelle liefert.",
+    "noValues": "Die Abfrage hat geantwortet, aber jede Zelle darin ist leer.",
+    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen.",
+    "needsGrid": "Eine Fläche braucht mindestens zwei Zeilen und zwei Zahlenspalten.",
+    "needsThreeNumbers": "Punkte im Raum brauchen drei Zahlenspalten.",
+    "needsValues": "Keine Zeile hat einen Wert über null, der sich zeichnen ließe.",
+    "needsValues": "Keine Zeile hat einen Wert über null, der sich zeichnen ließe.",
+    "needsFlows": "Keine Zeile führt von einem zum anderen. Nehmen Sie zwei Beschriftungsspalten oder Beschriftungen mit Ebenen.",
+    "needsDates": "Keine Beschriftung in der Tabelle lässt sich als Tag lesen.",
+    "needsSteps": "Ein Strom braucht seine Schichten über mindestens zwei Schritte: mehrere Zahlenspalten oder Beschriftungen, deren letzte Ebene der Schritt ist.",
+    "needsFlows": "Keine Zeile führt von einem zum anderen. Nehmen Sie zwei Beschriftungsspalten oder Beschriftungen mit Ebenen.",
+    "needsThreeAxes": "Ein Würfel braucht drei Achsen: Beschriftungen mit zwei Ebenen und mehrere Zahlenspalten, oder Beschriftungen mit drei Ebenen und eine Wertespalte."
+  },
+  "Hint": {
+    "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"
+  },
+  "Words": {
+    "change": "Veränderung",
+    "runningTotal": "Laufende Summe",
+    "lowest": "Kleinster Wert",
+    "lowerQuartile": "Unteres Quartil",
+    "median": "Median",
+    "upperQuartile": "Oberes Quartil",
+    "highest": "Größter Wert"
+  }
+}
