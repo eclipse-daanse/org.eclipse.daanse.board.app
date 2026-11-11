@@ -47,7 +47,7 @@
     "eslint-plugin-vue": "^10.0.0",
     "id128": "^1.6.6",
     "jsdom": "^29.1.1",
-    "lerna": "^9.0.5",
+    "lerna": "^10.1.1",
     "npm-run-all2": "^8.0.1",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
