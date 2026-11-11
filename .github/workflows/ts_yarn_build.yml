@@ -115,8 +115,7 @@ jobs:
             turbo-build-
 
       # These six had a typecheck script that no build ever ran, and fail
-      # it; the issue on CI speed says why. Each one taken off here is
-      # checked from then on.
+      # it (#1417). Each one taken off here is checked from then on.
       - name: Type check all Modules
         run: >
           yarn turbo run typecheck ${{ env.TURBO_ARGS }}
