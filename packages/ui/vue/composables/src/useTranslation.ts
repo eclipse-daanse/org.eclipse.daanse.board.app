@@ -43,6 +43,7 @@ interface Translator {
   on?(event: string, handler: () => void): void
   off?(event: string, handler: () => void): void
   store?: {
+    data?: Record<string, unknown>
     on?(event: string, handler: () => void): void
     off?(event: string, handler: () => void): void
   }
@@ -62,11 +63,42 @@ interface Translator {
  */
 const PROVIDED = 'i18n'
 const SERVICE = 'I18next'
+/* The language every package holds, and what i18next falls back to. */
+const FALLBACK = 'en'
+
+/**
+ * The language the texts on screen are actually in.
+ *
+ * i18next keeps the language it was asked for - the browser's 'ru', say -
+ * even when no package has a word of it, and then shows English. Reporting
+ * 'ru' would put "RU" on the language button and Russian digit grouping on
+ * English text. So the wanted language counts only if texts exist for it;
+ * else the one sharing its primary subtag ('de-AT' finds 'de'), else
+ * English. While nothing is held yet nothing is known, and the wanted
+ * language stands - a pack arriving for it later makes it the answer.
+ */
+export function languageShown(wanted: string | undefined, held: readonly string[]): string | undefined {
+  if (!wanted || held.length === 0 || held.includes(wanted)) return wanted
+  const primary = (tag: string) => tag.split('-')[0].toLowerCase()
+  return held.find((tag) => primary(tag) === primary(wanted)) ?? FALLBACK
+}
+
+function shownBy(i18n: Translator | undefined): string | undefined {
+  /* A language whose packs have all left keeps an empty entry - not held. */
+  const held = Object.entries(i18n?.store?.data ?? {})
+    .filter(([, namespaces]) => Object.keys((namespaces as object | undefined) ?? {}).length > 0)
+    .map(([tag]) => tag)
+  return languageShown(i18n?.language, held)
+}
 
 export interface Translation {
   /** Translates a key, and re-runs when what it translates changes. */
   t: (key: string, options?: Record<string, unknown>) => string
-  /** The language in use, as a ref, so a label can show it. */
+  /**
+   * The language the texts are in, as a ref, so a label can show it and a
+   * number can follow it - see languageShown for why that is not simply
+   * the one i18next was asked for.
+   */
   language: Ref<string | undefined>
   /**
    * Bumped by anything that changes what is translatable - a pack added or
@@ -106,11 +138,11 @@ export function useTranslation(namespace?: string): Translation {
 
   /* Bumped by every event that can change what a key translates to. */
   const changed = ref(0)
-  const language = ref<string | undefined>(read()?.language)
+  const language = ref<string | undefined>(shownBy(read()))
 
   const onChange = () => {
     changed.value += 1
-    language.value = read()?.language
+    language.value = shownBy(read())
   }
 
   /*

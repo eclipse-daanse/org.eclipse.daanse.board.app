@@ -156,7 +156,16 @@ describe('slice minimap', () => {
     expect(wrapper.findAll('thead th')).toHaveLength(11)
     expect(wrapper.findAll('tbody tr')).toHaveLength(13)
     const current = wrapper.find('.is-current')
-    expect(current.attributes('aria-label')).toBe(`1997 · USA: ${new Intl.NumberFormat().format(266773)}`)
+    expect(current.attributes('aria-label')).toBe('1997 · USA: 266,773')
+    wrapper.unmount()
+  })
+
+  it('writes its numbers in the language of the board, not the browser', () => {
+    const wrapper = mount(SliceMinimap, {
+      props: { cellset, current: { axis2: Y1997, axis3: USA } },
+      global: { provide: { i18n: { ...i18n, language: 'de' } } },
+    })
+    expect(wrapper.find('.is-current .minimap__value').text()).toBe('266.773')
     wrapper.unmount()
   })
 

@@ -114,6 +114,13 @@ describe('parseCellset on a recorded 4-axis answer', () => {
     expect(getCell(cellset, [0, 0, Y1997, USA])).toMatchObject({ value: 266773, formatted: '266,773' })
   })
 
+  it('writes a number without FmtValue in the locale it is given, English without one', () => {
+    const plain = { ...cellset, cells: Object.fromEntries(Object.entries(cellset.cells).map(([at, cell]) => [at, { ...cell, FmtValue: undefined }])) }
+    expect(getCell(plain, [0, 0, Y1997, USA])?.formatted).toBe('266,773')
+    expect(getCell(plain, [0, 0, Y1997, USA], 'de')?.formatted).toBe('266.773')
+    expect(getSlice(plain, { axis2: Y1997, axis3: USA }, 'de').cells[0][0]?.formatted).toBe('266.773')
+  })
+
   it('answers null for an empty cell, never 0', () => {
     expect(getCell(cellset, [0, 0, Y1997, CANADA])).toBeNull()
     expect(getCell(cellset, [0, 0, Y1998, USA])).toBeNull()

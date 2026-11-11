@@ -112,6 +112,20 @@ describe('the results view', () => {
     expect(view.text()).toContain('1040 rows')
   })
 
+  it('writes a number the server left unformatted in the language of the board', async () => {
+    const answer = result()
+    const cellset = answer.cellset as Cellset
+    answer.cellset = { ...cellset, cells: Object.fromEntries(Object.entries(cellset.cells).map(([at, cell]) => [at, { ...cell, FmtValue: undefined }])) }
+    const view = mount(ResultsView, {
+      props: { result: answer },
+      global: { provide: { i18n: { ...i18n, language: 'de' }, [WORKBENCH as symbol]: fakeWorkbench() }, stubs: { ChartView: true } },
+    })
+    await flushPromises()
+    await show(view, 'List')
+    expect(view.text()).toContain('266.773')
+    expect(view.text()).not.toContain('266,773')
+  })
+
   it('comes back on the view it was left on', async () => {
     const workbench = fakeWorkbench()
     const first = mountView(workbench)

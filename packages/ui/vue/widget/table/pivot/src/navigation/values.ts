@@ -19,6 +19,7 @@ import {
   type Cellset,
   type SliceValue,
 } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
+import { numberFormat } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { ScaleNormalization } from './store'
 
 /**
@@ -120,25 +121,30 @@ export function heatColor(t: number | null): string {
   return `color-mix(in srgb, ${tone} ${share}%, var(--color-raised))`
 }
 
-const numberFormat = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 })
-const percentFormat = new Intl.NumberFormat(undefined, { maximumFractionDigits: 1, signDisplay: 'exceptZero' })
-const signedFormat = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2, signDisplay: 'exceptZero' })
+/*
+ * The locale is the board's language (useFormat().locale), passed in: a
+ * formatter built with an undefined locale follows the browser, and a
+ * Russian browser then groups digits as "1 234,5" beside English text.
+ */
+const PLAIN: Intl.NumberFormatOptions = { maximumFractionDigits: 2 }
+const PERCENT: Intl.NumberFormatOptions = { maximumFractionDigits: 1, signDisplay: 'exceptZero' }
+const SIGNED: Intl.NumberFormatOptions = { maximumFractionDigits: 2, signDisplay: 'exceptZero' }
 
 /** A number for display; empty for nothing, never NaN. */
-export function formatNumber(value: number | null): string {
-  return value === null || !Number.isFinite(value) ? '' : numberFormat.format(value)
+export function formatNumber(value: number | null, locale: string): string {
+  return value === null || !Number.isFinite(value) ? '' : numberFormat(locale, PLAIN).format(value)
 }
 
-export function formatSigned(value: number | null): string {
-  return value === null || !Number.isFinite(value) ? '' : signedFormat.format(value)
+export function formatSigned(value: number | null, locale: string): string {
+  return value === null || !Number.isFinite(value) ? '' : numberFormat(locale, SIGNED).format(value)
 }
 
-export function formatPercent(value: number | null): string {
-  return value === null || !Number.isFinite(value) ? '' : `${percentFormat.format(value)} %`
+export function formatPercent(value: number | null, locale: string): string {
+  return value === null || !Number.isFinite(value) ? '' : `${numberFormat(locale, PERCENT).format(value)} %`
 }
 
 /** A slice value as shown: Σ marks a sum made here rather than a total from the server. */
-export function formatSliceValue(value: SliceValue): string {
+export function formatSliceValue(value: SliceValue, locale: string): string {
   if (value.value === null) return '–'
-  return value.kind === 'sum' ? `Σ ${formatNumber(value.value)}` : formatNumber(value.value)
+  return value.kind === 'sum' ? `Σ ${formatNumber(value.value, locale)}` : formatNumber(value.value, locale)
 }
