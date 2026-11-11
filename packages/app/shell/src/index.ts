@@ -41,6 +41,7 @@ import App from './App.vue'
 import router from './router'
 import Configuration from './pages/Configuration.vue'
 import Appearance from './pages/Appearance.vue'
+import About from './pages/About.vue'
 import { initTheme } from './theme/useTheme'
 import { initBoardBackdrop } from './composables/useBoardBackdrop'
 import { initGridSnap } from './composables/useGridSnap'
@@ -125,6 +126,12 @@ export async function activate({ services, log }: ActivationContext) {
   appearanceRoute.component = Appearance
   routeRegistry.registerRoute(appearanceRoute)
 
+  const aboutRoute = new RouteDefinition()
+  aboutRoute.path = '/about'
+  aboutRoute.name = 'about'
+  aboutRoute.component = About
+  routeRegistry.registerRoute(aboutRoute)
+
   const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
 
   const configNav = new NavigationItem()
@@ -137,6 +144,18 @@ export async function activate({ services, log }: ActivationContext) {
   configNav.order = 10
   configNav.visible = true
   navRegistry.registerNavigationItem(configNav)
+
+  /* Last in the rail: it is about the board, not a step in building one. */
+  const aboutNav = new NavigationItem()
+  aboutNav.id = 'about'
+  aboutNav.label = 'shell:Nav.about'
+  aboutNav.description = 'shell:Nav.aboutDesc'
+  aboutNav.icon = 'info'
+  aboutNav.route = '/about'
+  aboutNav.routeName = 'about'
+  aboutNav.order = 100
+  aboutNav.visible = true
+  navRegistry.registerNavigationItem(aboutNav)
 
   /*
    * Storing and restoring is deliberately not an area of its own: it is

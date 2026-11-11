@@ -16,6 +16,7 @@ import {
   readFileSync,
   statSync,
   watch,
+  writeFileSync,
 } from 'node:fs'
 import { extname, join, normalize } from 'node:path'
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite'
@@ -26,8 +27,11 @@ import dts from 'vite-plugin-dts'
 import tailwind from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 import { resolve } from 'path'
+import { collectComponentVersions } from '../../../scripts/component-versions.mjs'
 
 const isDev = process.env.NODE_ENV !== 'production'
+
+const REPOSITORY_ROOT = resolve(__dirname, '../../..')
 
 /**
  * Where the separately built tsm bundles live, keyed by module id: every
@@ -145,6 +149,13 @@ function tsmBundles(): Plugin {
       }
       console.log(`[tsm-bundles] ${copied} bundle(s) copied into dist/bundles`)
 
+      /* What this build holds, for the /about screen to set against what
+        the loader finds (scripts/component-versions.mjs). */
+      writeFileSync(
+        join(outDir, 'versions.json'),
+        JSON.stringify(collectComponentVersions({ root: REPOSITORY_ROOT }), null, 2),
+      )
+
       /*
        * A build that ships may not leave bundles out. The warning above was
        * all there was, and the image went out with 4 of 154 for as long as
@@ -161,6 +172,13 @@ function tsmBundles(): Plugin {
     },
 
     configureServer(server) {
+      /* The same answer the production build writes, made on request: a
+        bundle counts as part of the build when its output exists now. */
+      server.middlewares.use('/versions.json', (_request, response) => {
+        response.setHeader('Content-Type', 'application/json')
+        response.end(JSON.stringify(collectComponentVersions({ root: REPOSITORY_ROOT })))
+      })
+
       server.middlewares.use('/bundles', (request, response, next) => {
         const relative = normalize(decodeURIComponent((request.url ?? '/').split('?')[0]))
         if (relative.includes('..')) return next()
