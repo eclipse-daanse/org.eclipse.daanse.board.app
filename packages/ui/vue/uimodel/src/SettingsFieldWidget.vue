@@ -44,9 +44,9 @@ import {
   DInput,
   DSelect,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { describeClass, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { describeClass, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { kindOf, labelOf } from './buildForm'
-import { useLabel } from './useLabel'
+import { useHelp, useLabel } from './useLabel'
 
 const props = defineProps<{
   eObject?: EObject
@@ -66,6 +66,20 @@ const { t } = useTranslation('uimodel')
  * sent through t('uimodel') came back with that namespace in front of it.
  */
 const localized = useLabel()
+const helpFor = useHelp()
+
+/*
+ * The object the field belongs to, as Vue sees it change.
+ *
+ * Its features are read through this rather than through the prop: the
+ * prop is the same instance before and after an edit, so a computed that
+ * read a plain attribute off it - a shape, a palette - kept the value it
+ * was first drawn with. The select then showed the old choice again the
+ * next time anything in the form re-rendered it, while the settings and
+ * the widget held the new one. A wrapper's value is seen through its own
+ * read hook; a plain attribute has only the object's notification.
+ */
+const owner = useEObject(() => props.eObject)
 
 /** The wrapper itself - read and written through, never swapped out. */
 const wrapper = computed<any>(() => {
@@ -74,7 +88,8 @@ const wrapper = computed<any>(() => {
 })
 
 function readHeld(): unknown {
-  const { eObject, feature } = props
+  const eObject = owner.value
+  const { feature } = props
   if (!eObject || !feature) return undefined
   const name = feature.getName?.()
   return name ? (eObject as unknown as Record<string, any>)[name] : undefined
@@ -119,8 +134,8 @@ const isMany = computed(() => {
  */
 function chosenList(): any {
   const name = props.feature?.getName?.()
-  if (!name || !props.eObject) return undefined
-  return (props.eObject as unknown as Record<string, any>)[name]
+  if (!name || !owner.value) return undefined
+  return (owner.value as unknown as Record<string, any>)[name]
 }
 
 const chosen = computed<Array<string | number>>(() => {
@@ -257,7 +272,12 @@ const featureDoc = computed(() => {
   return describeClass(nsURI, className)?.features.find((f) => f.name === name)
 })
 
-const modelHint = computed(() => featureDoc.value?.documentation)
+/*
+ * The model's sentence is English; a package that translates the field's
+ * label can translate its help beside it (see helpKeyOf), and the sentence
+ * stays what is shown where it does not.
+ */
+const modelHint = computed(() => helpFor(props.custom?.rawWidget?.label, featureDoc.value?.documentation))
 
 /* Where it is bound, that is the more urgent thing to say. */
 const fieldHint = computed(() => boundHint.value ?? modelHint.value)
@@ -354,6 +374,30 @@ const options = computed<Array<{ value: string | number; text: string }>>(() => 
 })
 
 /*
+ * An enum value, as the literal the form lists.
+ *
+ * A board stores an enum setting as its literal ("threeQuarter"), and that
+ * is what a model's form offers. A fresh instance does not: the generated
+ * class starts the field at the enum's member, which emfts-codegen makes
+ * the name ("THREE_QUARTER"). Matched as it is, no option fit and the
+ * select said "—" over a gauge drawn with that very shape. The enum itself
+ * knows both spellings, so it is asked - by literal first, then by name -
+ * and every enum of every widget reads the same way. Only the reading
+ * changes; what is written on a pick is the literal, as before.
+ */
+function asLiteral(held: unknown): unknown {
+  const type = props.feature?.getEType?.() as
+    | {
+        getEEnumLiteralByLiteral?: (literal: string) => { getLiteral(): string } | null
+        getEEnumLiteral?: (name: string) => { getLiteral(): string } | null
+      }
+    | undefined
+  if (typeof held !== 'string' || typeof type?.getEEnumLiteralByLiteral !== 'function') return held
+  const literal = type.getEEnumLiteralByLiteral(held) ?? type.getEEnumLiteral?.(held)
+  return literal?.getLiteral?.() ?? held
+}
+
+/*
  * The choice as the widget draws it.
  *
  * An unset field is not "nothing": the widget falls back to the default
@@ -365,7 +409,7 @@ const options = computed<Array<{ value: string | number; text: string }>>(() => 
  */
 const choice = computed<any>({
   get: () => {
-    const held = value.value
+    const held = asLiteral(value.value)
     if (held !== '' && held !== null && held !== undefined) return held
     const fallback = featureDoc.value?.defaultValue
     if (fallback === undefined || fallback === '') return held

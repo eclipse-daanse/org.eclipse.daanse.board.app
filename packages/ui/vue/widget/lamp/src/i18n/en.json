@@ -28,6 +28,18 @@
     "sourceGroup": "Data source",
     "stateField": "Field with the state"
   },
+  "FormHelp": {
+    "on": "Whether the lamp is on: true or false. Bound to a variable, the lamp mirrors it and a press or an action writes into it.",
+    "brightness": "How bright the lamp is, from 0 to 100.",
+    "color": "The colour of the light, any CSS colour. Left empty, the colour follows the colour temperature.",
+    "colorTemperature": "The colour temperature of the light in kelvin, from 1000 (candle) to 10000 (blue sky). Used while no colour is set.",
+    "radius": "How far the light reaches, in pixels. Left empty, the size of the widget decides: the light reaches half its longer side, so sizing the widget sizes the light.",
+    "lightShape": "How the light falls: round, all around the lamp, or cone, in one direction.",
+    "direction": "Where a cone points, in degrees: 0 to the right, 90 down, 180 to the left, 270 up.",
+    "angle": "How wide a cone opens, in degrees.",
+    "lightsWidgets": "Whether the light falls on the widgets near the lamp as well, not only on the page behind them.",
+    "stateField": "Where in what the datasource answered the lamp finds its state, as a path (status.light). A value there that says on or off switches the lamp, a number sets its brightness, and an object may carry on, brightness, color and colorTemperature. Left empty, the datasource is not read."
+  },
   "Options": {
     "lightShape": {
       "round": "Round",
