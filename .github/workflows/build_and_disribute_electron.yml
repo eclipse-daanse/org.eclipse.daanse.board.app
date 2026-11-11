@@ -14,6 +14,8 @@ permissions:
   contents: write
 jobs:
   release:
+    # A red or cancelled CI run is no reason to publish an app.
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -21,13 +23,13 @@ jobs:
         os: [ macos-latest, ubuntu-latest, windows-latest ]
 
     steps:
+      # The commit CI tested, not whatever main points at by now.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 20.x
-      - name: Install Lerna
-        working-directory: .
-        run: yarn global add lerna
+          node-version-file: .nvmrc
 
       - name: Install
         working-directory: .

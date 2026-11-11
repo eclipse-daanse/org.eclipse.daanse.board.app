@@ -133,15 +133,29 @@ function tsmBundles(): Plugin {
       const outDir = resolve(__dirname, 'dist')
       if (!existsSync(outDir)) return
       let copied = 0
+      const missing: string[] = []
       for (const [id, dir] of Object.entries(bundleDirs)) {
         if (!existsSync(dir)) {
           console.warn(`[tsm-bundles] missing build output for ${id} - run its bundle build`)
+          missing.push(id)
           continue
         }
         cpSync(dir, join(outDir, 'bundles', id), { recursive: true })
         copied += 1
       }
       console.log(`[tsm-bundles] ${copied} bundle(s) copied into dist/bundles`)
+
+      /*
+       * A build that ships may not leave bundles out. The warning above was
+       * all there was, and the image went out with 4 of 154 for as long as
+       * nobody read the log. CI sets this; a local build that only wants
+       * the shell keeps the warning.
+       */
+      if (process.env.REQUIRE_ALL_BUNDLES === '1' && missing.length) {
+        throw new Error(
+          `[tsm-bundles] ${missing.length} bundle(s) without build output: ${missing.join(', ')} - run \`yarn bundles\``,
+        )
+      }
     },
 
     configureServer(server) {
