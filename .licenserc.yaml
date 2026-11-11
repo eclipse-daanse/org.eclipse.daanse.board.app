@@ -40,6 +40,7 @@ header:
     - '.gitattributes'
     - '.github/**'
     - '.gitignore'
+    - '.nvmrc'
     - '.licenserc.yaml'
     - '.readthedocs.yaml'
     - '.mvn/maven.config'

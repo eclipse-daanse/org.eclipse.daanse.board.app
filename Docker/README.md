@@ -18,10 +18,7 @@ configured to expose port **8080**. Nginx runs as a non-root user to enhance sec
 - **Exposed Port**: Port **8080** is used for HTTP traffic
 - **Supported OS/Architectures**:
 
-  - `linux/386`
   - `linux/amd64`
-  - `linux/arm/v7`
-  - `linux/arm/v8`
   - `linux/arm64`
 
 ## How to Use This Image
@@ -44,6 +41,34 @@ docker run -d -p 8080:8080 eclipsedaanse/board
 
 This maps port **8080** of the container to port **8080** on your host machine.
 
+## Configuration Profiles
+
+The image is built once and configured where it runs. The board reads `/config.json` when it starts, so deployments differ by that file alone.
+
+The image carries three profiles under `/etc/daanse/profiles/`: `dev`, `staging` and `prod`. It serves `prod` unless told otherwise.
+
+| Variable | Effect |
+|---|---|
+| `DAANSE_PROFILE` | Serve `/etc/daanse/profiles/<name>.config.json`, e.g. `staging`. |
+| `DAANSE_CONFIG_FILE` | Serve this file instead, e.g. one mounted into the container. |
+| `DAANSE_*` | Replaces `${DAANSE_...}` of the same name in the chosen file. |
+
+```bash
+docker run -d -p 8080:8080 -e DAANSE_PROFILE=staging eclipsedaanse/board
+```
+
+A template with placeholders, mounted and filled at start:
+
+```bash
+docker run -d -p 8080:8080 \
+  -v ./my.config.json:/etc/daanse/my.config.json:ro \
+  -e DAANSE_CONFIG_FILE=/etc/daanse/my.config.json \
+  -e DAANSE_GIT_URL=https://example.org/boards.git \
+  eclipsedaanse/board
+```
+
+Mounting a finished file straight over `/usr/share/nginx/html/config.json` works as well, as long as neither variable above is set.
+
 ## Exposed Port
 
 - **8080**: The default port where Nginx listens for HTTP connections.
@@ -52,10 +77,7 @@ This maps port **8080** of the container to port **8080** on your host machine.
 
 This image supports multiple operating systems and architectures:
 
-- `linux/386`
 - `linux/amd64`
-- `linux/arm/v7`
-- `linux/arm/v8`
 - `linux/arm64`
 
 ## Security Considerations
