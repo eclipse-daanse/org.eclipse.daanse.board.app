@@ -25,6 +25,24 @@ import OpenBoard from '../OpenBoard.vue'
 import { useStorageDialog } from '../../composables/useStorageDialog'
 import en from '../../i18n/en.json'
 
+/*
+ * The services useWorkspaceFile asks for and goes on without - each is
+ * used through ?. there. The shell provides them from the service
+ * registry; left out here, each mount logged one Vue warning per service,
+ * with the workspace printed in full (#1404). Provided as absent, which is
+ * what the board is opened with in this test.
+ */
+const withoutServices = Object.fromEntries(
+  [
+    'ConnectionRepository',
+    'DatasourceRepository',
+    'VariableRepository',
+    'VariableWrapperFactory',
+    'EventManager',
+    'RepositoryRegistry',
+  ].map((service) => [Symbol.for(service), undefined]),
+)
+
 const replace = vi.fn()
 const push = vi.fn()
 let params: Record<string, string> = {}
@@ -87,7 +105,7 @@ function setUp({ open = 'b1', asked = 'b1', connections = 1 } = {}) {
   }
   const wrapper = mount(OpenBoard, {
     global: {
-      provide: { [WORKSPACE]: workspace, i18n: translator },
+      provide: { ...withoutServices, [WORKSPACE]: workspace, i18n: translator },
       stubs: { BoardFloorplan: true },
     },
   })
