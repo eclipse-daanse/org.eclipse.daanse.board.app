@@ -51,6 +51,14 @@ async function translator(lng: string, progress: { en: Pack; de: Pack }) {
   return i18n
 }
 
+/*
+ * Every field that can take its value from a variable injects the variable
+ * repository. The shell provides it from the service registry; without it
+ * here, each field logged a Vue warning that printed the settings EObjects
+ * in full (#1404). No variables: nothing in this test binds one.
+ */
+const noVariables = { getVariable: () => undefined, getAllVariables: () => [] }
+
 async function settingsForm(i18n: Awaited<ReturnType<typeof translator>>) {
   const view = mount(SettingsForm, {
     props: {
@@ -61,7 +69,7 @@ async function settingsForm(i18n: Awaited<ReturnType<typeof translator>>) {
       uiModelUri: '/progress-settings.ui.xmi',
       ecore: settingsEcore,
     },
-    global: { provide: { i18n } },
+    global: { provide: { i18n, [Symbol.for('VariableRepository')]: noVariables } },
     attachTo: document.body,
   })
   await flushPromises()
