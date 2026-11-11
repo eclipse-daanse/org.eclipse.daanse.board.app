@@ -21,7 +21,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '../context'
 import { asTable } from '../table'
-import { LOOK } from './fixtures'
+import { LOOK, option } from './fixtures'
 
 const member = (hierarchy: string, caption: string, path = caption) => ({ Caption: caption, UName: `[${hierarchy}].[${path}]` })
 const gender = (caption: string) => member('Gender', caption)
@@ -110,3 +110,35 @@ describe('levels from the members a caption stands for', () => {
     expect(at.headerLevels(2)).toEqual(['1997', 'Q1'])
   })
 })
+
+describe('every kind that reads levels', () => {
+
+  it('takes the last member as the step of a stream, the members before it as the layer', () => {
+    const data = series('stream', CROSSJOIN)
+    expect(data).toEqual([
+      [0, 10, 'F'],
+      [1, 20, 'F'],
+      [0, 30, 'M'],
+      [1, 40, 'M'],
+    ])
+  })
+
+  it('reads the headers of a stream by their members', () => {
+    const data = {
+      headers: ['Caption', 'F - $30K - $50K', 'F - $50K - $70K', 'M - $30K - $50K'],
+      rows: [['Unit Sales', 1, 2, 3]],
+      columnProperties: {
+        'F - $30K - $50K': [gender('F'), income('$30K - $50K')],
+        'F - $50K - $70K': [gender('F'), income('$50K - $70K')],
+        'M - $30K - $50K': [gender('M'), income('$30K - $50K')],
+      },
+    }
+    expect(option('stream', data).singleAxis.axisLabel.formatter(0)).toBe('$30K - $50K')
+    expect(new Set(series('stream', data).map((point: unknown[]) => point[2]))).toEqual(new Set(['F', 'M']))
+  })
+
+})
+
+function series(kind: 'stream', data: unknown) {
+  return option(kind, data).series[0].data
+}
