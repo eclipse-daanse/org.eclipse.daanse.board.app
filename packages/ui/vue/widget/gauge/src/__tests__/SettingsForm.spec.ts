@@ -52,6 +52,14 @@ async function translator() {
   return i18n
 }
 
+/*
+ * Every field that can take its value from a variable injects the variable
+ * repository. The shell provides it from the service registry; without it
+ * here, each field logged a Vue warning that printed the settings EObjects
+ * in full (#1404). No variables: nothing in this test binds one.
+ */
+const noVariables = { getVariable: () => undefined, getAllVariables: () => [] }
+
 async function gaugeForm(initial: unknown = { datasourceId: undefined }) {
   const config = shallowRef<unknown>(initial)
   const Host = defineComponent({
@@ -72,6 +80,7 @@ async function gaugeForm(initial: unknown = { datasourceId: undefined }) {
       provide: {
         i18n: await translator(),
         [identifiers.TINY_EMITTER as symbol]: { emit: vi.fn(), on: vi.fn(), off: vi.fn() },
+        [Symbol.for('VariableRepository')]: noVariables,
       },
     },
     attachTo: document.body,

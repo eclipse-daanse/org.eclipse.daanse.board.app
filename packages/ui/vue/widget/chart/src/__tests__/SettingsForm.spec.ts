@@ -54,6 +54,15 @@ async function translator() {
   return i18n
 }
 
+/*
+ * Every field that can take its value from a variable renders a
+ * VariableInput, which injects the variable repository. The shell provides
+ * it from the service registry; without it here, each field logged a Vue
+ * warning that printed the settings EObjects in full - 2.9 million lines of
+ * the CI log (#1404). No variables: nothing in this test binds one.
+ */
+const noVariables = { getVariable: () => undefined, getAllVariables: () => [] }
+
 async function settingsForm(settings: ChartSettings) {
   const view = mount(SettingsForm, {
     props: {
@@ -70,7 +79,12 @@ async function settingsForm(settings: ChartSettings) {
       entryForms: [{ xmi: seriesSettingsFormXmi, uri: '/chart-series.ui.xmi' }],
       ecore: settingsEcore,
     },
-    global: { provide: { i18n: await translator() } },
+    global: {
+      provide: {
+        i18n: await translator(),
+        [Symbol.for('VariableRepository')]: noVariables,
+      },
+    },
     attachTo: document.body,
   })
   await flushPromises()

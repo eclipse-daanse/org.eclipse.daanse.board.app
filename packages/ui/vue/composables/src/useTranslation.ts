@@ -177,8 +177,10 @@ export function useTranslation(namespace?: string): Translation {
   }
 
   const t = (key: string, options?: Record<string, unknown>) => {
-    /* The dependency. Without this read the rest is a plain function
-       again and nothing re-renders. */
+    /*
+     * The dependency. Without this read the rest is a plain function
+     * again and nothing re-renders.
+     */
     void changed.value
     const i18n = read()
     if (!i18n) return key
