@@ -19,9 +19,21 @@ on:
     branches:
       - 'main'
 
+# Three jobs side by side, each on its own runner: the build that becomes
+# the image, the type check and the tests. They used to run one after
+# another in one job, the type check inside every package's build. The
+# image waits for all three.
+#
+# A runner has 4 vCPUs. turbo runs 4 tasks at a time; at 20 they mostly
+# waited for each other, and a test that measures time took 96 s instead
+# of 5.
+env:
+  TURBO_ARGS: --concurrency=4 --cache-dir=.turbo/cache --summarize
+  NODE_OPTIONS: --max_old_space_size=65536
+
 jobs:
   build:
-    name: Build & Test
+    name: Build
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -29,38 +41,29 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
-      - name: Build
-        working-directory: ./packages/app/default
-        #run: yarn --skip-integrity-check --no-lockfile --network-timeout 100000
+          cache: yarn
+      - name: Install
         run: yarn --immutable --network-timeout 100000
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://github.com/microsoft/vscode-ripgrep/issues/9
-      #- name: Check for uncommitted changes in yarn.lock
-      #  run: |
-      #    if git diff --name-only | grep -q "^yarn.lock"; then
-      #      echo "::error::The yarn.lock file has uncommitted changes!"
-      #      exit 1
-      #    fi
-      #- name: Create eslint json report
-      #  run: |
-      #    yarn lint:ci
 
-      #- name: Create summary
-      #  run: |
-      #    npm_config_yes=true npx github:10up/eslint-json-to-md#82ff16b --path ./eslint_report.json --output ./eslint_report.md
-      #   cat eslint_report.md >> $GITHUB_STEP_SUMMARY
-      - name: Check translations
-        run: node scripts/i18n.mjs check
+      # turbo names each task's output by a hash of its inputs, so an
+      # output kept from an earlier run is used only where nothing it was
+      # made from has changed.
+      - name: Restore the turbo cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo/cache
+          key: turbo-build-${{ hashFiles('yarn.lock', 'turbo.json') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-build-${{ hashFiles('yarn.lock', 'turbo.json') }}-
+            turbo-build-
 
       - name: Build all Modules
-        run: yarn run build
-        env:
-          NODE_OPTIONS: --max_old_space_size=65536
+        run: yarn turbo run build ${{ env.TURBO_ARGS }}
 
-      # The job has been called "Build & Test" since it was written and ran
-      # no tests. It runs them now.
-      - name: Test
-        run: yarn run test
+      - name: Keep only what this run used in the turbo cache
+        run: scripts/ci/prune-turbo-cache.sh
 
       # `yarn build` does not build the tsm bundles, and build:prod only
       # copies what is there. Without this step the image held 4 of 154.
@@ -71,7 +74,6 @@ jobs:
         working-directory: ./packages/app/default
         run: yarn run build:prod
         env:
-          NODE_OPTIONS: --max_old_space_size=65536
           # A missing bundle fails the build instead of a warning in the log.
           REQUIRE_ALL_BUNDLES: '1'
 
@@ -84,13 +86,80 @@ jobs:
           retention-days: 7
           if-no-files-found: error
 
+  # Every package's vue-tsc / tsc, as the turbo task `typecheck`. It needs
+  # the declarations of the packages a package imports, so this job builds
+  # them too - from the cache where it can.
+  typecheck:
+    name: Type check
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - name: Install
+        run: yarn --immutable --network-timeout 100000
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://github.com/microsoft/vscode-ripgrep/issues/9
+
+      - name: Restore the turbo cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo/cache
+          key: turbo-typecheck-${{ hashFiles('yarn.lock', 'turbo.json') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-typecheck-${{ hashFiles('yarn.lock', 'turbo.json') }}-
+            turbo-typecheck-
+            turbo-build-
+
+      # These six had a typecheck script that no build ever ran, and fail
+      # it; the issue on CI speed says why. Each one taken off here is
+      # checked from then on.
+      - name: Type check all Modules
+        run: >
+          yarn turbo run typecheck ${{ env.TURBO_ARGS }}
+          --filter='!org.eclipse.daanse.board.app.lib.lsp.lang.dax'
+          --filter='!org.eclipse.daanse.board.app.lib.lsp.lang.dmv'
+          --filter='!org.eclipse.daanse.board.app.lib.lsp.lang.mdx'
+          --filter='!org.eclipse.daanse.board.app.lib.lsp.lang.sql'
+          --filter='!org.eclipse.daanse.board.app.lib.lsp.server'
+          --filter='!org.eclipse.daanse.board.app.ui.vue.common.lsp'
+
+      - name: Keep only what this run used in the turbo cache
+        run: scripts/ci/prune-turbo-cache.sh
+
+  # The tests run against the sources (vitest.config.ts), so they need no
+  # build.
+  test:
+    name: Test
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - name: Install
+        run: yarn --immutable --network-timeout 100000
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://github.com/microsoft/vscode-ripgrep/issues/9
+
+      - name: Check translations
+        run: node scripts/i18n.mjs check
+
+      - name: Test
+        run: yarn run test
+
   # The image is built from the dist of this very run, so its tag and its
   # content name the same commit, and a failed build yields no image. It
   # used to follow CI through workflow_run and a cache that fell back to
   # any earlier build.
   image:
     name: Image
-    needs: build
+    needs: [build, typecheck, test]
     if: github.event_name != 'pull_request' && startsWith(github.repository, 'eclipse-daanse/')
     runs-on: ubuntu-latest
     permissions:

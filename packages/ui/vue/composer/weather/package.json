@@ -17,7 +17,8 @@
     "./manifest.json": "./manifest.json"
   },
   "scripts": {
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {

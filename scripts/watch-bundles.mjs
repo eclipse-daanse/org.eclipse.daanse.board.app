@@ -189,7 +189,7 @@ function flushLibs() {
         cwd: ROOT,
         /* A library's dist/ is baked into the bundles that inline it, and
           those are shipped. It stays a production build. */
-        env: inheritEnv({ ...process.env, SKIP_TYPE_CHECK: 'true', NODE_ENV: 'production' }),
+        env: inheritEnv({ ...process.env, NODE_ENV: 'production' }),
       })
     } catch (error) {
       const tail = `${error.stdout ?? ''}\n${error.stderr ?? ''}`.trim().split('\n').slice(-8)

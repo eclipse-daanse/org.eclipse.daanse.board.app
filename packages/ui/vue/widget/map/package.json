@@ -18,7 +18,8 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "[ \"$SKIP_TYPE_CHECK\" = \"true\" ] && vite build || (vue-tsc --noEmit && vite build)",
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage"

@@ -3,8 +3,12 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "env": ["SKIP_TYPE_CHECK"],
+      "outputs": ["dist/**", "dist-bundle/**"],
+      "cache": true
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": [],
       "cache": true
     },
     "dev": {

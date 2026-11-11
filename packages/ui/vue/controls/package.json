@@ -16,7 +16,8 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "[ \"$SKIP_TYPE_CHECK\" = \"true\" ] && (vite build && vite build --config vite.bundle.config.ts) || (vue-tsc --noEmit && vite build && vite build --config vite.bundle.config.ts)"
+    "build": "vite build && vite build --config vite.bundle.config.ts",
+    "typecheck": "vue-tsc --noEmit"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
