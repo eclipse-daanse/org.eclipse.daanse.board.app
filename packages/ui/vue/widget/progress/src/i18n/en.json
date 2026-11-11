@@ -27,6 +27,21 @@
     "valueAlign": "Horizontal",
     "valueJustify": "Vertical"
   },
+  "FormHelp": {
+    "progress": "How far the bar is filled, 0 to 100. A $value placeholder is replaced with the data of the assigned datasource: $value on its own inserts the whole object, $value.percent one of its fields.",
+    "min": "The minimum value for the progress bar.",
+    "max": "The maximum value for the progress bar.",
+    "isVertical": "A flag indicating whether the progress bar is oriented vertically.",
+    "fillColor": "The color representing the filled portion of the progress bar.",
+    "backgroundColor": "The background color of the progress bar, representing the unfilled portion.",
+    "barThickness": "The thickness of the progress bar (e.g., '20px').",
+    "borderRadius": "The border radius of the progress bar (e.g., '10px').",
+    "isGradient": "A flag indicating whether the progress bar should use a gradient color.",
+    "rotation": "The direction of the gradient, in degrees.",
+    "textColor": "The color of the text displayed on the progress bar.",
+    "valueAlign": "The horizontal alignment of the value text.",
+    "valueJustify": "The vertical alignment of the value text."
+  },
   "Options": {
     "align": {
       "left": "Left",
