@@ -13,7 +13,7 @@
 /* The shape of /versions.json, for vite.config.ts and the /about screen. */
 
 export interface ComponentVersions {
-  app: { name: string; version: string }
+  app: { name: string; version: string; variant?: string }
   commit?: string
   builtAt: string
   bundles: Array<{ id: string; name: string; version: string; included: boolean }>
@@ -26,6 +26,8 @@ export declare const KEY_DEPENDENCIES: string[]
 export declare function collectComponentVersions(options: {
   root: string
   included?: (dir: string) => boolean
+  belongs?: (id: string) => boolean
+  variant?: string
   commit?: string
   builtAt?: Date
 }): ComponentVersions
