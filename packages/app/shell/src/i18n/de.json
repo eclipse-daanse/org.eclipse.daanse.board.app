@@ -566,7 +566,9 @@
   },
   "Nav": {
     "variables": "Variablen",
-    "variablesDesc": "Benannte Werte, die Seiten und Widgets teilen."
+    "variablesDesc": "Benannte Werte, die Seiten und Widgets teilen.",
+    "about": "Über",
+    "aboutDesc": "Woraus dieses Board besteht, und in welchen Versionen."
   },
   "Board": {
     "noPages": {
@@ -599,5 +601,36 @@
     "anySource": "Keine — alle Widgets",
     "noneFit": "Kein Widget kann zeigen, was diese Quelle liefert.",
     "hint": "Auf das Board ziehen – oder anklicken, dann wird es unten angelegt."
+  },
+  "About": {
+    "title": "Über dieses Board",
+    "lead": "Der Build, aus dem dieses Board stammt, die Bundles, die es geladen hat, und worauf es läuft.",
+    "version": "Version",
+    "commit": "Commit",
+    "builtAt": "Gebaut",
+    "noBuild": "Keine Build-Informationen: Dieses Board wurde aus den Quellen gestartet.",
+    "bundles": "Bundles",
+    "dependencies": "Bibliotheken",
+    "packages": "Pakete ({{count}})",
+    "column": {
+      "bundle": "Bundle",
+      "built": "Gebaut",
+      "loaded": "Geladen",
+      "status": "Status"
+    },
+    "status": {
+      "failed": "Fehlgeschlagen",
+      "missing": "Fehlt",
+      "differs": "Andere Version",
+      "added": "Vom Deployment ergänzt",
+      "active": "Aktiv",
+      "idle": "Nicht gestartet"
+    },
+    "runtime": {
+      "title": "Laufzeit",
+      "address": "Adresse",
+      "language": "Sprache",
+      "browser": "Browser"
+    }
   }
 }

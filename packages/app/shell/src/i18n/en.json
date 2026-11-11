@@ -566,7 +566,9 @@
   },
   "Nav": {
     "variables": "Variables",
-    "variablesDesc": "Named values that pages and widgets share."
+    "variablesDesc": "Named values that pages and widgets share.",
+    "about": "About",
+    "aboutDesc": "What this board is made of, and in which versions."
   },
   "Board": {
     "noPages": {
@@ -599,5 +601,36 @@
     "anySource": "None — show every widget",
     "noneFit": "No widget can show what this source answers.",
     "hint": "Drag onto the board – or click, and it is placed below what is there."
+  },
+  "About": {
+    "title": "About this board",
+    "lead": "The build this board came from, the bundles it loaded, and what it runs on.",
+    "version": "Version",
+    "commit": "Commit",
+    "builtAt": "Built",
+    "noBuild": "No build information: this board was started from its sources.",
+    "bundles": "Bundles",
+    "dependencies": "Libraries",
+    "packages": "Packages ({{count}})",
+    "column": {
+      "bundle": "Bundle",
+      "built": "Built",
+      "loaded": "Loaded",
+      "status": "Status"
+    },
+    "status": {
+      "failed": "Failed",
+      "missing": "Missing",
+      "differs": "Other version",
+      "added": "Added by the deployment",
+      "active": "Active",
+      "idle": "Not started"
+    },
+    "runtime": {
+      "title": "Runtime",
+      "address": "Address",
+      "language": "Language",
+      "browser": "Browser"
+    }
   }
 }
