@@ -23,7 +23,8 @@
  * @generated
  */
 export const VisualKind = {
-  BARS3D: 'BARS3D'
+  BARS3D: 'BARS3D',
+  CUBE: 'CUBE'
 } as const;
 
 export type VisualKind = typeof VisualKind[keyof typeof VisualKind];
@@ -40,5 +41,6 @@ export function getVisualKind(name: string): VisualKind | undefined {
  */
 export function getVisualKindByLiteral(literal: string): VisualKind | undefined {
   if (literal === 'bars3d') return VisualKind.BARS3D;
+  if (literal === 'cube') return VisualKind.CUBE;
   return undefined;
 }

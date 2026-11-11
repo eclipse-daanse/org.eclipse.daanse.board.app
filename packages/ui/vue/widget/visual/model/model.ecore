@@ -31,6 +31,7 @@ Empty, each kind takes the columns it needs from the left.
             <details key="documentation" value="What the table is drawn as."/>
         </eAnnotations>
         <eLiterals name="BARS3D" literal="bars3d"/>
+        <eLiterals name="CUBE" literal="cube" value="12"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EEnum" name="VisualPalette">

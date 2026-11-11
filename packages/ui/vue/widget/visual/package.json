@@ -36,10 +36,12 @@
     "org.eclipse.daanse.board.app.lib.variables": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.ui.vue.plugins.i18next": "0.0.1-next.1"
+    "org.eclipse.daanse.board.app.ui.vue.plugins.i18next": "0.0.1-next.1",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@types/node": "^25.0.8",
+    "@types/three": "^0.187.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",

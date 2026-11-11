@@ -21,6 +21,7 @@
 import { columnNamed, columnsOf, rowLabel, type Columns, type Table } from './table'
 import { isLight, onDark, paletteNamed, withAlpha, type Palette } from './palettes'
 import type { Kind } from './drawing'
+import type { Cube } from './kinds/cube'
 
 /** Where the camera of a 3D box stands until the reader turns it, and goes back to on a double click. */
 export const HOME_VIEW = { alpha: 24, beta: 38, distance: 380 } as const
@@ -81,12 +82,14 @@ export type Problem =
   | 'noValues'
   /** No column of numbers to draw. */
   | 'needsNumbers'
+  /** A cube needs three axes to stand on. */
+  | 'needsThreeAxes'
 
 /* ECharts' option is a large open object, and echarts-gl's half is not typed at all. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Option = Record<string, any>
 
-export type Drawing = { option: Option } | { problem: Problem }
+export type Drawing = { option: Option } | { cube: Cube } | { problem: Problem }
 
 
 /* ------------------------------------------------------------- shared */
