@@ -14,7 +14,8 @@
   },
   "Options": {
     "kind": {
-      "bars3d": "Balken in 3D"
+      "bars3d": "Balken in 3D",
+      "surface": "Fläche in 3D"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -27,7 +28,8 @@
   "Problem": {
     "noData": "Noch keine Daten. Geben Sie diesem Widget eine Quelle, die eine Tabelle liefert.",
     "noValues": "Die Abfrage hat geantwortet, aber jede Zelle darin ist leer.",
-    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen."
+    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen.",
+    "needsGrid": "Eine Fläche braucht mindestens zwei Zeilen und zwei Zahlenspalten."
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"

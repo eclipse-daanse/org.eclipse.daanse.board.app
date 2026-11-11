@@ -14,7 +14,8 @@
   },
   "Options": {
     "kind": {
-      "bars3d": "Bars in 3D"
+      "bars3d": "Bars in 3D",
+      "surface": "Surface in 3D"
     },
     "palette": {
       "aurora": "Aurora",
@@ -27,7 +28,8 @@
   "Problem": {
     "noData": "No data yet. Give this widget a source that answers a table.",
     "noValues": "The query answered, but every cell in it is empty.",
-    "needsNumbers": "The table has no column of numbers to draw."
+    "needsNumbers": "The table has no column of numbers to draw.",
+    "needsGrid": "A surface needs at least two rows and two columns of numbers."
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"
