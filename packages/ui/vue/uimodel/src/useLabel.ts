@@ -41,3 +41,44 @@ export function useLabel() {
   return <T extends string | undefined>(text: T): T =>
     (isTranslationKey(text) ? t(text) : text) as T
 }
+
+/**
+ * The key of the help text that goes with a label key.
+ *
+ * A field's help is the GenModel documentation of its feature, and that is
+ * English, written once in the .ecore. A package that wants it in another
+ * language puts it beside the label, in a section named after the label's
+ * own with `Help` behind it:
+ *
+ *   label "progress:Form.fillColor" -> help "progress:FormHelp.fillColor"
+ *
+ * Derived rather than written into the form because the UI model has no
+ * place for it, and so that a form gains help by adding texts only.
+ * scripts/i18n.mjs knows the same rule, so such a key counts as used.
+ */
+export function helpKeyOf(labelKey: unknown): string | undefined {
+  if (!isTranslationKey(labelKey)) return undefined
+  const colon = labelKey.indexOf(':')
+  const dot = labelKey.indexOf('.', colon)
+  if (dot < 0) return undefined
+  return `${labelKey.slice(0, dot)}Help${labelKey.slice(dot)}`
+}
+
+/* What i18next hands back for a key it does not have, when asked to. */
+const MISSING = '\u0000missing'
+
+/**
+ * The help text of a field: its key's text if a pack has one, otherwise
+ * the model's own sentence.
+ */
+export function useHelp() {
+  const { t } = useTranslation()
+  return (labelKey: unknown, documentation: string | undefined): string | undefined => {
+    const key = helpKeyOf(labelKey)
+    if (!key) return documentation
+    const text = t(key, { defaultValue: MISSING })
+    /* Without a translator t hands the key back. */
+    if (!text || text === MISSING || text === key) return documentation
+    return text
+  }
+}

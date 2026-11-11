@@ -27,6 +27,21 @@
     "valueAlign": "Waagerecht",
     "valueJustify": "Senkrecht"
   },
+  "FormHelp": {
+    "progress": "Wie weit der Balken gefüllt ist, 0 bis 100. Ein Platzhalter $value wird durch die Daten der zugewiesenen Datenquelle ersetzt: $value allein fügt das ganze Objekt ein, $value.percent eines seiner Felder.",
+    "min": "Der kleinste Wert des Fortschrittsbalkens.",
+    "max": "Der größte Wert des Fortschrittsbalkens.",
+    "isVertical": "Ob der Fortschrittsbalken senkrecht steht.",
+    "fillColor": "Die Farbe des gefüllten Teils des Fortschrittsbalkens.",
+    "backgroundColor": "Die Hintergrundfarbe des Fortschrittsbalkens, also des ungefüllten Teils.",
+    "barThickness": "Die Dicke des Fortschrittsbalkens (z. B. „20px“).",
+    "borderRadius": "Der Eckenradius des Fortschrittsbalkens (z. B. „10px“).",
+    "isGradient": "Ob der Fortschrittsbalken mit einem Farbverlauf gefüllt wird.",
+    "rotation": "Die Richtung des Farbverlaufs, in Grad.",
+    "textColor": "Die Farbe des Textes auf dem Fortschrittsbalken.",
+    "valueAlign": "Die waagerechte Ausrichtung des Wertes.",
+    "valueJustify": "Die senkrechte Ausrichtung des Wertes."
+  },
   "Options": {
     "align": {
       "left": "Links",
