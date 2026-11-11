@@ -7,6 +7,11 @@
     "kind": "Darstellung",
     "title": "Titel",
     "palette": "Farben",
+    "columnsGroup": "Spalten",
+    "xColumn": "Quer",
+    "yColumn": "In die Tiefe",
+    "zColumn": "Nach oben",
+    "sizeColumn": "Punktgröße aus",
     "motionGroup": "Bewegung",
     "autoRotate": "Langsam von selbst drehen",
     "displayGroup": "Anzeige",
@@ -14,7 +19,8 @@
   },
   "Options": {
     "kind": {
-      "bars3d": "Balken in 3D"
+      "bars3d": "Balken in 3D",
+      "scatter3d": "Punkte in 3D"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -27,7 +33,8 @@
   "Problem": {
     "noData": "Noch keine Daten. Geben Sie diesem Widget eine Quelle, die eine Tabelle liefert.",
     "noValues": "Die Abfrage hat geantwortet, aber jede Zelle darin ist leer.",
-    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen."
+    "needsNumbers": "Die Tabelle hat keine Zahlenspalte zum Zeichnen.",
+    "needsThreeNumbers": "Punkte im Raum brauchen drei Zahlenspalten."
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"

@@ -26,7 +26,7 @@ import {
   VisualMapComponent,
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
-import { Bar3DChart } from 'echarts-gl/charts'
+import { Bar3DChart, Scatter3DChart } from 'echarts-gl/charts'
 import { Grid3DComponent } from 'echarts-gl/components'
 
 echarts.use([
@@ -35,6 +35,7 @@ echarts.use([
   VisualMapComponent,
   CanvasRenderer,
   Bar3DChart,
+  Scatter3DChart,
   Grid3DComponent,
 ])
 
