@@ -28,6 +28,18 @@
     "sourceGroup": "Datenquelle",
     "stateField": "Feld mit dem Zustand"
   },
+  "FormHelp": {
+    "on": "Ob die Lampe an ist: true oder false. An eine Variable gebunden, folgt die Lampe ihr, und ein Druck oder eine Aktion schreibt in sie.",
+    "brightness": "Wie hell die Lampe ist, von 0 bis 100.",
+    "color": "Die Farbe des Lichts, jede CSS-Farbe. Leer gelassen, folgt die Farbe der Farbtemperatur.",
+    "colorTemperature": "Die Farbtemperatur des Lichts in Kelvin, von 1000 (Kerze) bis 10000 (blauer Himmel). Gilt, solange keine Farbe gesetzt ist.",
+    "radius": "Wie weit das Licht reicht, in Pixeln. Leer gelassen, entscheidet die Größe des Widgets: Das Licht reicht über die Hälfte seiner längeren Seite, wer das Widget vergrößert, vergrößert also das Licht.",
+    "lightShape": "Wie das Licht fällt: rund, rings um die Lampe, oder als Kegel in eine Richtung.",
+    "direction": "Wohin ein Kegel zeigt, in Grad: 0 nach rechts, 90 nach unten, 180 nach links, 270 nach oben.",
+    "angle": "Wie weit sich ein Kegel öffnet, in Grad.",
+    "lightsWidgets": "Ob das Licht auch auf die Widgets in der Nähe der Lampe fällt, nicht nur auf die Seite dahinter.",
+    "stateField": "Wo in der Antwort der Datenquelle die Lampe ihren Zustand findet, als Pfad (status.light). Ein Wert dort, der an oder aus sagt, schaltet die Lampe, eine Zahl setzt ihre Helligkeit, und ein Objekt kann on, brightness, color und colorTemperature tragen. Leer gelassen, wird die Datenquelle nicht gelesen."
+  },
   "Options": {
     "lightShape": {
       "round": "Rund",
