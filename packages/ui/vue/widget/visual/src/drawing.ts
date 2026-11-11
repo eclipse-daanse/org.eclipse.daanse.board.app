@@ -34,10 +34,12 @@ import { calendar } from './kinds/calendar'
 import { stream } from './kinds/stream'
 import { waterfall } from './kinds/waterfall'
 import { chord } from './kinds/chord'
+import { boxplot } from './kinds/boxplot'
 import { cube } from './kinds/cube'
 
 export { HOME_VIEW, homeOf, SMALL, WORDS, type Drawing, type Look, type Option, type Problem, type Word } from './context'
 export { dayOf } from './kinds/calendar'
+export { summaryOf } from './kinds/boxplot'
 
 export const KINDS = [
   'bars3d',
@@ -51,8 +53,6 @@ export const KINDS = [
   'stream',
   'waterfall',
   'chord',
-import { boxplot } from './kinds/boxplot'
-export { summaryOf } from './kinds/boxplot'
   'boxplot',
   'cube',
 ] as const

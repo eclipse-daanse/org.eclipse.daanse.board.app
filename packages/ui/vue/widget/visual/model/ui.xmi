@@ -20,20 +20,11 @@ shown for it, so the form never offers a setting that does nothing.
 The kind is compared by the enum's name in capitals: the model stores the
 name, a board written by hand may hold the literal, and both read the same.
 -->
-<uimodel:UIModel
-    xmlns:xmi="http://www.omg.org/XMI"
-    xmi:version="2.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:uimodel="http://uimodel/1.0"
-    name="VisualSettingsForm">
-
+<uimodel:UIModel xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uimodel="http://uimodel/1.0" xmi:version="2.0" name="VisualSettingsForm">
   <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings"/>
-
   <components xsi:type="uimodel:FormView" name="VisualSettingsFormView">
-
     <fields xsi:type="uimodel:GroupWidget" name="drawGroup" layout="VERTICAL" label="visual:Form.drawGroup">
-      <fields xsi:type="uimodel:SelectWidget" name="kind"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/kind" label="visual:Form.kind">
+      <fields xsi:type="uimodel:SelectWidget" name="kind" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/kind" label="visual:Form.kind">
         <values>BARS3D</values>
         <values>SURFACE</values>
         <values>SCATTER3D</values>
@@ -49,10 +40,8 @@ name, a board written by hand may hold the literal, and both read the same.
         <values>CUBE</values>
         <optionLabel language="JS" body="'visual:Options.kind.' + String(option).toLowerCase()"/>
       </fields>
-      <fields xsi:type="uimodel:InputWidget" name="title"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/title" label="visual:Form.title"/>
-      <fields xsi:type="uimodel:SelectWidget" name="palette"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/palette" label="visual:Form.palette">
+      <fields xsi:type="uimodel:InputWidget" name="title" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/title" label="visual:Form.title"/>
+      <fields xsi:type="uimodel:SelectWidget" name="palette" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/palette" label="visual:Form.palette">
         <values>AURORA</values>
         <values>OCEAN</values>
         <values>SUNSET</values>
@@ -61,105 +50,47 @@ name, a board written by hand may hold the literal, and both read the same.
         <optionLabel language="JS" body="'visual:Options.palette.' + String(option).toLowerCase()"/>
       </fields>
     </fields>
-
     <fields xsi:type="uimodel:GroupWidget" name="columnsGroup" layout="VERTICAL" label="visual:Form.columnsGroup">
-      <visibilityCondition language="JS" body="!['BARS3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      <fields xsi:type="uimodel:InputWidget" name="xColumn"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/xColumn" label="visual:Form.xColumn">
+      <visibilityCondition language="JS" body="['SCATTER3D', 'SUNBURST', 'TREEMAP', 'SANKEY', 'CALENDAR', 'STREAM', 'WATERFALL', 'CHORD', 'BOXPLOT', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <fields xsi:type="uimodel:InputWidget" name="xColumn" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/xColumn" label="visual:Form.xColumn">
         <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
-      <fields xsi:type="uimodel:InputWidget" name="yColumn"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/yColumn" label="visual:Form.yColumn">
+      <fields xsi:type="uimodel:InputWidget" name="yColumn" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/yColumn" label="visual:Form.yColumn">
         <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
-      <fields xsi:type="uimodel:InputWidget" name="zColumn"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/zColumn" label="visual:Form.zColumn">
+      <fields xsi:type="uimodel:InputWidget" name="zColumn" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/zColumn" label="visual:Form.zColumn">
         <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
-      <fields xsi:type="uimodel:InputWidget" name="sizeColumn"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/sizeColumn" label="visual:Form.sizeColumn">
+      <fields xsi:type="uimodel:InputWidget" name="sizeColumn" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/sizeColumn" label="visual:Form.sizeColumn">
         <visibilityCondition language="JS" body="['SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      <fields xsi:type="uimodel:InputWidget" name="valueColumn"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/valueColumn" label="visual:Form.valueColumn" placeholder="visual:Placeholder.column">
-        <visibilityCondition language="JS" body="['SUNBURST'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      <fields xsi:type="uimodel:InputWidget" name="pathSeparator"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/pathSeparator" label="visual:Form.pathSeparator">
-        <visibilityCondition language="JS" body="['SUNBURST'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['TREEMAP'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['TREEMAP'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['SANKEY'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['SANKEY'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['CALENDAR'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['STREAM'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['STREAM'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['WATERFALL'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['BOXPLOT'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['BOXPLOT'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="valueColumn" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/valueColumn" label="visual:Form.valueColumn" placeholder="visual:Placeholder.column">
+        <visibilityCondition language="JS" body="['SUNBURST', 'TREEMAP', 'SANKEY', 'CALENDAR', 'STREAM', 'WATERFALL', 'CHORD', 'BOXPLOT', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget" name="pathSeparator" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/pathSeparator" label="visual:Form.pathSeparator">
+        <visibilityCondition language="JS" body="['SUNBURST', 'TREEMAP', 'SANKEY', 'STREAM', 'CHORD', 'BOXPLOT', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
-
     <fields xsi:type="uimodel:GroupWidget" name="motionGroup" layout="VERTICAL" label="visual:Form.motionGroup">
-      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      <fields xsi:type="uimodel:CheckboxWidget" name="autoRotate"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/autoRotate" label="visual:Form.autoRotate">
-        <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'RACE', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="autoRotate" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/autoRotate" label="visual:Form.autoRotate">
+        <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
-      <fields xsi:type="uimodel:NumberWidget" name="topN"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/topN" label="visual:Form.topN" min="1" max="50" step="1">
+      <fields xsi:type="uimodel:NumberWidget" name="topN" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/topN" label="visual:Form.topN" min="1" max="50" step="1">
         <visibilityCondition language="JS" body="['RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
-      <fields xsi:type="uimodel:NumberWidget" name="frameDuration"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/frameDuration" label="visual:Form.frameDuration" min="200" max="20000" step="100">
+      <fields xsi:type="uimodel:NumberWidget" name="frameDuration" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/frameDuration" label="visual:Form.frameDuration" min="200" max="20000" step="100">
         <visibilityCondition language="JS" body="['RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      <visibilityCondition language="JS" body="['BARS3D', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['BARS3D', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
-
     <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="visual:Form.displayGroup">
-      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'SUNBURST', 'TREEMAP', 'SANKEY', 'RACE', 'STREAM', 'WATERFALL', 'CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      <fields xsi:type="uimodel:CheckboxWidget" name="showScale"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showScale" label="visual:Form.showScale">
-        <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'SUNBURST', 'TREEMAP', 'SANKEY', 'RACE', 'CALENDAR', 'STREAM', 'WATERFALL', 'CHORD', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showScale" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showScale" label="visual:Form.showScale">
+        <visibilityCondition language="JS" body="['BARS3D', 'SURFACE', 'SCATTER3D', 'CALENDAR', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
-      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
-        <visibilityCondition language="JS" body="['SUNBURST'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      </fields>
-      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
-        <visibilityCondition language="JS" body="['TREEMAP'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      </fields>
-      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
-        <visibilityCondition language="JS" body="['SANKEY'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      </fields>
-      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
-        <visibilityCondition language="JS" body="['RACE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      <visibilityCondition language="JS" body="['BARS3D', 'CALENDAR'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['BARS3D', 'CALENDAR'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      </fields>
-      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
-        <visibilityCondition language="JS" body="['STREAM'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      </fields>
-      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
-        <visibilityCondition language="JS" body="['WATERFALL'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      </fields>
-      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels"
-          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
-        <visibilityCondition language="JS" body="['CHORD'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-      <visibilityCondition language="JS" body="['BARS3D', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['BARS3D', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
-        <visibilityCondition language="JS" body="['CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showLabels" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.visual#//VisualSettings/showLabels" label="visual:Form.showLabels">
+        <visibilityCondition language="JS" body="['SUNBURST', 'TREEMAP', 'SANKEY', 'RACE', 'STREAM', 'WATERFALL', 'CHORD', 'CUBE'].includes(String(self.kind ?? 'BARS3D').toUpperCase().replace(/_/g, ''))"/>
       </fields>
     </fields>
-
   </components>
 </uimodel:UIModel>
