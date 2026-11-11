@@ -31,6 +31,15 @@ To pull the image from Docker Hub:
 docker pull eclipsedaanse/board
 ```
 
+### Tags
+
+| Tag | What it is | Kept |
+| --- | --- | --- |
+| `latest` | The newest release | For good |
+| `X.Y.Z` | A release | For good |
+| `main` | The newest build of `main` | Moves with every merge |
+| `sha-<commit>` | One build of `main` (ghcr.io only) | 30 days |
+
 ### Running a Container
 
 Run a container using this image with the following command:

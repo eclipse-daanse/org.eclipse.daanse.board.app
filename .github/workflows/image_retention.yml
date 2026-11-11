@@ -1,0 +1,63 @@
+name: Image retention
+
+# Images of main are for trying a commit out, not for keeping: every merge
+# adds one. This deletes those older than 30 days from ghcr.io. Releases
+# stay for good.
+#
+# Deleted is a package version whose tags are all `sha-<commit>`. That
+# leaves alone:
+#   - the image `main` points at, and every release (`X.Y.Z`, `latest`),
+#     because they carry a tag that is not a commit;
+#   - every untagged version. Those are the per-platform images and the
+#     SBOM and provenance attestations hanging off a tagged image. Deleting
+#     them would break the release they belong to; what a deleted main
+#     image leaves of them stays behind, which costs storage and nothing
+#     else.
+#
+# Needs the repository to have the Admin role on the package `board`
+# (package settings, "Manage Actions access"); GITHUB_TOKEN can then list
+# and delete its versions. Docker Hub is not cleaned: main images go there
+# under the moving tag `main` only.
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Only list what would be deleted'
+        type: boolean
+        default: true
+
+permissions:
+  packages: write
+
+jobs:
+  clean:
+    name: Delete main images older than 30 days
+    if: startsWith(github.repository, 'eclipse-daanse/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE: /orgs/eclipse-daanse/packages/container/board/versions
+          # A scheduled run has no inputs, and deletes.
+          DRY_RUN: ${{ inputs.dry-run || false }}
+        run: |
+          cutoff=$(date -u -d '30 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          echo "Deleting images of main created before $cutoff (dry run: $DRY_RUN)"
+
+          gh api --paginate "$PACKAGE?per_page=100" --jq '.[]' |
+            jq -c --arg cutoff "$cutoff" '
+              select(.created_at < $cutoff)
+              | select((.metadata.container.tags | length) > 0)
+              | select(all(.metadata.container.tags[]; test("^sha-[0-9a-f]+$")))
+              | { id, tags: (.metadata.container.tags | join(",")), created_at }' |
+            while read -r version; do
+              id=$(jq -r .id <<< "$version")
+              jq -r '"\(.tags) (\(.created_at))"' <<< "$version"
+              if [ "$DRY_RUN" != true ]; then
+                gh api --method DELETE "$PACKAGE/$id"
+              fi
+            done
