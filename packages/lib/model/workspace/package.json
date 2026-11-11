@@ -13,7 +13,7 @@
     "./manifest.json": "./manifest.json"
   },
   "scripts": {
-    "build": "tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@emfts/core": "^0.3.0-next.6",

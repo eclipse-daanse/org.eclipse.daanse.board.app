@@ -13,7 +13,7 @@
     "./manifest.json": "./manifest.json"
   },
   "scripts": {
-    "build": "tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@codemirror/language": "~6.13.1",
