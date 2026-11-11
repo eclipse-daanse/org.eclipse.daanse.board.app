@@ -78,6 +78,21 @@ docker run -d -p 8080:8080 \
 
 Mounting a finished file straight over `/usr/share/nginx/html/config.json` works as well, as long as neither variable above is set.
 
+## Software Bill of Materials
+
+Every image carries an SPDX SBOM and its build provenance as registry attestations:
+
+```bash
+docker buildx imagetools inspect ghcr.io/eclipse-daanse/board:latest --format '{{ json .SBOM }}'
+```
+
+A release (tag `vX.Y.Z`) also gets two CycloneDX 1.6 SBOMs as assets of its GitHub Release: `sbom-source.cdx.json` (every package in `yarn.lock`) and `sbom-image.cdx.json` (the image's Alpine packages and served files). The image SBOM is attested on the image in ghcr.io:
+
+```bash
+gh attestation verify oci://ghcr.io/eclipse-daanse/board:X.Y.Z \
+  --owner eclipse-daanse --predicate-type https://cyclonedx.org/bom
+```
+
 ## Exposed Port
 
 - **8080**: The default port where Nginx listens for HTTP connections.

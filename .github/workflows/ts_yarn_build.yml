@@ -11,6 +11,10 @@ on:
   push:
     branches:
       - 'main'
+    # A release is a tag; it runs the whole pipeline and ends in a GitHub
+    # Release (see the release job).
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - 'main'
@@ -92,6 +96,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      digest: ${{ steps.push.outputs.digest }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
@@ -130,34 +136,129 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # What an image of main is called. `main` moves with every build;
-      # `sha-<commit>` stays, in ghcr.io only, for 30 days
-      # (image_retention.yml). Docker Hub gets the moving tag alone, since
-      # nothing clears it out. `latest` is a release's, not main's.
+      # What an image is called.
       #
+      # A release (tag vX.Y.Z) is X.Y.Z, and `latest` unless it is a
+      # prerelease such as v1.2.0-rc.1, in both registries; it stays.
+      #
+      # An image of main is `main`, which moves with every build, and
+      # `sha-<commit>`, in ghcr.io only, for 30 days (image_retention.yml).
+      # Docker Hub gets the moving tag alone, since nothing clears it out.
       # Started by hand on another branch, the image gets the sha tag
       # only: `main` names what main holds.
       - name: Name the image
         id: names
         run: |
-          short="${GITHUB_SHA::9}"
           {
             echo 'tags<<EOF'
-            echo "ghcr.io/eclipse-daanse/board:sha-$short"
-            if [ "$GITHUB_REF" = refs/heads/main ]; then
-              echo "ghcr.io/eclipse-daanse/board:main"
-              echo "docker.io/eclipsedaanse/board:main"
+            if [ "$GITHUB_REF_TYPE" = tag ]; then
+              version="${GITHUB_REF_NAME#v}"
+              for registry in docker.io/eclipsedaanse/board ghcr.io/eclipse-daanse/board; do
+                echo "$registry:$version"
+                case "$version" in
+                  *-*) ;;
+                  *) echo "$registry:latest" ;;
+                esac
+              done
+            else
+              echo "ghcr.io/eclipse-daanse/board:sha-${GITHUB_SHA::9}"
+              if [ "$GITHUB_REF" = refs/heads/main ]; then
+                echo "ghcr.io/eclipse-daanse/board:main"
+                echo "docker.io/eclipsedaanse/board:main"
+              fi
             fi
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
       # The image is nginx and static files, so two platforms cover what
       # runs it; the other four only cost build time.
+      #
+      # sbom and provenance make BuildKit attach an SPDX SBOM and the build
+      # provenance to the image in the registry, for every image. The
+      # CycloneDX SBOMs of a release are made in the release job.
       - name: Build and Push Multi-Arch Docker Image
+        id: push
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           file: "Docker/Dockerfile"
           platforms: linux/amd64,linux/arm64
           push: true
+          sbom: true
+          provenance: mode=max
           tags: ${{ steps.names.outputs.tags }}
+
+  # What a release ships, listed: one SBOM of the sources (every package in
+  # yarn.lock) and one of the image (nginx's Alpine packages and the files
+  # served), both CycloneDX 1.6, attached to the GitHub Release. The image
+  # SBOM is also attested on the image in ghcr.io, so whoever pulls it can
+  # verify what it holds with `gh attestation verify`.
+  release:
+    name: Release
+    needs: image
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      attestations: write
+    env:
+      IMAGE: ghcr.io/eclipse-daanse/board
+      DIGEST: ${{ needs.image.outputs.digest }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      # Read from yarn.lock and the workspace package.json files; nothing
+      # is installed.
+      - name: SBOM of the sources
+        run: >
+          npx --yes @cyclonedx/cdxgen@12.9.1
+          --type js
+          --spec-version 1.6
+          --no-install-deps
+          --project-name org.eclipse.daanse.board.app
+          --project-version "${GITHUB_REF_NAME#v}"
+          --output sbom-source.cdx.json
+          .
+
+      - name: Login to Github Docker Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # By digest: the image this run pushed, not whatever the tag points
+      # at by the time this step runs.
+      - name: SBOM of the image
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
+        with:
+          image: ${{ env.IMAGE }}@${{ env.DIGEST }}
+          format: cyclonedx-json@1.6
+          output-file: sbom-image.cdx.json
+          upload-artifact: false
+          upload-release-assets: false
+
+      - name: Attest the image SBOM
+        uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        with:
+          subject-name: ${{ env.IMAGE }}
+          subject-digest: ${{ env.DIGEST }}
+          sbom-path: sbom-image.cdx.json
+          push-to-registry: true
+
+      # A release written by hand before the tag was pushed keeps its text
+      # and gets the SBOMs added; otherwise one is made with GitHub's notes.
+      - name: Attach the SBOMs to the GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" sbom-source.cdx.json sbom-image.cdx.json --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" sbom-source.cdx.json sbom-image.cdx.json --verify-tag --generate-notes
+          fi
