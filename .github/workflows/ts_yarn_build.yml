@@ -130,6 +130,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # What an image of main is called. `main` moves with every build;
+      # `sha-<commit>` stays, in ghcr.io only, for 30 days
+      # (image_retention.yml). Docker Hub gets the moving tag alone, since
+      # nothing clears it out. `latest` is a release's, not main's.
+      #
+      # Started by hand on another branch, the image gets the sha tag
+      # only: `main` names what main holds.
+      - name: Name the image
+        id: names
+        run: |
+          short="${GITHUB_SHA::9}"
+          {
+            echo 'tags<<EOF'
+            echo "ghcr.io/eclipse-daanse/board:sha-$short"
+            if [ "$GITHUB_REF" = refs/heads/main ]; then
+              echo "ghcr.io/eclipse-daanse/board:main"
+              echo "docker.io/eclipsedaanse/board:main"
+            fi
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
       # The image is nginx and static files, so two platforms cover what
       # runs it; the other four only cost build time.
       - name: Build and Push Multi-Arch Docker Image
@@ -139,8 +160,4 @@ jobs:
           file: "Docker/Dockerfile"
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            docker.io/eclipsedaanse/board:latest
-            docker.io/eclipsedaanse/board:${{ github.sha }}
-            ghcr.io/eclipse-daanse/board:latest
-            ghcr.io/eclipse-daanse/board:${{ github.sha }}
+          tags: ${{ steps.names.outputs.tags }}
