@@ -286,11 +286,9 @@ const spatial = computed(() => SPATIAL.has(look.value.kind))
       @contextmenu.prevent
       @dblclick="home"
     />
+    <div ref="cubeHost" class="visual__canvas" :class="{ 'visual__canvas--hidden': !isCube }" @contextmenu.prevent />
     <p v-if="problem && !waiting" class="visual__problem">{{ t(`Problem.${problem}`) }}</p>
     <p v-else-if="spatial && !problem" class="visual__hint">{{ t('Hint.turn') }}</p>
-    <div ref="cubeHost" class="visual__canvas" :class="{ 'visual__canvas--hidden': !isCube }" @contextmenu.prevent />
-    <p v-if="problem" class="visual__problem">{{ t(`Problem.${problem}`) }}</p>
-    <p v-else-if="spatial" class="visual__hint">{{ t('Hint.turn') }}</p>
   </div>
 </template>
 
