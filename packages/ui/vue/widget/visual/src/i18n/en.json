@@ -7,6 +7,9 @@
     "kind": "Drawn as",
     "title": "Title",
     "palette": "Colours",
+    "columnsGroup": "Columns",
+    "valueColumn": "Values from the column",
+    "pathSeparator": "Levels in a label split at",
     "motionGroup": "Motion",
     "autoRotate": "Turn slowly by itself",
     "displayGroup": "Display",
@@ -14,7 +17,8 @@
   },
   "Options": {
     "kind": {
-      "bars3d": "Bars in 3D"
+      "bars3d": "Bars in 3D",
+      "boxplot": "Spread (box plot)"
     },
     "palette": {
       "aurora": "Aurora",
@@ -24,6 +28,9 @@
       "mono": "Greys"
     }
   },
+  "Placeholder": {
+    "column": "first column of numbers"
+  },
   "Problem": {
     "noData": "No data yet. Give this widget a source that answers a table.",
     "noValues": "The query answered, but every cell in it is empty.",
@@ -31,5 +38,12 @@
   },
   "Hint": {
     "turn": "Drag to turn, scroll to zoom, double-click to go back"
+  },
+  "Words": {
+    "lowest": "Lowest",
+    "lowerQuartile": "Lower quartile",
+    "median": "Median",
+    "upperQuartile": "Upper quartile",
+    "highest": "Highest"
   }
 }

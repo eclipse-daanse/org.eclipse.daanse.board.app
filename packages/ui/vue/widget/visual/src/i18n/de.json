@@ -7,6 +7,9 @@
     "kind": "Darstellung",
     "title": "Titel",
     "palette": "Farben",
+    "columnsGroup": "Spalten",
+    "valueColumn": "Werte aus der Spalte",
+    "pathSeparator": "Ebenen einer Beschriftung trennen bei",
     "motionGroup": "Bewegung",
     "autoRotate": "Langsam von selbst drehen",
     "displayGroup": "Anzeige",
@@ -14,7 +17,8 @@
   },
   "Options": {
     "kind": {
-      "bars3d": "Balken in 3D"
+      "bars3d": "Balken in 3D",
+      "boxplot": "Streuung (Boxplot)"
     },
     "palette": {
       "aurora": "Polarlicht",
@@ -24,6 +28,9 @@
       "mono": "Grautöne"
     }
   },
+  "Placeholder": {
+    "column": "erste Zahlenspalte"
+  },
   "Problem": {
     "noData": "Noch keine Daten. Geben Sie diesem Widget eine Quelle, die eine Tabelle liefert.",
     "noValues": "Die Abfrage hat geantwortet, aber jede Zelle darin ist leer.",
@@ -31,5 +38,12 @@
   },
   "Hint": {
     "turn": "Ziehen zum Drehen, Scrollen zum Zoomen, Doppelklick zurück"
+  },
+  "Words": {
+    "lowest": "Kleinster Wert",
+    "lowerQuartile": "Unteres Quartil",
+    "median": "Median",
+    "upperQuartile": "Oberes Quartil",
+    "highest": "Größter Wert"
   }
 }

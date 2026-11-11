@@ -21,7 +21,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '../context'
 import { asTable } from '../table'
-import { LOOK } from './fixtures'
+import { LOOK, option } from './fixtures'
 
 const member = (hierarchy: string, caption: string, path = caption) => ({ Caption: caption, UName: `[${hierarchy}].[${path}]` })
 const gender = (caption: string) => member('Gender', caption)
@@ -45,6 +45,21 @@ const CROSSJOIN = {
 }
 
 /** Yearly Income × Gender: the caption that holds the separator comes first. */
+const INCOME_FIRST = {
+  headers: ['Caption', 'Unit Sales'],
+  rows: [
+    ['$30K - $50K - F', 10],
+    ['$30K - $50K - M', 11],
+    ['$50K - $70K - F', 20],
+    ['$50K - $70K - M', 21],
+  ],
+  rowProperties: {
+    '$30K - $50K - F': [income('$30K - $50K'), gender('F')],
+    '$30K - $50K - M': [income('$30K - $50K'), gender('M')],
+    '$50K - $70K - F': [income('$50K - $70K'), gender('F')],
+    '$50K - $70K - M': [income('$50K - $70K'), gender('M')],
+  },
+}
 
 const context = (data: unknown, look = {}) => new Context(asTable(data)!, { ...LOOK, ...look })
 
@@ -109,4 +124,13 @@ describe('levels from the members a caption stands for', () => {
     expect(at.headerLevels(1)).toEqual(['F', '$30K - $50K'])
     expect(at.headerLevels(2)).toEqual(['1997', 'Q1'])
   })
+})
+
+describe('every kind that reads levels', () => {
+
+  it('groups a boxplot by the first member, not by half a caption', () => {
+    expect(option('boxplot', CROSSJOIN).xAxis.data).toEqual(['F', 'M'])
+    expect(option('boxplot', INCOME_FIRST).xAxis.data).toEqual(['$30K - $50K', '$50K - $70K'])
+  })
+
 })
