@@ -21,7 +21,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '../context'
 import { asTable } from '../table'
-import { LOOK } from './fixtures'
+import { LOOK, option } from './fixtures'
 
 const member = (hierarchy: string, caption: string, path = caption) => ({ Caption: caption, UName: `[${hierarchy}].[${path}]` })
 const gender = (caption: string) => member('Gender', caption)
@@ -109,4 +109,28 @@ describe('levels from the members a caption stands for', () => {
     expect(at.headerLevels(1)).toEqual(['F', '$30K - $50K'])
     expect(at.headerLevels(2)).toEqual(['1997', 'Q1'])
   })
+})
+
+describe('every kind that reads levels', () => {
+
+  it('flows from member to member in the sankey', () => {
+    const series = option('sankey', CROSSJOIN).series[0]
+    const label = series.label.formatter
+    expect(series.data.map((node: { name: string }) => label({ name: node.name })).sort()).toEqual(['$30K - $50K', '$50K - $70K', 'F', 'M'])
+  })
+
+  it('flows through the members of the headers in the sankey', () => {
+    const data = {
+      headers: ['Caption', 'F - $30K - $50K', 'F - $50K - $70K'],
+      rows: [['Unit Sales', 1, 2]],
+      columnProperties: {
+        'F - $30K - $50K': [gender('F'), income('$30K - $50K')],
+        'F - $50K - $70K': [gender('F'), income('$50K - $70K')],
+      },
+    }
+    const series = option('sankey', data).series[0]
+    const label = series.label.formatter
+    expect(series.data.map((node: { name: string }) => label({ name: node.name }))).toEqual(['F', '$30K - $50K', '$50K - $70K'])
+  })
+
 })
