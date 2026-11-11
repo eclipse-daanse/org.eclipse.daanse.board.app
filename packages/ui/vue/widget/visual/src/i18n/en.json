@@ -1,0 +1,35 @@
+{
+  "Widget": {
+    "name": "Visual chart"
+  },
+  "Form": {
+    "drawGroup": "What it draws",
+    "kind": "Drawn as",
+    "title": "Title",
+    "palette": "Colours",
+    "motionGroup": "Motion",
+    "autoRotate": "Turn slowly by itself",
+    "displayGroup": "Display",
+    "showScale": "Show the scale of values"
+  },
+  "Options": {
+    "kind": {
+      "bars3d": "Bars in 3D"
+    },
+    "palette": {
+      "aurora": "Aurora",
+      "ocean": "Ocean",
+      "sunset": "Sunset",
+      "forest": "Forest",
+      "mono": "Greys"
+    }
+  },
+  "Problem": {
+    "noData": "No data yet. Give this widget a source that answers a table.",
+    "noValues": "The query answered, but every cell in it is empty.",
+    "needsNumbers": "The table has no column of numbers to draw."
+  },
+  "Hint": {
+    "turn": "Drag to turn, scroll to zoom, double-click to go back"
+  }
+}
