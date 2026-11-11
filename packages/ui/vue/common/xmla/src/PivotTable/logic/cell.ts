@@ -67,11 +67,10 @@ export const cellStyle = (cell: PivotCell, defaults: CellDefaults, format: Forma
 const isNumericValue = (value: unknown) =>
   value !== undefined && value !== null && value !== '' && !Number.isNaN(Number(value))
 
-const numberFormat = new Intl.NumberFormat('de-DE')
-
 // Formatted text of a cell: FmtValue when the server sent one, numbers as the
-// caller formats them - the table passes the language on screen
-export const cellText = (cell: PivotCell, formatNumber: (value: number) => string = numberFormat.format): string => {
+// caller formats them. No default: only the caller knows the language on
+// screen (useFormat().number), and a fixed one is wrong for everybody else.
+export const cellText = (cell: PivotCell, formatNumber: (value: number) => string): string => {
   let value = typeof cell.FmtValue === 'string' ? cell.FmtValue : cell.Value
   if (value === undefined || value === null) return ''
   if (typeof value === 'string') {

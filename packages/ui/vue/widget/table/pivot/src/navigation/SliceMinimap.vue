@@ -29,9 +29,10 @@ import {
 import { formatSliceValue, heatColor, scaleMatrix } from './values'
 import type { ScaleNormalization } from './store'
 import { sliceId } from './store'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { t } = useTranslation('tablePivot')
+const { locale } = useFormat()
 
 const props = withDefaults(
   defineProps<{
@@ -109,7 +110,7 @@ const isSelected = (slice: SliceRef) => props.selection.some(s => sliceId(s) ===
 const marksOf = (slice: SliceRef) => props.marks.filter(m => sliceId(m.slice) === sliceId(slice))
 
 const describe = (page: CellsetPosition, chapter: CellsetPosition | null, value: SliceValue) =>
-  `${[page.label, chapter?.label].filter(Boolean).join(' · ')}: ${formatSliceValue(value)}` +
+  `${[page.label, chapter?.label].filter(Boolean).join(' · ')}: ${formatSliceValue(value, locale.value)}` +
   (value.kind === 'sum' ? t('Navigation.sumOfVisible') : '')
 
 const activate = (slice: SliceRef, event: MouseEvent | KeyboardEvent, cell?: HTMLElement) => {
@@ -205,7 +206,7 @@ const move = async (event: KeyboardEvent) => {
               @click="activate(sliceAt(page, chapter), $event)"
               @focus="focus = { row: r, column: c }"
             >
-              <span class="minimap__value">{{ formatSliceValue(values[r][c]) }}</span>
+              <span class="minimap__value">{{ formatSliceValue(values[r][c], locale) }}</span>
               <span v-if="marksOf(sliceAt(page, chapter)).length" class="minimap__mark">
                 <span v-for="m in marksOf(sliceAt(page, chapter))" :key="m.label" :class="m.tone && `tone-${m.tone}`">{{ m.label }}</span>
               </span>

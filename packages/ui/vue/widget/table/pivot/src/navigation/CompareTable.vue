@@ -35,9 +35,10 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
 import type { DiffType } from './store'
 import { formatPercent, formatSigned } from './values'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useFormat, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const { t } = useTranslation('tablePivot')
+const { locale } = useFormat()
 
 const props = defineProps<{
   aligned: AlignedTable
@@ -137,8 +138,8 @@ const shown = computed<Shown[][]>(() =>
         return { text: a === null && b === null ? '' : t('Navigation.notAvailable'), sign: '', tone: 'none', faint: true }
       }
       const parts = [] as string[]
-      if (props.diffType !== 'percent') parts.push(formatSigned(diff.absolute))
-      if (props.diffType !== 'absolute') parts.push(diff.percent === null ? t('Navigation.notAvailable') : formatPercent(diff.percent))
+      if (props.diffType !== 'percent') parts.push(formatSigned(diff.absolute, locale.value))
+      if (props.diffType !== 'absolute') parts.push(diff.percent === null ? t('Navigation.notAvailable') : formatPercent(diff.percent, locale.value))
       const sign = diff.absolute > 0 ? '▲' : diff.absolute < 0 ? '▼' : '='
       return {
         text: props.diffType === 'both' ? `${parts[0]} (${parts[1]})` : parts[0],
