@@ -40,7 +40,7 @@
     "vega-lite": "~6.5.0"
   },
   "devDependencies": {
-    "@types/node": "^25.0.8",
+    "@types/node": "^26.6.6",
     "@vitejs/plugin-vue": "^5.2.3",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",
