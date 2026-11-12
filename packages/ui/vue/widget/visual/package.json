@@ -41,7 +41,7 @@
     "three": "^0.187.0"
   },
   "devDependencies": {
-    "@types/node": "^25.0.8",
+    "@types/node": "^26.6.6",
     "@types/three": "^0.187.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "rollup": "^4.36.0",
