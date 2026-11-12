@@ -24,7 +24,7 @@ import type { EClass, EStructuralFeature, EList } from '@emfts/core';
 import { TransformKind } from './TransformKind.js';
 import { FilterOp } from './FilterOp.js';
 import type { Transform } from './Transform.js';
-import { VegawidgetPackage } from './VegawidgetPackage.js';
+import { BaseconnectionPackage } from './BaseconnectionPackage.js';
 
 /**
  * Implementation of Transform
@@ -42,6 +42,7 @@ export class TransformImpl extends BasicEObject implements Transform {
   static readonly VALUE_AS: number = 7;
   static readonly AS: number = 8;
   static readonly EXPRESSION: number = 9;
+  static readonly PATTERN: number = 10;
 
   // Private fields
   private _kind: TransformKind = TransformKind.filter;
@@ -54,12 +55,13 @@ export class TransformImpl extends BasicEObject implements Transform {
   private _valueAs: string = "value";
   private _as: string = "";
   private _expression: string = "";
+  private _pattern: string = "";
 
   /**
    * Returns the EClass of this object
    */
   override eClass(): EClass {
-    return VegawidgetPackage.Literals.TRANSFORM;
+    return BaseconnectionPackage.Literals.TRANSFORM;
   }
 
   // Getters and Setters
@@ -286,6 +288,30 @@ export class TransformImpl extends BasicEObject implements Transform {
     }
   }
 
+  get pattern(): string {
+    return this._pattern!;
+  }
+
+  set pattern(value: string) {
+    const oldValue = this._pattern;
+    this._pattern = value;
+    if (this.eDeliver()) {
+      this.eNotify({
+        getNotifier: () => this,
+        getEventType: () => 1, // SET
+        getFeature: () => this.eClass().getEStructuralFeature(TransformImpl.PATTERN),
+        getOldValue: () => oldValue,
+        getNewValue: () => value,
+        getPosition: () => -1,
+        wasSet: () => true,
+        isTouch: () => false,
+        isReset: () => false,
+        getFeatureID: () => TransformImpl.PATTERN,
+        merge: () => false
+      });
+    }
+  }
+
   // Reflective API
 
   /**
@@ -314,6 +340,8 @@ export class TransformImpl extends BasicEObject implements Transform {
         return this.as;
       case TransformImpl.EXPRESSION:
         return this.expression;
+      case TransformImpl.PATTERN:
+        return this.pattern;
       default:
         return super.eGet(feature);
     }
@@ -366,6 +394,10 @@ export class TransformImpl extends BasicEObject implements Transform {
         this.expression = newValue as string;
         super.eSet(feature, newValue);
         break;
+      case TransformImpl.PATTERN:
+        this.pattern = newValue as string;
+        super.eSet(feature, newValue);
+        break;
       default:
         super.eSet(feature, newValue);
     }
@@ -397,6 +429,8 @@ export class TransformImpl extends BasicEObject implements Transform {
         return this._as !== "";
       case TransformImpl.EXPRESSION:
         return this._expression !== "";
+      case TransformImpl.PATTERN:
+        return this._pattern !== "";
       default:
         return super.eIsSet(feature);
     }
@@ -438,6 +472,9 @@ export class TransformImpl extends BasicEObject implements Transform {
       case TransformImpl.EXPRESSION:
         this._expression = "";
         return;
+      case TransformImpl.PATTERN:
+        this._pattern = "";
+        return;
       default:
         super.eUnset(feature);
     }
@@ -463,6 +500,7 @@ export class TransformImpl extends BasicEObject implements Transform {
       valueAs: this.valueAs,
       as: this.as,
       expression: this.expression,
+      pattern: this.pattern,
     };
   }
 }

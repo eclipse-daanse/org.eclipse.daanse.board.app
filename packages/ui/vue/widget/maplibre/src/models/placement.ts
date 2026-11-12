@@ -52,7 +52,7 @@ export interface PlacedLayer {
   scale?: number
   rotation?: number
   altitudeOffset?: number
-  instances?: Iterable<{ id?: string; lon?: number; lat?: number; scale?: number; rotation?: number; height?: number; width?: number; color?: string }> | null
+  instances?: Iterable<{ id?: string; lon?: number; lat?: number; scale?: number; rotation?: number; height?: number; width?: number; color?: string; partColors?: (string | undefined)[] }> | null
 }
 
 /** One instance in the frame: where, turned by how much (radians about y), how large. */
@@ -65,8 +65,10 @@ export interface InstancePlacement {
   height?: number
   /** How wide in metres, where the data says it: the model is scaled across to it. */
   width?: number
-  /** A colour for the model, where a rule gives one. */
+  /** A colour for the model, where its encoding gives one. */
   color?: string
+  /** A colour for each part of its layer, by index (#1296). */
+  partColors?: (string | undefined)[]
 }
 
 const number = (value: unknown, fallback: number) => {
@@ -97,6 +99,7 @@ export function placementsOf(layer: PlacedLayer, origin: Origin): InstancePlacem
       ...(Number(instance.height) > 0 ? { height: Number(instance.height) } : {}),
       ...(Number(instance.width) > 0 ? { width: Number(instance.width) } : {}),
       ...(instance.color ? { color: String(instance.color) } : {}),
+      ...(instance.partColors ? { partColors: instance.partColors } : {}),
     })
   }
   return out

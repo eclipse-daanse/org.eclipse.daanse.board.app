@@ -81,45 +81,184 @@
     "geoJson": "GeoJSON (written in, wins over the address)",
     "heightProperty": "Property with the height",
     "models": {
-      "none": "No 3D model yet.",
-      "url": "Model file (FBX, glTF, GLB)",
       "urlHint": "The server of the file must allow the board to read it (CORS).",
-      "format": "Format",
-      "formats": {
-        "auto": "By the ending of the address"
-      },
-      "scale": "Metres per unit of the model",
-      "scaleHint": "Most FBX files are in centimetres: 0.01.",
-      "rotation": "Rotation (clockwise from north)",
-      "altitudeOffset": "Height above the ground (m)",
       "place": "Place on the map",
       "placing": "Placing - click here to end",
       "placeHint": "In the preview: a click adds the model, drag moves it, a right click removes it.",
-      "count": "{{count}} placed",
-      "instanceScale": "Size",
-      "newLayer": "Trees",
       "loading": "Loading …",
       "ready": "The model is loaded.",
       "errors": {
         "blocked": "The file cannot be read: the server does not allow it (no CORS header) or cannot be reached.",
         "http": "The server answered with an error ({{status}}).",
         "format": "The file is no model in this format."
+      }
+    }
+  },
+  "Symbols": {
+    "groups": {
+      "layer": "Layer",
+      "data": "Data",
+      "model": "Model file",
+      "encodings": "Encodings",
+      "parts": "Parts of the model",
+      "instances": "Placed by hand"
+    },
+    "MapLibreSettings": {
+      "modelLayers": "Symbol layers"
+    },
+    "ModelLayer": {
+      "name": "Name",
+      "visible": "Visible",
+      "datasourceId": "Data source of the points",
+      "transforms": "Steps on the points (filter, extract)",
+      "url": "Model file (FBX, glTF, GLB)",
+      "format": "Format",
+      "scale": "Metres per unit of the model (FBX in cm: 0.01)",
+      "rotation": "Rotation (clockwise from north)",
+      "altitudeOffset": "Height above the ground (m)",
+      "size": "Size",
+      "color": "Colour",
+      "modelBy": "Model by value",
+      "parts": "Parts",
+      "instances": "Instances"
+    },
+    "SizeEncoding": {
+      "height": "Height",
+      "width": "Width"
+    },
+    "FieldEncoding": {
+      "field": "Field",
+      "unit": "Unit of the field",
+      "scaleType": "Scale",
+      "domainMin": "Smallest value",
+      "domainMax": "Largest value",
+      "rangeMin": "Metres of the smallest value",
+      "rangeMax": "Metres of the largest value",
+      "value": "Metres without a value (0: the scale)"
+    },
+    "ColorEncoding": {
+      "field": "Field",
+      "type": "Kind",
+      "mappings": "Colour per value",
+      "domainMin": "Value of the low colour",
+      "domainMax": "Value of the high colour",
+      "lowColor": "Low colour",
+      "highColor": "High colour",
+      "color": "Colour without a value (empty: of the file)"
+    },
+    "ColorMapping": {
+      "code": "Value",
+      "color": "Colour"
+    },
+    "ModelEncoding": {
+      "field": "Field",
+      "mappings": "Model file per value"
+    },
+    "ModelMapping": {
+      "code": "Value",
+      "url": "Model file"
+    },
+    "PartEncoding": {
+      "mesh": "Meshes (regular expression on their names, e.g. trunk|cylinder)",
+      "color": "Colour"
+    },
+    "ModelInstance": {
+      "lat": "Latitude",
+      "lon": "Longitude",
+      "scale": "Size",
+      "rotation": "Rotation"
+    },
+    "options": {
+      "format": {
+        "auto": "By the ending of the address",
+        "fbx": "FBX",
+        "gltf": "glTF / GLB"
       },
-      "datasource": "Stand on the points of a data source",
-      "datasourceHint": "E.g. a WFS tree cadastre: a model at every point, besides the ones placed by hand.",
-      "noDatasource": "None - only the ones placed by hand",
-      "heightProperty": "Property with the height (m)",
-      "heightPropertyHint": "The model is scaled to it. Empty: the scale above.",
-      "defaultHeight": "Height without a value (m, 0: the scale above)",
-      "ruleProperty": "Property",
-      "ruleValue": "Value (x* starts with)",
-      "addRule": "Add a rule",
-      "ruleUrl": "Model file",
-      "ruleUrlHint": "empty: the model above",
-      "widthProperty": "Property with the width (m)",
-      "widthPropertyHint": "E.g. the crown diameter. Empty: in proportion to the height.",
-      "color": "Colour of the model (empty: of the file)",
-      "trunkColor": "Colour of the trunk (empty: of the file)"
+      "scaleType": {
+        "identity": "The value in metres",
+        "linear": "Linear from a domain to metres"
+      },
+      "type": {
+        "nominal": "A colour per value",
+        "quantitative": "A ramp over a domain"
+      },
+      "unit": {
+        "auto": "Of the column type, else m",
+        "m": "m",
+        "cm": "cm",
+        "mm": "mm",
+        "km": "km"
+      }
+    },
+    "migration": {
+      "firstWord": "{{field}} (first word)"
+    }
+  },
+  "Hints": {
+    "MapLibreSettings": {
+      "modelLayers": "Symbol layers of the map: a 3D model at every point of a data source, or placed by hand."
+    },
+    "ColorMapping": {
+      "code": "The value as the field or the datastream gives it, e.g. RED.",
+      "color": "The colour it gives, any CSS colour."
+    },
+    "ModelLayer": {
+      "name": "Name of the layer, as a user knows it.",
+      "visible": "Whether the layer is drawn.",
+      "url": "Address of the model file. The server must allow the board to read it (CORS).",
+      "format": "The format of the file: fbx, gltf (also glb), or empty to tell it by the ending of the address.",
+      "scale": "Metres per unit of the model. A file in centimetres (most FBX files) takes 0.01.",
+      "rotation": "Rotation of the model around the vertical, in degrees clockwise from north.",
+      "altitudeOffset": "Height above the ground, in metres.",
+      "instances": "Where the model stands.",
+      "datasourceId": "A data source of points (e.g. a WFS tree cadastre): a model stands at every point, besides the instances placed by hand. Empty: only those.",
+      "transforms": "Steps on the points before they are drawn - filter, or extract a part of a field, e.g. the genus as the first word of a species.",
+      "size": "How tall and how wide a model is, from fields of its point.",
+      "color": "The colour of the model, from a field of its point; the parts named in parts have their own.",
+      "modelBy": "Which model file a point gets, by a field of its point. Without it, the file above.",
+      "parts": "Meshes of the model that have colours of their own, e.g. the trunk of a tree."
+    },
+    "SizeEncoding": {
+      "height": "How tall the model is, in metres; the model is scaled to it.",
+      "width": "How wide the model is, in metres; the model is scaled across to it. Without it, across in proportion to the height."
+    },
+    "FieldEncoding": {
+      "field": "The field of the point. Empty: every point has the value below.",
+      "unit": "The unit of the field: m, cm, mm or km. Empty: the unit of its column type, else m.",
+      "scaleType": "identity: the value in metres as it is; linear: the domain below maps to the range below.",
+      "domainMin": "linear: the smallest value of the field.",
+      "domainMax": "linear: the largest value of the field.",
+      "rangeMin": "linear: the metres the smallest value gives.",
+      "rangeMax": "linear: the metres the largest value gives.",
+      "value": "The metres where the field has no value; 0: the scale of the model."
+    },
+    "ColorEncoding": {
+      "field": "The field of the point. Empty: every point has the colour below.",
+      "type": "nominal: a colour per value (mappings); quantitative: the ramp from lowColor to highColor.",
+      "mappings": "nominal: which value gives which colour.",
+      "domainMin": "quantitative: the value of lowColor.",
+      "domainMax": "quantitative: the value of highColor.",
+      "lowColor": "quantitative: the colour of the low end.",
+      "highColor": "quantitative: the colour of the high end.",
+      "color": "The colour where no value gives one. Empty: the colours of the file."
+    },
+    "ModelEncoding": {
+      "field": "The field of the point.",
+      "mappings": "Which value gives which file."
+    },
+    "ModelMapping": {
+      "code": "The value of the field.",
+      "url": "The model file."
+    },
+    "PartEncoding": {
+      "mesh": "Which meshes: a regular expression on their names (and the names of their materials), case ignored, e.g. trunk|stem|cylinder.",
+      "color": "The colour of these meshes."
+    },
+    "ModelInstance": {
+      "lon": "Longitude.",
+      "lat": "Latitude.",
+      "scale": "Size of this one, as a factor on the scale of the layer.",
+      "rotation": "Rotation of this one, in degrees, added to the rotation of the layer."
     }
   }
 }

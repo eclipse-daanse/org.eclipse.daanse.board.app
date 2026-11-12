@@ -3,19 +3,368 @@
     "name": "Vega-Lite chart",
     "error": "The chart cannot be drawn: {{message}}"
   },
-  "Form": {
-    "title": "Title",
-    "renderer": "Drawn as",
-    "tooltip": "Show values in a tooltip"
-  },
-  "Options": {
-    "renderer": {
-      "canvas": "Canvas (fast with many marks)",
-      "svg": "SVG (sharp when zoomed)"
-    }
-  },
   "Recipe": {
     "noLayers": "The chart has no layer yet. Add one in the settings.",
     "facetNeedsOneDataset": "Small multiples need every layer to draw the same dataset."
+  },
+  "Form": {
+    "title": "Title",
+    "layers": "Layers",
+    "datasets": "Datasets",
+    "facet": "Small multiples",
+    "params": "Selections and values",
+    "legendPosition": "Legend",
+    "tooltip": "Show values in a tooltip",
+    "renderer": "Drawn as",
+    "layersHint": "No layer yet: add one to draw marks.",
+    "datasetsHint": "None: the chart draws the data source of the widget as the dataset table.",
+    "paramsHint": "No selection: marks are not picked.",
+    "starter": "Start from a chart",
+    "independentScales": "Own scale per layer for",
+    "references": "Reference lines and bands",
+    "referencesHint": "None: no constant lines or bands."
+  },
+  "Options": {
+    "legendPosition": {
+      "right": "Right",
+      "bottom": "Below",
+      "top": "Above",
+      "left": "Left",
+      "none": "No legend"
+    },
+    "renderer": {
+      "canvas": "Canvas (fast with many marks)",
+      "svg": "SVG (sharp when zoomed)"
+    },
+    "mark": {
+      "bar": "Bars",
+      "line": "Line",
+      "area": "Area",
+      "point": "Points",
+      "circle": "Circles",
+      "square": "Squares",
+      "tick": "Ticks",
+      "rule": "Rule (reference line)",
+      "rect": "Rectangles (heatmap)",
+      "arc": "Arc (pie, donut)",
+      "text": "Text",
+      "trail": "Trail (line of varying width)",
+      "boxplot": "Box plot",
+      "errorbar": "Error bars"
+    },
+    "interpolate": {
+      "linear": "Straight",
+      "monotone": "Smooth",
+      "step": "Steps",
+      "basis": "Curved"
+    },
+    "channel": {
+      "x": "x - horizontal position",
+      "y": "y - vertical position",
+      "x2": "x2 - end of a horizontal range",
+      "y2": "y2 - end of a vertical range",
+      "xOffset": "x offset - side by side within a band",
+      "yOffset": "y offset - stacked within a band",
+      "color": "Colour",
+      "size": "Size",
+      "shape": "Shape",
+      "opacity": "Opacity",
+      "theta": "Angle (arc)",
+      "radius": "Radius (arc)",
+      "text": "Text",
+      "tooltip": "Tooltip",
+      "detail": "Detail - group without a visual channel",
+      "order": "Drawing order"
+    },
+    "type": {
+      "quantitative": "Numbers",
+      "temporal": "Points in time",
+      "ordinal": "Ordered categories",
+      "nominal": "Categories"
+    },
+    "aggregate": {
+      "none": "None - every value",
+      "count": "Count of rows",
+      "sum": "Sum",
+      "mean": "Mean",
+      "median": "Median",
+      "min": "Minimum",
+      "max": "Maximum",
+      "distinct": "Distinct values",
+      "stdev": "Standard deviation"
+    },
+    "timeUnit": {
+      "none": "The whole point in time",
+      "year": "Year",
+      "yearmonth": "Year and month",
+      "yearmonthdate": "Day",
+      "month": "Month of the year",
+      "date": "Day of the month",
+      "day": "Day of the week",
+      "hours": "Hour of the day",
+      "hoursminutes": "Time of day"
+    },
+    "sort": {
+      "none": "As the data comes",
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "otherAscending": "By the other axis, ascending",
+      "otherDescending": "By the other axis, descending"
+    },
+    "stack": {
+      "auto": "As the mark stacks",
+      "zero": "From zero",
+      "normalize": "As shares of the whole",
+      "center": "Centred",
+      "none": "Not stacked"
+    },
+    "scaleType": {
+      "auto": "Automatic",
+      "linear": "Linear",
+      "log": "Logarithmic",
+      "sqrt": "Square root",
+      "pow": "Power",
+      "time": "Time (local)",
+      "utc": "Time (UTC)",
+      "band": "Bands",
+      "point": "Points"
+    },
+    "paramKind": {
+      "point": "Pick marks",
+      "interval": "Pick a range",
+      "value": "A value"
+    },
+    "encodings": {
+      "x": "x",
+      "y": "y"
+    },
+    "bind": {
+      "none": "In the chart",
+      "legend": "In the legend",
+      "scales": "Zoom and pan the chart"
+    },
+    "shape": {
+      "table": "Table (rows with headers)",
+      "object": "JSON with a list of rows",
+      "geojson": "GeoJSON features"
+    },
+    "starter": {
+      "none": "No starter",
+      "bar": "Bars",
+      "stackedBar": "Stacked bars",
+      "groupedBar": "Grouped bars",
+      "line": "Line",
+      "area": "Stacked areas",
+      "scatter": "Scatter plot",
+      "heatmap": "Heatmap",
+      "histogram": "Histogram",
+      "boxplot": "Box plot",
+      "donut": "Donut",
+      "brush": "Brush and link"
+    },
+    "axisOrient": {
+      "auto": "Automatic",
+      "left": "Left",
+      "right": "Right",
+      "top": "Top",
+      "bottom": "Bottom"
+    },
+    "referenceKind": {
+      "line": "Line",
+      "band": "Band"
+    },
+    "referenceChannel": {
+      "y": "Across, at a value of y",
+      "x": "Upright, at a value of x"
+    },
+    "labelAt": {
+      "start": "Start",
+      "middle": "Middle",
+      "end": "End"
+    }
+  },
+  "FormLayer": {
+    "mark": "Mark",
+    "encodings": "Encodings",
+    "transforms": "Steps on the data",
+    "interpolate": "Line between points",
+    "showPoints": "Draw a point at each value",
+    "filled": "Filled",
+    "color": "Colour of every mark",
+    "opacity": "Opacity",
+    "cornerRadius": "Rounded corners (px)",
+    "innerRadius": "Inner radius (px) - more than 0 draws a donut",
+    "strokeWidth": "Line width (px)",
+    "dataset": "Dataset (empty: the data of the widget)",
+    "encodingsHint": "No encoding: add x and y to place the marks."
+  },
+  "FormEncoding": {
+    "channel": "Channel",
+    "field": "Field",
+    "type": "The values are",
+    "aggregate": "Combine values",
+    "value": "Fixed value (without a field)",
+    "bin": "Group into bins (histogram)",
+    "maxBins": "Largest number of bins (0: automatic)",
+    "timeUnit": "Part of the point in time",
+    "sort": "Order",
+    "stack": "Stacking",
+    "title": "Title of the axis or legend",
+    "format": "Format (d3, e.g. ,.2f or %Y-%m)",
+    "scaleType": "Scale",
+    "scaleZero": "Scale includes zero",
+    "domainMin": "Lowest value shown",
+    "domainMax": "Highest value shown",
+    "scheme": "Colour scheme (e.g. tableau10, blues, viridis)",
+    "showAxis": "Draw the axis",
+    "showGrid": "Grid lines",
+    "labelAngle": "Angle of the labels (degrees)",
+    "showLegend": "Draw the legend",
+    "highlightParam": "Highlight what this selection holds",
+    "valueIfNotSelected": "Value outside the selection (e.g. lightgray, 0.2)",
+    "scaleEntries": "Fixed output per value",
+    "scaleEntriesHint": "None: the scheme decides.",
+    "axisOrient": "Axis side"
+  },
+  "FormParam": {
+    "name": "Name",
+    "kind": "What it is",
+    "fields": "Select all marks with the same",
+    "encodings": "The range spans",
+    "bind": "Picked",
+    "value": "Initial value (JSON)"
+  },
+  "FormFacet": {
+    "row": "One row per",
+    "column": "One column per",
+    "columns": "Columns before wrapping (0: no wrap)"
+  },
+  "FormDataset": {
+    "name": "Name",
+    "datasourceId": "Data source (empty: the one of the widget)",
+    "shape": "Read as",
+    "path": "Path to the rows (e.g. data.items)",
+    "columnTypes": "Columns read as",
+    "columnTypesHint": "None: every value as it arrives."
+  },
+  "Hints": {
+    "VegaWidgetSettings": {
+      "title": "The title drawn above the chart. Empty draws none.",
+      "renderer": "Canvas or SVG. Canvas stays fast with thousands of marks; SVG stays sharp when zoomed.",
+      "tooltip": "Whether a mark shows its values in a tooltip while the pointer is over it. Tooltip encodings choose the values; without one a mark shows all of its fields.",
+      "legendPosition": "Where the legends stand; none hides every legend.",
+      "layers": "The layers of the chart, drawn in this order - the first one at the bottom. One layer is a plain chart; a second one adds, for example, points on a line or a rule on bars.",
+      "facet": "Splits the chart into small multiples, one per value of a field. Empty draws a single chart.",
+      "params": "Selections and values the chart holds: what is picked or brushed, and values other settings refer to by name.",
+      "datasets": "The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one.",
+      "starter": "Replaces the layers, selections and small multiples with this chart, filled with columns of the data. Then the choice is empty again; \"Discard\" brings the chart back.",
+      "independentScales": "The channels whose scale each layer has for itself: y gives every layer its own y axis - a temperature on the left, a precipitation on the right. Only read with more than one layer or with small multiples.",
+      "references": "Constant lines and bands drawn with the chart: limits, targets, zones, a date. They belong to the whole chart and share its scales, so a band from 0 to 1.8 lies where 0 and 1.8 are on the axis. Not drawn in small multiples."
+    },
+    "DatasetBinding": {
+      "name": "The name layers use for this dataset. table is the data source of the widget.",
+      "datasourceId": "The board data source the dataset comes from. Empty: the data source of the widget.",
+      "shape": "The form the dataset is asked for. The data source of the widget itself is always read as a table, so that the part of it the frame selects is what the chart draws.",
+      "path": "For the shape object: where the list of rows is in the answer, as names separated by dots (data.items). Empty: the answer itself.",
+      "columnTypes": "Columns read as numbers, dates or booleans rather than as they arrive."
+    },
+    "Layer": {
+      "dataset": "The name of the dataset the layer draws. Empty draws the dataset of the widget, named table.",
+      "mark": "The kind of mark the layer draws.",
+      "interpolate": "How a line, area or trail runs between its points. Ignored by other marks.",
+      "showPoints": "Whether a line, area or trail also draws a point at each value.",
+      "filled": "Whether a point, circle or square is filled rather than drawn as an outline.",
+      "color": "A fixed colour for every mark of the layer, as a CSS colour. Empty takes the colour of the theme or of a colour encoding.",
+      "opacity": "The opacity of the marks, from 0 (invisible) to 1 (solid).",
+      "cornerRadius": "Rounds the corners of bars, rects and arcs by this many pixels; 0 keeps them sharp.",
+      "innerRadius": "The inner radius of an arc in pixels: 0 draws a pie, more draws a donut. Ignored by other marks.",
+      "strokeWidth": "The width of lines and outlines in pixels; 0 takes the default.",
+      "encodings": "What drives the marks: which field goes to which channel, and how.",
+      "transforms": "Steps applied to the data before the layer draws it, in this order."
+    },
+    "Encoding": {
+      "channel": "The channel this encoding drives.",
+      "field": "The field of the dataset that drives the channel. Empty with a value set uses the value; empty with the aggregate count counts the rows.",
+      "type": "What the values of the field are.",
+      "aggregate": "How values that fall on the same place are combined.",
+      "bin": "Whether the values are grouped into bins - a histogram is a binned x with a count on y.",
+      "maxBins": "The largest number of bins; 0 lets Vega-Lite choose.",
+      "timeUnit": "The part of a point in time the channel uses, for example the month to compare months across years.",
+      "sort": "How the values along the channel are ordered.",
+      "stack": "How marks on the same position stack. Only read on a position channel.",
+      "title": "The title of the axis or legend. Empty takes the name of the field.",
+      "format": "How values are written on the axis, in the legend or in the text: a d3 number format (,.2f) or, for points in time, a d3 time format (%Y-%m). Empty takes the default.",
+      "value": "A fixed value for the channel when no field drives it, for example a colour or an opacity. Numbers are read as numbers.",
+      "scaleType": "How values are mapped to the channel.",
+      "scaleZero": "Whether a quantitative scale includes zero. Turned off, the scale fits the values.",
+      "domainMin": "The lowest value the scale shows. Empty fits the data.",
+      "domainMax": "The highest value the scale shows. Empty fits the data.",
+      "scheme": "A Vega colour scheme for a colour encoding, for example tableau10, blues or viridis. Empty takes the colours of the theme.",
+      "showAxis": "Whether a position channel draws its axis.",
+      "showGrid": "Whether the axis draws grid lines.",
+      "labelAngle": "The angle of the axis labels in degrees, for example -45. Empty lets Vega-Lite choose.",
+      "showLegend": "Whether a colour, size, shape or opacity channel draws its legend.",
+      "highlightParam": "The name of a selection. Marks the selection holds keep the field or value above; the others take the value below - this is how a selection highlights.",
+      "valueIfNotSelected": "The value the marks outside the selection take, for example lightgray or 0.2.",
+      "scaleEntries": "Each listed value of the field is drawn as its own output - a colour, a shape, a size, an opacity - rather than as the scheme picks. List every value, or none: a value not listed gets no output of its own.",
+      "axisOrient": "The side the axis of this position channel is drawn on. Automatic: x below, y left."
+    },
+    "Facet": {
+      "row": "The field whose values make the rows. Empty makes no rows.",
+      "column": "The field whose values make the columns. Empty makes no columns.",
+      "columns": "With only a column field: the number of columns before the charts wrap to the next row; 0 never wraps."
+    },
+    "Param": {
+      "name": "The name the encodings, filters and board actions use. Letters, digits and underscore.",
+      "kind": "What the parameter is.",
+      "fields": "The fields a selection projects on: picking one mark then selects every mark with the same values. Empty selects single marks.",
+      "encodings": "The channels an interval spans, usually x, or x and y. Empty spans both.",
+      "bind": "What the selection is bound to.",
+      "value": "The initial value, as JSON - for a value parameter its value, for a selection what it holds at the start. Empty starts empty."
+    },
+    "ScaleEntry": {
+      "value": "The value of the field, as it appears in the data. A number may be written as text.",
+      "output": "What the value is drawn as: a CSS colour for colour, a shape name (circle, square, triangle-up, ...) for shape, a number for size and opacity."
+    },
+    "Reference": {
+      "kind": "A line at one value, or a band between two.",
+      "channel": "y draws it across the chart at a value of the y axis; x draws it upright at a value of the x axis.",
+      "type": "What the values are: numbers, or points in time on a time axis.",
+      "from": "The value of the line; for a band its lower end. A point in time is written as ISO 8601 text (2026-11-07T12:00:00Z).",
+      "to": "Band: the upper end.",
+      "color": "A CSS colour, with transparency for a band (#E5393514). Empty: the colour of the theme.",
+      "label": "Text drawn at the line or band. Empty: none.",
+      "labelAt": "Where along the line or band the label stands.",
+      "behind": "Whether it is drawn behind the layers of the chart, or in front of them.",
+      "dash": "Line: the dash pattern in pixels, comma-separated (4,2). Empty: solid."
+    }
+  },
+  "SpecTab": {
+    "label": "Spec",
+    "explain": "The whole Vega-Lite spec the chart draws. What you change here beyond the form is kept as an override; the form still decides the rest. URLs, links and data of its own are taken out.",
+    "apply": "Apply",
+    "removeAll": "Remove all overrides",
+    "remove": "Remove this override",
+    "overrides": "Overrides",
+    "unused": "Overrides that find nothing to change",
+    "refused": "Taken out",
+    "invalid": "This is no JSON object: {{message}}",
+    "noWidget": "The widget is not on this board."
+  },
+  "FormScaleEntry": {
+    "value": "Value",
+    "output": "Drawn as (colour, shape, size)"
+  },
+  "FormReference": {
+    "kind": "Kind",
+    "channel": "Across or upright",
+    "type": "The values are",
+    "from": "Value (band: from)",
+    "to": "To",
+    "color": "Colour",
+    "label": "Label",
+    "labelAt": "Label at",
+    "behind": "Behind the layers",
+    "dash": "Dash pattern (e.g. 4,2)"
   }
 }

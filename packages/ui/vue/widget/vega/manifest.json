@@ -7,9 +7,25 @@
   "entry": "/bundles/ui.vue.widget.vega/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.datasource",
+    "lib.api.events",
+    "lib.api.page",
     "lib.api.widget",
+    "lib.datasource.base",
+    "lib.events",
     "platform.vue",
     "ui.vue.composables"
+  ],
+  "requiresService": [
+    {
+      "id": "DatasourceRepository"
+    },
+    {
+      "id": "EventRegistry"
+    },
+    {
+      "id": "EventActionsRegistry"
+    }
   ],
   "sharedDependencies": [
     {
@@ -19,6 +35,22 @@
     {
       "id": "vue-router",
       "versionRange": "^5.0.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.page",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
+      "versionRange": ">=0.0.1-0"
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.api.widget",
@@ -35,6 +67,10 @@
     {
       "id": "@emfts/core",
       "versionRange": "^0.3.0-next.6"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.datasource.base",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [

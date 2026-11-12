@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A constant line or band of a chart (#1304): a limit, a target, a zone, a
+date. The upper end only for a band, the dash only for a line, the type
+only on x, where a value may be a point in time.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaReferenceForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaReferenceFormView">
+    <fields xsi:type="uimodel:SelectWidget"
+        name="kind"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/kind"
+        label="vega:FormReference.kind">
+      <values>line</values>
+      <values>band</values>
+      <optionLabel language="JS" body="({ line: 'vega:Options.referenceKind.line', band: 'vega:Options.referenceKind.band' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="channel"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/channel"
+        label="vega:FormReference.channel">
+      <values>y</values>
+      <values>x</values>
+      <optionLabel language="JS" body="({ y: 'vega:Options.referenceChannel.y', x: 'vega:Options.referenceChannel.x' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="type"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/type"
+        label="vega:FormReference.type">
+      <values>quantitative</values>
+      <values>temporal</values>
+      <optionLabel language="JS" body="({ quantitative: 'vega:Options.type.quantitative', temporal: 'vega:Options.type.temporal' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="self.channel === 'x'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="from"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/from"
+        label="vega:FormReference.from"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="to"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/to"
+        label="vega:FormReference.to">
+      <visibilityCondition language="JS" body="self.kind === 'band'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="color"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/color"
+        label="vega:FormReference.color"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="label"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/label"
+        label="vega:FormReference.label"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="labelAt"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/labelAt"
+        label="vega:FormReference.labelAt">
+      <values>start</values>
+      <values>middle</values>
+      <values>end</values>
+      <optionLabel language="JS" body="({ start: 'vega:Options.labelAt.start', middle: 'vega:Options.labelAt.middle', end: 'vega:Options.labelAt.end' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="!!self.label"/>
+    </fields>
+    <fields xsi:type="uimodel:CheckboxWidget"
+        name="behind"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/behind"
+        label="vega:FormReference.behind"/>
+    <fields xsi:type="uimodel:InputWidget"
+        name="dash"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Reference/dash"
+        label="vega:FormReference.dash">
+      <visibilityCondition language="JS" body="self.kind === 'line'"/>
+    </fields>
+  </components>
+</uimodel:UIModel>

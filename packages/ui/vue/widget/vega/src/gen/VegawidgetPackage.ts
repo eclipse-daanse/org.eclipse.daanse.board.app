@@ -32,10 +32,25 @@ import { TimeUnit } from './TimeUnit.js';
 import { SortOrder } from './SortOrder.js';
 import { StackMode } from './StackMode.js';
 import { ScaleType } from './ScaleType.js';
-import { FilterOp } from './FilterOp.js';
 import { ParamKind } from './ParamKind.js';
 import { ParamBind } from './ParamBind.js';
-import { TransformKind } from './TransformKind.js';
+import { StarterChart } from './StarterChart.js';
+import { DatasetShape } from './DatasetShape.js';
+import { AxisOrient } from './AxisOrient.js';
+import { ReferenceKind } from './ReferenceKind.js';
+import { LabelPosition } from './LabelPosition.js';
+
+/**
+ * Resolve a dependency package from the registry, failing with an actionable
+ * message instead of a null dereference when it is not registered yet
+ */
+function requireEPackage(nsURI: string) {
+  const pkg = EPackageRegistry.INSTANCE.getEPackage(nsURI);
+  if (!pkg) {
+    throw new Error(`EPackage '${nsURI}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing VegawidgetPackage.`);
+  }
+  return pkg;
+}
 
 /**
  * Vegawidget Package
@@ -69,6 +84,17 @@ export class VegawidgetPackage extends BasicEPackage {
     VEGA_WIDGET_SETTINGS__LAYERS: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__FACET: null as unknown as EAttribute | EReference,
     VEGA_WIDGET_SETTINGS__PARAMS: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__DATASETS: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__SPEC_OVERLAY: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__STARTER: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_SETTINGS__REFERENCES: null as unknown as EAttribute | EReference,
+    DATASET_BINDING: null as unknown as EClass,
+    DATASET_BINDING__NAME: null as unknown as EAttribute | EReference,
+    DATASET_BINDING__DATASOURCE_ID: null as unknown as EAttribute | EReference,
+    DATASET_BINDING__SHAPE: null as unknown as EAttribute | EReference,
+    DATASET_BINDING__PATH: null as unknown as EAttribute | EReference,
+    DATASET_BINDING__COLUMN_TYPES: null as unknown as EAttribute | EReference,
     LAYER: null as unknown as EClass,
     LAYER__DATASET: null as unknown as EAttribute | EReference,
     LAYER__MARK: null as unknown as EAttribute | EReference,
@@ -106,17 +132,8 @@ export class VegawidgetPackage extends BasicEPackage {
     ENCODING__SHOW_LEGEND: null as unknown as EAttribute | EReference,
     ENCODING__HIGHLIGHT_PARAM: null as unknown as EAttribute | EReference,
     ENCODING__VALUE_IF_NOT_SELECTED: null as unknown as EAttribute | EReference,
-    TRANSFORM: null as unknown as EClass,
-    TRANSFORM__KIND: null as unknown as EAttribute | EReference,
-    TRANSFORM__FIELD: null as unknown as EAttribute | EReference,
-    TRANSFORM__OP: null as unknown as EAttribute | EReference,
-    TRANSFORM__VALUE: null as unknown as EAttribute | EReference,
-    TRANSFORM__PARAM: null as unknown as EAttribute | EReference,
-    TRANSFORM__FIELDS: null as unknown as EAttribute | EReference,
-    TRANSFORM__KEY_AS: null as unknown as EAttribute | EReference,
-    TRANSFORM__VALUE_AS: null as unknown as EAttribute | EReference,
-    TRANSFORM__AS: null as unknown as EAttribute | EReference,
-    TRANSFORM__EXPRESSION: null as unknown as EAttribute | EReference,
+    ENCODING__SCALE_ENTRIES: null as unknown as EAttribute | EReference,
+    ENCODING__AXIS_ORIENT: null as unknown as EAttribute | EReference,
     FACET: null as unknown as EClass,
     FACET__ROW: null as unknown as EAttribute | EReference,
     FACET__COLUMN: null as unknown as EAttribute | EReference,
@@ -128,6 +145,31 @@ export class VegawidgetPackage extends BasicEPackage {
     PARAM__ENCODINGS: null as unknown as EAttribute | EReference,
     PARAM__BIND: null as unknown as EAttribute | EReference,
     PARAM__VALUE: null as unknown as EAttribute | EReference,
+    MARK_CLICK_PAYLOAD: null as unknown as EClass,
+    MARK_CLICK_PAYLOAD__LAYER: null as unknown as EAttribute | EReference,
+    MARK_CLICK_PAYLOAD__MARK: null as unknown as EAttribute | EReference,
+    MARK_CLICK_PAYLOAD__DATUM: null as unknown as EAttribute | EReference,
+    SELECTION_PAYLOAD: null as unknown as EClass,
+    SELECTION_PAYLOAD__PARAM: null as unknown as EAttribute | EReference,
+    SELECTION_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
+    PARAM_PAYLOAD: null as unknown as EClass,
+    PARAM_PAYLOAD__PARAM: null as unknown as EAttribute | EReference,
+    PARAM_PAYLOAD__VALUE: null as unknown as EAttribute | EReference,
+    VEGA_WIDGET_INTERFACE: null as unknown as EClass,
+    SCALE_ENTRY: null as unknown as EClass,
+    SCALE_ENTRY__VALUE: null as unknown as EAttribute | EReference,
+    SCALE_ENTRY__OUTPUT: null as unknown as EAttribute | EReference,
+    REFERENCE: null as unknown as EClass,
+    REFERENCE__KIND: null as unknown as EAttribute | EReference,
+    REFERENCE__CHANNEL: null as unknown as EAttribute | EReference,
+    REFERENCE__TYPE: null as unknown as EAttribute | EReference,
+    REFERENCE__FROM: null as unknown as EAttribute | EReference,
+    REFERENCE__TO: null as unknown as EAttribute | EReference,
+    REFERENCE__COLOR: null as unknown as EAttribute | EReference,
+    REFERENCE__LABEL: null as unknown as EAttribute | EReference,
+    REFERENCE__LABEL_AT: null as unknown as EAttribute | EReference,
+    REFERENCE__BEHIND: null as unknown as EAttribute | EReference,
+    REFERENCE__DASH: null as unknown as EAttribute | EReference,
     VEGA_RENDERER: null as unknown as EEnum,
     LEGEND_POSITION: null as unknown as EEnum,
     MARK_TYPE: null as unknown as EEnum,
@@ -139,10 +181,13 @@ export class VegawidgetPackage extends BasicEPackage {
     SORT_ORDER: null as unknown as EEnum,
     STACK_MODE: null as unknown as EEnum,
     SCALE_TYPE: null as unknown as EEnum,
-    FILTER_OP: null as unknown as EEnum,
     PARAM_KIND: null as unknown as EEnum,
     PARAM_BIND: null as unknown as EEnum,
-    TRANSFORM_KIND: null as unknown as EEnum,
+    STARTER_CHART: null as unknown as EEnum,
+    DATASET_SHAPE: null as unknown as EEnum,
+    AXIS_ORIENT: null as unknown as EEnum,
+    REFERENCE_KIND: null as unknown as EEnum,
+    LABEL_POSITION: null as unknown as EEnum,
   };
 
   private constructor() {
@@ -234,6 +279,104 @@ export class VegawidgetPackage extends BasicEPackage {
     vegaWidgetSettings_params.setUpperBound(-1);
     vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_params);
     VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__PARAMS = vegaWidgetSettings_params;
+
+    // Create datasets feature
+    const vegaWidgetSettings_datasets = new BasicEReference();
+    vegaWidgetSettings_datasets.setContainment(true);
+    vegaWidgetSettings_datasets.setName('datasets');
+    vegaWidgetSettings_datasets.setLowerBound(0);
+    vegaWidgetSettings_datasets.setUpperBound(-1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_datasets);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__DATASETS = vegaWidgetSettings_datasets;
+
+    // Create specOverlay feature
+    const vegaWidgetSettings_specOverlay = new BasicEAttribute();
+    vegaWidgetSettings_specOverlay.setName('specOverlay');
+    vegaWidgetSettings_specOverlay.setLowerBound(0);
+    vegaWidgetSettings_specOverlay.setUpperBound(1);
+    vegaWidgetSettings_specOverlay.setDefaultValueLiteral("");
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_specOverlay);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__SPEC_OVERLAY = vegaWidgetSettings_specOverlay;
+
+    // Create starter feature
+    const vegaWidgetSettings_starter = new BasicEAttribute();
+    vegaWidgetSettings_starter.setName('starter');
+    vegaWidgetSettings_starter.setLowerBound(0);
+    vegaWidgetSettings_starter.setUpperBound(1);
+    vegaWidgetSettings_starter.setDefaultValueLiteral("none");
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_starter);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__STARTER = vegaWidgetSettings_starter;
+
+    // Create independentScales feature
+    const vegaWidgetSettings_independentScales = new BasicEAttribute();
+    vegaWidgetSettings_independentScales.setName('independentScales');
+    vegaWidgetSettings_independentScales.setLowerBound(0);
+    vegaWidgetSettings_independentScales.setUpperBound(-1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_independentScales);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES = vegaWidgetSettings_independentScales;
+
+    // Create references feature
+    const vegaWidgetSettings_references = new BasicEReference();
+    vegaWidgetSettings_references.setContainment(true);
+    vegaWidgetSettings_references.setName('references');
+    vegaWidgetSettings_references.setLowerBound(0);
+    vegaWidgetSettings_references.setUpperBound(-1);
+    vegaWidgetSettingsClass.getEStructuralFeatures().push(vegaWidgetSettings_references);
+    VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__REFERENCES = vegaWidgetSettings_references;
+
+    // Create DatasetBinding class
+    const datasetBindingClass = new BasicEClass();
+    datasetBindingClass.setName('DatasetBinding');
+    datasetBindingClass.setAbstract(false);
+    datasetBindingClass.setInterface(false);
+    this.getEClassifiers().push(datasetBindingClass);
+    datasetBindingClass.setEPackage(this);
+    VegawidgetPackage.Literals.DATASET_BINDING = datasetBindingClass;
+
+    // Create name feature
+    const datasetBinding_name = new BasicEAttribute();
+    datasetBinding_name.setName('name');
+    datasetBinding_name.setLowerBound(0);
+    datasetBinding_name.setUpperBound(1);
+    datasetBinding_name.setDefaultValueLiteral("table");
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_name);
+    VegawidgetPackage.Literals.DATASET_BINDING__NAME = datasetBinding_name;
+
+    // Create datasourceId feature
+    const datasetBinding_datasourceId = new BasicEAttribute();
+    datasetBinding_datasourceId.setName('datasourceId');
+    datasetBinding_datasourceId.setLowerBound(0);
+    datasetBinding_datasourceId.setUpperBound(1);
+    datasetBinding_datasourceId.setDefaultValueLiteral("");
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_datasourceId);
+    VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID = datasetBinding_datasourceId;
+
+    // Create shape feature
+    const datasetBinding_shape = new BasicEAttribute();
+    datasetBinding_shape.setName('shape');
+    datasetBinding_shape.setLowerBound(0);
+    datasetBinding_shape.setUpperBound(1);
+    datasetBinding_shape.setDefaultValueLiteral("table");
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_shape);
+    VegawidgetPackage.Literals.DATASET_BINDING__SHAPE = datasetBinding_shape;
+
+    // Create path feature
+    const datasetBinding_path = new BasicEAttribute();
+    datasetBinding_path.setName('path');
+    datasetBinding_path.setLowerBound(0);
+    datasetBinding_path.setUpperBound(1);
+    datasetBinding_path.setDefaultValueLiteral("");
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_path);
+    VegawidgetPackage.Literals.DATASET_BINDING__PATH = datasetBinding_path;
+
+    // Create columnTypes feature
+    const datasetBinding_columnTypes = new BasicEReference();
+    datasetBinding_columnTypes.setContainment(true);
+    datasetBinding_columnTypes.setName('columnTypes');
+    datasetBinding_columnTypes.setLowerBound(0);
+    datasetBinding_columnTypes.setUpperBound(-1);
+    datasetBindingClass.getEStructuralFeatures().push(datasetBinding_columnTypes);
+    VegawidgetPackage.Literals.DATASET_BINDING__COLUMN_TYPES = datasetBinding_columnTypes;
 
     // Create Layer class
     const layerClass = new BasicEClass();
@@ -568,103 +711,23 @@ export class VegawidgetPackage extends BasicEPackage {
     encodingClass.getEStructuralFeatures().push(encoding_valueIfNotSelected);
     VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED = encoding_valueIfNotSelected;
 
-    // Create Transform class
-    const transformClass = new BasicEClass();
-    transformClass.setName('Transform');
-    transformClass.setAbstract(false);
-    transformClass.setInterface(false);
-    this.getEClassifiers().push(transformClass);
-    transformClass.setEPackage(this);
-    VegawidgetPackage.Literals.TRANSFORM = transformClass;
+    // Create scaleEntries feature
+    const encoding_scaleEntries = new BasicEReference();
+    encoding_scaleEntries.setContainment(true);
+    encoding_scaleEntries.setName('scaleEntries');
+    encoding_scaleEntries.setLowerBound(0);
+    encoding_scaleEntries.setUpperBound(-1);
+    encodingClass.getEStructuralFeatures().push(encoding_scaleEntries);
+    VegawidgetPackage.Literals.ENCODING__SCALE_ENTRIES = encoding_scaleEntries;
 
-    // Create kind feature
-    const transform_kind = new BasicEAttribute();
-    transform_kind.setName('kind');
-    transform_kind.setLowerBound(0);
-    transform_kind.setUpperBound(1);
-    transform_kind.setDefaultValueLiteral("filter");
-    transformClass.getEStructuralFeatures().push(transform_kind);
-    VegawidgetPackage.Literals.TRANSFORM__KIND = transform_kind;
-
-    // Create field feature
-    const transform_field = new BasicEAttribute();
-    transform_field.setName('field');
-    transform_field.setLowerBound(0);
-    transform_field.setUpperBound(1);
-    transform_field.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_field);
-    VegawidgetPackage.Literals.TRANSFORM__FIELD = transform_field;
-
-    // Create op feature
-    const transform_op = new BasicEAttribute();
-    transform_op.setName('op');
-    transform_op.setLowerBound(0);
-    transform_op.setUpperBound(1);
-    transform_op.setDefaultValueLiteral("eq");
-    transformClass.getEStructuralFeatures().push(transform_op);
-    VegawidgetPackage.Literals.TRANSFORM__OP = transform_op;
-
-    // Create value feature
-    const transform_value = new BasicEAttribute();
-    transform_value.setName('value');
-    transform_value.setLowerBound(0);
-    transform_value.setUpperBound(1);
-    transform_value.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_value);
-    VegawidgetPackage.Literals.TRANSFORM__VALUE = transform_value;
-
-    // Create param feature
-    const transform_param = new BasicEAttribute();
-    transform_param.setName('param');
-    transform_param.setLowerBound(0);
-    transform_param.setUpperBound(1);
-    transform_param.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_param);
-    VegawidgetPackage.Literals.TRANSFORM__PARAM = transform_param;
-
-    // Create fields feature
-    const transform_fields = new BasicEAttribute();
-    transform_fields.setName('fields');
-    transform_fields.setLowerBound(0);
-    transform_fields.setUpperBound(-1);
-    transformClass.getEStructuralFeatures().push(transform_fields);
-    VegawidgetPackage.Literals.TRANSFORM__FIELDS = transform_fields;
-
-    // Create keyAs feature
-    const transform_keyAs = new BasicEAttribute();
-    transform_keyAs.setName('keyAs');
-    transform_keyAs.setLowerBound(0);
-    transform_keyAs.setUpperBound(1);
-    transform_keyAs.setDefaultValueLiteral("key");
-    transformClass.getEStructuralFeatures().push(transform_keyAs);
-    VegawidgetPackage.Literals.TRANSFORM__KEY_AS = transform_keyAs;
-
-    // Create valueAs feature
-    const transform_valueAs = new BasicEAttribute();
-    transform_valueAs.setName('valueAs');
-    transform_valueAs.setLowerBound(0);
-    transform_valueAs.setUpperBound(1);
-    transform_valueAs.setDefaultValueLiteral("value");
-    transformClass.getEStructuralFeatures().push(transform_valueAs);
-    VegawidgetPackage.Literals.TRANSFORM__VALUE_AS = transform_valueAs;
-
-    // Create as feature
-    const transform_as = new BasicEAttribute();
-    transform_as.setName('as');
-    transform_as.setLowerBound(0);
-    transform_as.setUpperBound(1);
-    transform_as.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_as);
-    VegawidgetPackage.Literals.TRANSFORM__AS = transform_as;
-
-    // Create expression feature
-    const transform_expression = new BasicEAttribute();
-    transform_expression.setName('expression');
-    transform_expression.setLowerBound(0);
-    transform_expression.setUpperBound(1);
-    transform_expression.setDefaultValueLiteral("");
-    transformClass.getEStructuralFeatures().push(transform_expression);
-    VegawidgetPackage.Literals.TRANSFORM__EXPRESSION = transform_expression;
+    // Create axisOrient feature
+    const encoding_axisOrient = new BasicEAttribute();
+    encoding_axisOrient.setName('axisOrient');
+    encoding_axisOrient.setLowerBound(0);
+    encoding_axisOrient.setUpperBound(1);
+    encoding_axisOrient.setDefaultValueLiteral("auto");
+    encodingClass.getEStructuralFeatures().push(encoding_axisOrient);
+    VegawidgetPackage.Literals.ENCODING__AXIS_ORIENT = encoding_axisOrient;
 
     // Create Facet class
     const facetClass = new BasicEClass();
@@ -762,6 +825,224 @@ export class VegawidgetPackage extends BasicEPackage {
     param_value.setDefaultValueLiteral("");
     paramClass.getEStructuralFeatures().push(param_value);
     VegawidgetPackage.Literals.PARAM__VALUE = param_value;
+
+    // Create MarkClickPayload class
+    const markClickPayloadClass = new BasicEClass();
+    markClickPayloadClass.setName('MarkClickPayload');
+    markClickPayloadClass.setAbstract(false);
+    markClickPayloadClass.setInterface(false);
+    this.getEClassifiers().push(markClickPayloadClass);
+    markClickPayloadClass.setEPackage(this);
+    VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD = markClickPayloadClass;
+
+    // Create layer feature
+    const markClickPayload_layer = new BasicEAttribute();
+    markClickPayload_layer.setName('layer');
+    markClickPayload_layer.setLowerBound(0);
+    markClickPayload_layer.setUpperBound(1);
+    markClickPayloadClass.getEStructuralFeatures().push(markClickPayload_layer);
+    VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__LAYER = markClickPayload_layer;
+
+    // Create mark feature
+    const markClickPayload_mark = new BasicEAttribute();
+    markClickPayload_mark.setName('mark');
+    markClickPayload_mark.setLowerBound(0);
+    markClickPayload_mark.setUpperBound(1);
+    markClickPayloadClass.getEStructuralFeatures().push(markClickPayload_mark);
+    VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__MARK = markClickPayload_mark;
+
+    // Create datum feature
+    const markClickPayload_datum = new BasicEAttribute();
+    markClickPayload_datum.setName('datum');
+    markClickPayload_datum.setLowerBound(0);
+    markClickPayload_datum.setUpperBound(1);
+    markClickPayloadClass.getEStructuralFeatures().push(markClickPayload_datum);
+    VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__DATUM = markClickPayload_datum;
+
+    // Create SelectionPayload class
+    const selectionPayloadClass = new BasicEClass();
+    selectionPayloadClass.setName('SelectionPayload');
+    selectionPayloadClass.setAbstract(false);
+    selectionPayloadClass.setInterface(false);
+    this.getEClassifiers().push(selectionPayloadClass);
+    selectionPayloadClass.setEPackage(this);
+    VegawidgetPackage.Literals.SELECTION_PAYLOAD = selectionPayloadClass;
+
+    // Create param feature
+    const selectionPayload_param = new BasicEAttribute();
+    selectionPayload_param.setName('param');
+    selectionPayload_param.setLowerBound(0);
+    selectionPayload_param.setUpperBound(1);
+    selectionPayloadClass.getEStructuralFeatures().push(selectionPayload_param);
+    VegawidgetPackage.Literals.SELECTION_PAYLOAD__PARAM = selectionPayload_param;
+
+    // Create value feature
+    const selectionPayload_value = new BasicEAttribute();
+    selectionPayload_value.setName('value');
+    selectionPayload_value.setLowerBound(0);
+    selectionPayload_value.setUpperBound(1);
+    selectionPayloadClass.getEStructuralFeatures().push(selectionPayload_value);
+    VegawidgetPackage.Literals.SELECTION_PAYLOAD__VALUE = selectionPayload_value;
+
+    // Create ParamPayload class
+    const paramPayloadClass = new BasicEClass();
+    paramPayloadClass.setName('ParamPayload');
+    paramPayloadClass.setAbstract(false);
+    paramPayloadClass.setInterface(false);
+    this.getEClassifiers().push(paramPayloadClass);
+    paramPayloadClass.setEPackage(this);
+    VegawidgetPackage.Literals.PARAM_PAYLOAD = paramPayloadClass;
+
+    // Create param feature
+    const paramPayload_param = new BasicEAttribute();
+    paramPayload_param.setName('param');
+    paramPayload_param.setLowerBound(0);
+    paramPayload_param.setUpperBound(1);
+    paramPayloadClass.getEStructuralFeatures().push(paramPayload_param);
+    VegawidgetPackage.Literals.PARAM_PAYLOAD__PARAM = paramPayload_param;
+
+    // Create value feature
+    const paramPayload_value = new BasicEAttribute();
+    paramPayload_value.setName('value');
+    paramPayload_value.setLowerBound(0);
+    paramPayload_value.setUpperBound(1);
+    paramPayloadClass.getEStructuralFeatures().push(paramPayload_value);
+    VegawidgetPackage.Literals.PARAM_PAYLOAD__VALUE = paramPayload_value;
+
+    // Create VegaWidgetInterface class
+    const vegaWidgetInterfaceClass = new BasicEClass();
+    vegaWidgetInterfaceClass.setName('VegaWidgetInterface');
+    vegaWidgetInterfaceClass.setAbstract(true);
+    vegaWidgetInterfaceClass.setInterface(false);
+    this.getEClassifiers().push(vegaWidgetInterfaceClass);
+    vegaWidgetInterfaceClass.setEPackage(this);
+    VegawidgetPackage.Literals.VEGA_WIDGET_INTERFACE = vegaWidgetInterfaceClass;
+
+    // Create ScaleEntry class
+    const scaleEntryClass = new BasicEClass();
+    scaleEntryClass.setName('ScaleEntry');
+    scaleEntryClass.setAbstract(false);
+    scaleEntryClass.setInterface(false);
+    this.getEClassifiers().push(scaleEntryClass);
+    scaleEntryClass.setEPackage(this);
+    VegawidgetPackage.Literals.SCALE_ENTRY = scaleEntryClass;
+
+    // Create value feature
+    const scaleEntry_value = new BasicEAttribute();
+    scaleEntry_value.setName('value');
+    scaleEntry_value.setLowerBound(0);
+    scaleEntry_value.setUpperBound(1);
+    scaleEntry_value.setDefaultValueLiteral("");
+    scaleEntryClass.getEStructuralFeatures().push(scaleEntry_value);
+    VegawidgetPackage.Literals.SCALE_ENTRY__VALUE = scaleEntry_value;
+
+    // Create output feature
+    const scaleEntry_output = new BasicEAttribute();
+    scaleEntry_output.setName('output');
+    scaleEntry_output.setLowerBound(0);
+    scaleEntry_output.setUpperBound(1);
+    scaleEntry_output.setDefaultValueLiteral("");
+    scaleEntryClass.getEStructuralFeatures().push(scaleEntry_output);
+    VegawidgetPackage.Literals.SCALE_ENTRY__OUTPUT = scaleEntry_output;
+
+    // Create Reference class
+    const referenceClass = new BasicEClass();
+    referenceClass.setName('Reference');
+    referenceClass.setAbstract(false);
+    referenceClass.setInterface(false);
+    this.getEClassifiers().push(referenceClass);
+    referenceClass.setEPackage(this);
+    VegawidgetPackage.Literals.REFERENCE = referenceClass;
+
+    // Create kind feature
+    const reference_kind = new BasicEAttribute();
+    reference_kind.setName('kind');
+    reference_kind.setLowerBound(0);
+    reference_kind.setUpperBound(1);
+    reference_kind.setDefaultValueLiteral("line");
+    referenceClass.getEStructuralFeatures().push(reference_kind);
+    VegawidgetPackage.Literals.REFERENCE__KIND = reference_kind;
+
+    // Create channel feature
+    const reference_channel = new BasicEAttribute();
+    reference_channel.setName('channel');
+    reference_channel.setLowerBound(0);
+    reference_channel.setUpperBound(1);
+    reference_channel.setDefaultValueLiteral("y");
+    referenceClass.getEStructuralFeatures().push(reference_channel);
+    VegawidgetPackage.Literals.REFERENCE__CHANNEL = reference_channel;
+
+    // Create type feature
+    const reference_type = new BasicEAttribute();
+    reference_type.setName('type');
+    reference_type.setLowerBound(0);
+    reference_type.setUpperBound(1);
+    reference_type.setDefaultValueLiteral("quantitative");
+    referenceClass.getEStructuralFeatures().push(reference_type);
+    VegawidgetPackage.Literals.REFERENCE__TYPE = reference_type;
+
+    // Create from feature
+    const reference_from = new BasicEAttribute();
+    reference_from.setName('from');
+    reference_from.setLowerBound(0);
+    reference_from.setUpperBound(1);
+    reference_from.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_from);
+    VegawidgetPackage.Literals.REFERENCE__FROM = reference_from;
+
+    // Create to feature
+    const reference_to = new BasicEAttribute();
+    reference_to.setName('to');
+    reference_to.setLowerBound(0);
+    reference_to.setUpperBound(1);
+    reference_to.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_to);
+    VegawidgetPackage.Literals.REFERENCE__TO = reference_to;
+
+    // Create color feature
+    const reference_color = new BasicEAttribute();
+    reference_color.setName('color');
+    reference_color.setLowerBound(0);
+    reference_color.setUpperBound(1);
+    reference_color.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_color);
+    VegawidgetPackage.Literals.REFERENCE__COLOR = reference_color;
+
+    // Create label feature
+    const reference_label = new BasicEAttribute();
+    reference_label.setName('label');
+    reference_label.setLowerBound(0);
+    reference_label.setUpperBound(1);
+    reference_label.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_label);
+    VegawidgetPackage.Literals.REFERENCE__LABEL = reference_label;
+
+    // Create labelAt feature
+    const reference_labelAt = new BasicEAttribute();
+    reference_labelAt.setName('labelAt');
+    reference_labelAt.setLowerBound(0);
+    reference_labelAt.setUpperBound(1);
+    reference_labelAt.setDefaultValueLiteral("start");
+    referenceClass.getEStructuralFeatures().push(reference_labelAt);
+    VegawidgetPackage.Literals.REFERENCE__LABEL_AT = reference_labelAt;
+
+    // Create behind feature
+    const reference_behind = new BasicEAttribute();
+    reference_behind.setName('behind');
+    reference_behind.setLowerBound(0);
+    reference_behind.setUpperBound(1);
+    reference_behind.setDefaultValueLiteral("true");
+    referenceClass.getEStructuralFeatures().push(reference_behind);
+    VegawidgetPackage.Literals.REFERENCE__BEHIND = reference_behind;
+
+    // Create dash feature
+    const reference_dash = new BasicEAttribute();
+    reference_dash.setName('dash');
+    reference_dash.setLowerBound(0);
+    reference_dash.setUpperBound(1);
+    reference_dash.setDefaultValueLiteral("");
+    referenceClass.getEStructuralFeatures().push(reference_dash);
+    VegawidgetPackage.Literals.REFERENCE__DASH = reference_dash;
 
     // Create VegaRenderer enum
     const vegaRendererEnumType = new BasicEEnum();
@@ -1715,118 +1996,6 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.SCALE_TYPE = scaleTypeEnumType;
     this.getEClassifiers().push(scaleTypeEnumType);
 
-    // Create FilterOp enum
-    const filterOpEnumType = new BasicEEnum();
-    filterOpEnumType.setName('FilterOp');
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("eq");
-      literal.setValue(0);
-      literal.setLiteral("eq");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.eq);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("neq");
-      literal.setValue(1);
-      literal.setLiteral("neq");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.neq);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("lt");
-      literal.setValue(2);
-      literal.setLiteral("lt");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.lt);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("lte");
-      literal.setValue(3);
-      literal.setLiteral("lte");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.lte);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("gt");
-      literal.setValue(4);
-      literal.setLiteral("gt");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.gt);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("gte");
-      literal.setValue(5);
-      literal.setLiteral("gte");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.gte);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("oneOf");
-      literal.setValue(6);
-      literal.setLiteral("oneOf");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.oneOf);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("range");
-      literal.setValue(7);
-      literal.setLiteral("range");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.range);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("valid");
-      literal.setValue(8);
-      literal.setLiteral("valid");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.valid);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const literal = new BasicEEnumLiteral();
-      literal.setName("param");
-      literal.setValue(9);
-      literal.setLiteral("param");
-      // the generated string constant is the literal's instance, so
-      // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(FilterOp.param);
-      filterOpEnumType.addLiteral(literal);
-    }
-    {
-      const annotation = new BasicEAnnotation();
-      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
-      annotation.getDetails().putByKey("documentation", "The comparison a filter makes. oneOf takes a comma-separated list, range takes two comma-separated bounds, valid keeps rows with a value, param keeps what a selection holds.");
-      filterOpEnumType.getEAnnotations().push(annotation);
-    }
-    VegawidgetPackage.Literals.FILTER_OP = filterOpEnumType;
-    this.getEClassifiers().push(filterOpEnumType);
-
     // Create ParamKind enum
     const paramKindEnumType = new BasicEEnum();
     paramKindEnumType.setName('ParamKind');
@@ -1911,52 +2080,324 @@ export class VegawidgetPackage extends BasicEPackage {
     VegawidgetPackage.Literals.PARAM_BIND = paramBindEnumType;
     this.getEClassifiers().push(paramBindEnumType);
 
-    // Create TransformKind enum
-    const transformKindEnumType = new BasicEEnum();
-    transformKindEnumType.setName('TransformKind');
+    // Create StarterChart enum
+    const starterChartEnumType = new BasicEEnum();
+    starterChartEnumType.setName('StarterChart');
     {
       const literal = new BasicEEnumLiteral();
-      literal.setName("filter");
+      literal.setName("none");
       literal.setValue(0);
-      literal.setLiteral("filter");
+      literal.setLiteral("none");
       // the generated string constant is the literal's instance, so
       // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(TransformKind.filter);
-      transformKindEnumType.addLiteral(literal);
+      literal.setInstance(StarterChart.none);
+      starterChartEnumType.addLiteral(literal);
     }
     {
       const literal = new BasicEEnumLiteral();
-      literal.setName("fold");
+      literal.setName("bar");
       literal.setValue(1);
-      literal.setLiteral("fold");
+      literal.setLiteral("bar");
       // the generated string constant is the literal's instance, so
       // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(TransformKind.fold);
-      transformKindEnumType.addLiteral(literal);
+      literal.setInstance(StarterChart.bar);
+      starterChartEnumType.addLiteral(literal);
     }
     {
       const literal = new BasicEEnumLiteral();
-      literal.setName("calculate");
+      literal.setName("stackedBar");
       literal.setValue(2);
-      literal.setLiteral("calculate");
+      literal.setLiteral("stackedBar");
       // the generated string constant is the literal's instance, so
       // createFromString returns the value the generated type declares (#53)
-      literal.setInstance(TransformKind.calculate);
-      transformKindEnumType.addLiteral(literal);
+      literal.setInstance(StarterChart.stackedBar);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("groupedBar");
+      literal.setValue(3);
+      literal.setLiteral("groupedBar");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.groupedBar);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("line");
+      literal.setValue(4);
+      literal.setLiteral("line");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.line);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("area");
+      literal.setValue(5);
+      literal.setLiteral("area");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.area);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("scatter");
+      literal.setValue(6);
+      literal.setLiteral("scatter");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.scatter);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("heatmap");
+      literal.setValue(7);
+      literal.setLiteral("heatmap");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.heatmap);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("histogram");
+      literal.setValue(8);
+      literal.setLiteral("histogram");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.histogram);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("boxplot");
+      literal.setValue(9);
+      literal.setLiteral("boxplot");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.boxplot);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("donut");
+      literal.setValue(10);
+      literal.setLiteral("donut");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.donut);
+      starterChartEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("brush");
+      literal.setValue(11);
+      literal.setLiteral("brush");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(StarterChart.brush);
+      starterChartEnumType.addLiteral(literal);
     }
     {
       const annotation = new BasicEAnnotation();
       annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
-      annotation.getDetails().putByKey("documentation", "What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate).");
-      transformKindEnumType.getEAnnotations().push(annotation);
+      annotation.getDetails().putByKey("documentation", "A chart to start from (#1292): a recipe of layers, encodings and selections filled with columns of the data the chart reads - the first text, number and date columns it finds. The fields can be changed afterwards like any other.");
+      starterChartEnumType.getEAnnotations().push(annotation);
     }
-    VegawidgetPackage.Literals.TRANSFORM_KIND = transformKindEnumType;
-    this.getEClassifiers().push(transformKindEnumType);
+    VegawidgetPackage.Literals.STARTER_CHART = starterChartEnumType;
+    this.getEClassifiers().push(starterChartEnumType);
+
+    // Create DatasetShape enum
+    const datasetShapeEnumType = new BasicEEnum();
+    datasetShapeEnumType.setName('DatasetShape');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("table");
+      literal.setValue(0);
+      literal.setLiteral("table");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DatasetShape.table);
+      datasetShapeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("object");
+      literal.setValue(1);
+      literal.setLiteral("object");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DatasetShape.object);
+      datasetShapeEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("geojson");
+      literal.setValue(2);
+      literal.setLiteral("geojson");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(DatasetShape.geojson);
+      datasetShapeEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "The form a data source answers in, as the widget asks for it: rows with headers (table), any JSON with a list somewhere in it (object), or GeoJSON features (geojson).");
+      datasetShapeEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.DATASET_SHAPE = datasetShapeEnumType;
+    this.getEClassifiers().push(datasetShapeEnumType);
+
+    // Create AxisOrient enum
+    const axisOrientEnumType = new BasicEEnum();
+    axisOrientEnumType.setName('AxisOrient');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("auto");
+      literal.setValue(0);
+      literal.setLiteral("auto");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.auto);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("left");
+      literal.setValue(1);
+      literal.setLiteral("left");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.left);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("right");
+      literal.setValue(2);
+      literal.setLiteral("right");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.right);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("top");
+      literal.setValue(3);
+      literal.setLiteral("top");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.top);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("bottom");
+      literal.setValue(4);
+      literal.setLiteral("bottom");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(AxisOrient.bottom);
+      axisOrientEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "The side of the chart an axis is drawn on; auto lets Vega-Lite choose.");
+      axisOrientEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.AXIS_ORIENT = axisOrientEnumType;
+    this.getEClassifiers().push(axisOrientEnumType);
+
+    // Create ReferenceKind enum
+    const referenceKindEnumType = new BasicEEnum();
+    referenceKindEnumType.setName('ReferenceKind');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("line");
+      literal.setValue(0);
+      literal.setLiteral("line");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ReferenceKind.line);
+      referenceKindEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("band");
+      literal.setValue(1);
+      literal.setLiteral("band");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(ReferenceKind.band);
+      referenceKindEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "A line at one value, or a band between two.");
+      referenceKindEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.REFERENCE_KIND = referenceKindEnumType;
+    this.getEClassifiers().push(referenceKindEnumType);
+
+    // Create LabelPosition enum
+    const labelPositionEnumType = new BasicEEnum();
+    labelPositionEnumType.setName('LabelPosition');
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("start");
+      literal.setValue(0);
+      literal.setLiteral("start");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LabelPosition.start);
+      labelPositionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("middle");
+      literal.setValue(1);
+      literal.setLiteral("middle");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LabelPosition.middle);
+      labelPositionEnumType.addLiteral(literal);
+    }
+    {
+      const literal = new BasicEEnumLiteral();
+      literal.setName("end");
+      literal.setValue(2);
+      literal.setLiteral("end");
+      // the generated string constant is the literal's instance, so
+      // createFromString returns the value the generated type declares (#53)
+      literal.setInstance(LabelPosition.end);
+      labelPositionEnumType.addLiteral(literal);
+    }
+    {
+      const annotation = new BasicEAnnotation();
+      annotation.setSource("http://www.eclipse.org/emf/2002/GenModel");
+      annotation.getDetails().putByKey("documentation", "Where along the line or band its label stands.");
+      labelPositionEnumType.getEAnnotations().push(annotation);
+    }
+    VegawidgetPackage.Literals.LABEL_POSITION = labelPositionEnumType;
+    this.getEClassifiers().push(labelPositionEnumType);
 
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
     // ============================================
+    (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
+    (VegawidgetPackage.Literals.SELECTION_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
+    (VegawidgetPackage.Literals.PARAM_PAYLOAD as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('Payload')! as EClass);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_INTERFACE as BasicEClass).getESuperTypes().push(requireEPackage('http://org.eclipse.daanse.board.app.lib.events').getEClassifier('WidgetActionInterface')! as EClass);
 
     // ============================================
     // Set ETypes for all features (must be done after all classes are created).
@@ -1970,6 +2411,16 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__LAYERS as BasicEReference).setEType(VegawidgetPackage.Literals.LAYER);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__FACET as BasicEReference).setEType(VegawidgetPackage.Literals.FACET);
     (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__PARAMS as BasicEReference).setEType(VegawidgetPackage.Literals.PARAM);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__DATASETS as BasicEReference).setEType(VegawidgetPackage.Literals.DATASET_BINDING);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__SPEC_OVERLAY as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__STARTER as BasicEAttribute).setEType(VegawidgetPackage.Literals.STARTER_CHART);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__INDEPENDENT_SCALES as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
+    (VegawidgetPackage.Literals.VEGA_WIDGET_SETTINGS__REFERENCES as BasicEReference).setEType(VegawidgetPackage.Literals.REFERENCE);
+    (VegawidgetPackage.Literals.DATASET_BINDING__NAME as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.DATASET_BINDING__DATASOURCE_ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.DATASET_BINDING__SHAPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.DATASET_SHAPE);
+    (VegawidgetPackage.Literals.DATASET_BINDING__PATH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.DATASET_BINDING__COLUMN_TYPES as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.datasource.base').getEClassifier('ColumnType')!);
     (VegawidgetPackage.Literals.LAYER__DATASET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.LAYER__MARK as BasicEAttribute).setEType(VegawidgetPackage.Literals.MARK_TYPE);
     (VegawidgetPackage.Literals.LAYER__INTERPOLATE as BasicEAttribute).setEType(VegawidgetPackage.Literals.INTERPOLATE);
@@ -1981,7 +2432,7 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.LAYER__INNER_RADIUS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (VegawidgetPackage.Literals.LAYER__STROKE_WIDTH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EDouble')!);
     (VegawidgetPackage.Literals.LAYER__ENCODINGS as BasicEReference).setEType(VegawidgetPackage.Literals.ENCODING);
-    (VegawidgetPackage.Literals.LAYER__TRANSFORMS as BasicEReference).setEType(VegawidgetPackage.Literals.TRANSFORM);
+    (VegawidgetPackage.Literals.LAYER__TRANSFORMS as BasicEReference).setEType(requireEPackage('http://org.eclipse.daanse.board.app.lib.datasource.base').getEClassifier('Transform')!);
     (VegawidgetPackage.Literals.ENCODING__CHANNEL as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
     (VegawidgetPackage.Literals.ENCODING__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.ENCODING__TYPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.FIELD_TYPE);
@@ -2005,16 +2456,8 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.ENCODING__SHOW_LEGEND as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (VegawidgetPackage.Literals.ENCODING__HIGHLIGHT_PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.ENCODING__VALUE_IF_NOT_SELECTED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__KIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.TRANSFORM_KIND);
-    (VegawidgetPackage.Literals.TRANSFORM__FIELD as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__OP as BasicEAttribute).setEType(VegawidgetPackage.Literals.FILTER_OP);
-    (VegawidgetPackage.Literals.TRANSFORM__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__FIELDS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__KEY_AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__VALUE_AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__AS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (VegawidgetPackage.Literals.TRANSFORM__EXPRESSION as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.ENCODING__SCALE_ENTRIES as BasicEReference).setEType(VegawidgetPackage.Literals.SCALE_ENTRY);
+    (VegawidgetPackage.Literals.ENCODING__AXIS_ORIENT as BasicEAttribute).setEType(VegawidgetPackage.Literals.AXIS_ORIENT);
     (VegawidgetPackage.Literals.FACET__ROW as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__COLUMN as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (VegawidgetPackage.Literals.FACET__COLUMNS as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
@@ -2024,6 +2467,25 @@ export class VegawidgetPackage extends BasicEPackage {
     (VegawidgetPackage.Literals.PARAM__ENCODINGS as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
     (VegawidgetPackage.Literals.PARAM__BIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.PARAM_BIND);
     (VegawidgetPackage.Literals.PARAM__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__LAYER as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__MARK as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.MARK_CLICK_PAYLOAD__DATUM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (VegawidgetPackage.Literals.SELECTION_PAYLOAD__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.SELECTION_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (VegawidgetPackage.Literals.PARAM_PAYLOAD__PARAM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.PARAM_PAYLOAD__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
+    (VegawidgetPackage.Literals.SCALE_ENTRY__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.SCALE_ENTRY__OUTPUT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__KIND as BasicEAttribute).setEType(VegawidgetPackage.Literals.REFERENCE_KIND);
+    (VegawidgetPackage.Literals.REFERENCE__CHANNEL as BasicEAttribute).setEType(VegawidgetPackage.Literals.CHANNEL);
+    (VegawidgetPackage.Literals.REFERENCE__TYPE as BasicEAttribute).setEType(VegawidgetPackage.Literals.FIELD_TYPE);
+    (VegawidgetPackage.Literals.REFERENCE__FROM as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__TO as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__LABEL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (VegawidgetPackage.Literals.REFERENCE__LABEL_AT as BasicEAttribute).setEType(VegawidgetPackage.Literals.LABEL_POSITION);
+    (VegawidgetPackage.Literals.REFERENCE__BEHIND as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (VegawidgetPackage.Literals.REFERENCE__DASH as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Set EOpposites (must be done after all features are created) (#59)

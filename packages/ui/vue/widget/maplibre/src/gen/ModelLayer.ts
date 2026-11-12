@@ -20,7 +20,11 @@
 
 import type { EObject, EList } from '@emfts/core';
 import type { ModelInstance } from './ModelInstance.js';
-import type { ModelRule } from './ModelRule.js';
+import type { Transform } from 'org.eclipse.daanse.board.app.lib.datasource.base';
+import type { SizeEncoding } from './SizeEncoding.js';
+import type { ColorEncoding } from './ColorEncoding.js';
+import type { ModelEncoding } from './ModelEncoding.js';
+import type { PartEncoding } from './PartEncoding.js';
 
 /**
  * ModelLayer
@@ -35,13 +39,12 @@ export interface ModelLayer extends EObject {
   scale?: number;
   rotation?: number;
   altitudeOffset?: number;
-  color?: string;
-  trunkColor?: string;
   instances: EList<ModelInstance>;
   datasourceId?: string;
-  heightProperty?: string;
-  defaultHeight?: number;
-  widthProperty?: string;
-  rules: EList<ModelRule>;
+  transforms: EList<Transform>;
+  size?: SizeEncoding;
+  color?: ColorEncoding;
+  modelBy?: ModelEncoding;
+  parts: EList<PartEncoding>;
 
 }

@@ -23,16 +23,26 @@ import type { EClass, EObject } from '@emfts/core';
 import { VegawidgetPackage } from './VegawidgetPackage.js';
 import { VegaWidgetSettings } from './VegaWidgetSettings.js';
 import { VegaWidgetSettingsImpl } from './VegaWidgetSettingsImpl.js';
+import { DatasetBinding } from './DatasetBinding.js';
+import { DatasetBindingImpl } from './DatasetBindingImpl.js';
 import { Layer } from './Layer.js';
 import { LayerImpl } from './LayerImpl.js';
 import { Encoding } from './Encoding.js';
 import { EncodingImpl } from './EncodingImpl.js';
-import { Transform } from './Transform.js';
-import { TransformImpl } from './TransformImpl.js';
 import { Facet } from './Facet.js';
 import { FacetImpl } from './FacetImpl.js';
 import { Param } from './Param.js';
 import { ParamImpl } from './ParamImpl.js';
+import { MarkClickPayload } from './MarkClickPayload.js';
+import { MarkClickPayloadImpl } from './MarkClickPayloadImpl.js';
+import { SelectionPayload } from './SelectionPayload.js';
+import { SelectionPayloadImpl } from './SelectionPayloadImpl.js';
+import { ParamPayload } from './ParamPayload.js';
+import { ParamPayloadImpl } from './ParamPayloadImpl.js';
+import { ScaleEntry } from './ScaleEntry.js';
+import { ScaleEntryImpl } from './ScaleEntryImpl.js';
+import { Reference } from './Reference.js';
+import { ReferenceImpl } from './ReferenceImpl.js';
 
 /**
  * Factory for creating Vegawidget model objects
@@ -62,6 +72,13 @@ export class VegawidgetFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new DatasetBinding instance
+   */
+  createDatasetBinding(): DatasetBinding {
+    return new DatasetBindingImpl();
+  }
+
+  /**
    * Create a new Layer instance
    */
   createLayer(): Layer {
@@ -73,13 +90,6 @@ export class VegawidgetFactory extends BasicEFactory {
    */
   createEncoding(): Encoding {
     return new EncodingImpl();
-  }
-
-  /**
-   * Create a new Transform instance
-   */
-  createTransform(): Transform {
-    return new TransformImpl();
   }
 
   /**
@@ -97,22 +107,67 @@ export class VegawidgetFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new MarkClickPayload instance
+   */
+  createMarkClickPayload(): MarkClickPayload {
+    return new MarkClickPayloadImpl();
+  }
+
+  /**
+   * Create a new SelectionPayload instance
+   */
+  createSelectionPayload(): SelectionPayload {
+    return new SelectionPayloadImpl();
+  }
+
+  /**
+   * Create a new ParamPayload instance
+   */
+  createParamPayload(): ParamPayload {
+    return new ParamPayloadImpl();
+  }
+
+  /**
+   * Create a new ScaleEntry instance
+   */
+  createScaleEntry(): ScaleEntry {
+    return new ScaleEntryImpl();
+  }
+
+  /**
+   * Create a new Reference instance
+   */
+  createReference(): Reference {
+    return new ReferenceImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
     switch (eClass.getName()) {
       case 'VegaWidgetSettings':
         return this.createVegaWidgetSettings();
+      case 'DatasetBinding':
+        return this.createDatasetBinding();
       case 'Layer':
         return this.createLayer();
       case 'Encoding':
         return this.createEncoding();
-      case 'Transform':
-        return this.createTransform();
       case 'Facet':
         return this.createFacet();
       case 'Param':
         return this.createParam();
+      case 'MarkClickPayload':
+        return this.createMarkClickPayload();
+      case 'SelectionPayload':
+        return this.createSelectionPayload();
+      case 'ParamPayload':
+        return this.createParamPayload();
+      case 'ScaleEntry':
+        return this.createScaleEntry();
+      case 'Reference':
+        return this.createReference();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

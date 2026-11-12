@@ -30,7 +30,7 @@ import { clickEventOf } from '../events/payloads'
 import { TextAttributionControl, attributionFragment } from '../attribution'
 import { placing } from '../models/placementMode'
 import { newModelLayer } from '../settingsModel'
-import { MaplibreFactory } from '../gen/MaplibreFactory'
+import { VIEWPORT_EVENT } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 
 void EventsPackage.eINSTANCE
 void MaplibrePackage.eINSTANCE
@@ -107,7 +107,17 @@ vi.mock('maplibre-gl', () => {
     }
     canvasStyle: Record<string, string> = {}
     getCanvas() {
-      return { style: this.canvasStyle }
+      return { style: this.canvasStyle, clientWidth: 800, clientHeight: 600 }
+    }
+    /* Bounds of a view of 800 x 600 px at zoom 16 around 11.6 / 50.95, untilted. */
+    getBounds() {
+      return { getWest: () => 11.5932, getSouth: () => 50.9468, getEast: () => 11.6068, getNorth: () => 50.9532 }
+    }
+    getCenter() {
+      return { lng: 11.6, lat: 50.95 }
+    }
+    getZoom() {
+      return 16
     }
     /* A plain projection for the test: 1 px per 0.0001 degree, from 11.6 / 50.95. */
     project([lng, lat]: [number, number]) {
@@ -420,8 +430,8 @@ describe('the 3D models of the map (#1281)', () => {
   })
 })
 
-describe('the 3D models on data (#1282)', () => {
-  it('stand at the points of their data source, with the height and colour of their rules', async () => {
+describe('the 3D models on data (#1282, #1296)', () => {
+  it('stand at the points of their data source, with the size and colour of their encodings', async () => {
     const store = fakeStore()
     ;(store as any).getData = vi.fn(async (type: string) =>
       type === 'geojson'
@@ -431,16 +441,11 @@ describe('the 3D models on data (#1282)', () => {
     const settings = stored()
     const { map } = await mountWidget(settings, store)
     const model = modelledSettings(settings)
-    const layer = newModelLayer('Trees')
-    layer.url = 'https://x/tree.fbx'
-    layer.datasourceId = 'wfs'
-    layer.heightProperty = 'hoehe'
-    const rule = MaplibreFactory.eINSTANCE.createModelRule()
-    rule.property = 'gattung'
-    rule.value = 'Linde'
-    rule.color = '#2e7d32'
-    layer.rules.add(rule)
-    model.modelLayers.add(layer)
+    model.modelLayers.add(modelledSettings({ modelLayers: [{
+      id: 'trees', url: 'https://x/tree.fbx', datasourceId: 'wfs',
+      size: { height: { field: 'hoehe' } },
+      color: { field: 'gattung', mappings: [{ code: 'Linde', color: '#2e7d32' }] },
+    }] }).modelLayers.get(0))
     await flushPromises()
     expect(map.layers.at(-1).id).toBe('daanse:models')
     expect(store.getData).toHaveBeenCalledWith('geojson')
@@ -448,6 +453,26 @@ describe('the 3D models on data (#1282)', () => {
     expect(last).toHaveLength(1)
     expect(last[0].url).toBe('https://x/tree.fbx')
     expect(last[0].instances).toEqual([{ id: 'b1', lon: 11.6, lat: 50.95, height: 12, color: '#2e7d32' }])
+  })
+
+  it('tell their data source what the map shows, where it takes the viewport event (#1297)', async () => {
+    const store = fakeStore()
+    ;(store as any).acceptedEvents = () => [VIEWPORT_EVENT]
+    ;(store as any).callEvent = vi.fn()
+    const settings = { ...stored(), modelLayers: [{ id: 'trees', url: 'https://x/tree.fbx', datasourceId: 'wfs' }] }
+    const { map, wrapper } = await mountWidget(settings, store)
+    vi.useFakeTimers()
+    try {
+      map.handlers.moveend?.()
+      vi.advanceTimersByTime(300)
+      expect((store as any).callEvent).toHaveBeenCalledWith(VIEWPORT_EVENT, {
+        bbox: [11.5932, 50.9468, 11.6068, 50.9532], zoom: 16, sender: 'w1',
+      })
+      wrapper.unmount()
+      expect((store as any).callEvent).toHaveBeenLastCalledWith(VIEWPORT_EVENT, { bbox: null, zoom: 16, sender: 'w1' })
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })
 

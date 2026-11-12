@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+An instance placed by hand (#1281).
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ModelInstanceForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelInstance"/>
+
+  <components xsi:type="uimodel:FormView" name="ModelInstanceFormView">
+    <fields xsi:type="uimodel:NumberWidget" name="lat" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelInstance/lat" label="maplibre:Symbols.ModelInstance.lat" step="0.00001"/>
+    <fields xsi:type="uimodel:NumberWidget" name="lon" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelInstance/lon" label="maplibre:Symbols.ModelInstance.lon" step="0.00001"/>
+    <fields xsi:type="uimodel:NumberWidget" name="scale" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelInstance/scale" label="maplibre:Symbols.ModelInstance.scale" min="0" step="0.1"/>
+    <fields xsi:type="uimodel:NumberWidget" name="rotation" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//ModelInstance/rotation" label="maplibre:Symbols.ModelInstance.rotation" min="0" max="359" step="1"/>
+  </components>
+</uimodel:UIModel>

@@ -7,11 +7,13 @@
   "exports": {},
   "dependencies": [
     "lib.api.datasource",
+    "lib.datasource.base",
     "lib.datasource.wfs",
     "platform.vue",
     "ui.vue.common.map",
     "ui.vue.composables",
-    "ui.vue.controls"
+    "ui.vue.controls",
+    "ui.vue.uimodel"
   ],
   "requiresService": [
     {
@@ -44,6 +46,14 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.datasource.wfs",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.uimodel",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.datasource.base",
       "versionRange": ">=0.0.1-0"
     }
   ],

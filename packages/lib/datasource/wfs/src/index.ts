@@ -44,7 +44,7 @@ export function deactivate({ services }: ActivationContext) {
 
 export { type WfsStore, type IWfsStoreConfiguration, WFS_STORE_FACTORY, factorySymbol }
 export { WfsstorePackage, WfsstoreFactory, IWfsStoreConfigurationImpl }
-export { boxOf, exceptionOf, featuresOf, featuresOfGml, getCapabilitiesPath, getFeaturePath, tableOf, GEOJSON } from './wfs'
+export { boxOf, columnTypesOfSchema, describeFeatureTypePath, exceptionOf, featuresOf, featuresOfGml, getCapabilitiesPath, getFeaturePath, tableOf, GEOJSON } from './wfs'
 export type { WfsRequest } from './wfs'
 export { featureInfoPath, featuresOfFeatureInfo, mergedOf, tilesOf, MAX_TILES } from './featureInfo'
 export type { FeatureInfoRequest } from './featureInfo'

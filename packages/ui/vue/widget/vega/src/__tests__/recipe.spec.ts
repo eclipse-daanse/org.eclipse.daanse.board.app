@@ -19,7 +19,7 @@
 import { describe, expect, it } from 'vitest'
 import { compile } from 'vega-lite'
 import { VegawidgetPackage } from '../gen/VegawidgetPackage'
-import { compileRecipe, RecipeError } from '../recipe'
+import { compileRecipe, RecipeError, withSize } from '../recipe'
 import { modelledSettings } from '../settingsModel'
 import { sampleDatasets, withDatasets } from '../sample'
 import type { MarkType } from '../gen/MarkType'
@@ -246,6 +246,15 @@ describe('compileRecipe', () => {
     expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
   })
 
+  it('keeps values and selections of a single view together', () => {
+    const spec = compileRecipe(recipe({
+      params: [{ name: 'pick', kind: 'point', fields: ['category'] }, { name: 'limit', kind: 'value', value: '1' }],
+      layers: [bars()],
+    })) as Record<string, any>
+    expect(spec.params.map((p: { name: string }) => p.name)).toEqual(['limit', 'pick'])
+    expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+  })
+
   it('declares selections on the first layer and values on the chart', () => {
     const spec = compileRecipe(recipe({
       params: [{ name: 'pick', kind: 'point' }, { name: 'limit', kind: 'value', value: '50' }],
@@ -280,6 +289,25 @@ describe('compileRecipe', () => {
     ])
   })
 
+  it('writes an extract step as calculate, and Vega computes the part it names (#1295)', async () => {
+    const spec = compileRecipe(recipe({ layers: [bars({ transforms: [
+      { kind: 'extract', field: 'Baumart', pattern: '^(\\S+)', as: 'genus' },
+      { kind: 'extract', field: 'Baumart', as: 'unfinished' },
+    ] })] })) as Record<string, any>
+    expect(spec.transform).toEqual([{
+      calculate: 'test(regexp("^.*?(?:^(\\\\S+)).*$"), datum["Baumart"]) ? replace(datum["Baumart"], regexp("^.*?(?:^(\\\\S+)).*$"), \'$1\') : null',
+      as: 'genus',
+    }])
+    const { parse, View } = await import('vega')
+    const withRows = { ...spec, data: { values: [{ Baumart: 'Tilia cordata, Winterlinde', amount: 1, category: 'a' }, { Baumart: '', amount: 2, category: 'b' }] } }
+    const compiled = compile(withRows as never).spec as any
+    const view = new View(parse(compiled), { renderer: 'none' })
+    await view.runAsync()
+    const named = compiled.data.find((d: any) => (d.transform ?? []).some((t: any) => t.type === 'formula'))
+    expect(view.data(named.name).map((row: any) => row.genus)).toEqual(['Tilia', null])
+    view.finalize()
+  })
+
   it('says why a chart without layers gives no chart', () => {
     expect(() => compileRecipe(recipe({ layers: [] }))).toThrow(RecipeError)
   })
@@ -287,5 +315,99 @@ describe('compileRecipe', () => {
   it('names its data and inlines none of it', () => {
     const spec = compileRecipe(recipe({ layers: [bars()] }))
     expect(JSON.stringify(spec)).not.toMatch(/"values"|"url"/)
+  })
+
+  it('is drawn at the size of its frame, labels and legend inside it', () => {
+    const spec = withSize(compileRecipe(recipe({ layers: [bars({ encodings: [
+      { channel: 'x', field: 'category', type: 'nominal', labelAngle: '-30' },
+      { channel: 'y', field: 'amount', type: 'quantitative' },
+      { channel: 'color', field: 'category', type: 'nominal' },
+    ] })] })), 760.6, 420) as Record<string, any>
+    expect([spec.width, spec.height, spec.autosize]).toEqual([760, 420, { type: 'fit', contains: 'padding' }])
+    expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+    /* An unmeasured frame still draws; small multiples keep sizing themselves. */
+    expect((withSize(compileRecipe(recipe({ layers: [bars()] })), 0, 0) as any).width).toBe(300)
+    const facet = compileRecipe(recipe({ facet: { column: 'series' }, layers: [bars()] }))
+    expect(withSize(facet, 500, 300)).toBe(facet)
+  })
+
+  it('draws each listed value as its own output: a colour per series (#1304)', () => {
+    const spec = compileRecipe(recipe({ layers: [{ mark: 'line', encodings: [
+      { channel: 'x', field: 'category', type: 'nominal' },
+      { channel: 'y', field: 'amount', type: 'quantitative' },
+      { channel: 'color', field: 'category', type: 'nominal', scaleEntries: [
+        { value: 'A', output: '#4FC3F7' }, { value: 'B', output: '#B39DDB' }, { value: '', output: 'red' },
+      ] },
+      { channel: 'size', field: 'amount', type: 'quantitative', scaleEntries: [{ value: '28', output: '10' }, { value: '55', output: '40' }] },
+    ] }] })) as Record<string, any>
+    expect(spec.encoding.color.scale).toEqual({ domain: ['A', 'B'], range: ['#4FC3F7', '#B39DDB'] })
+    expect(spec.encoding.size.scale).toEqual({ domain: [28, 55], range: [10, 40] })
+    expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+  })
+
+  it('gives layers their own y scale and puts an axis on the right (#1304)', () => {
+    const stored = (independentScales: string[]) => recipe({ independentScales, layers: [
+      { mark: 'line', encodings: [{ channel: 'x', field: 'category', type: 'nominal' }, { channel: 'y', field: 'amount', type: 'quantitative' }] },
+      { mark: 'bar', encodings: [{ channel: 'x', field: 'category', type: 'nominal' }, { channel: 'y', field: 'amount', type: 'quantitative', axisOrient: 'right' }] },
+    ] })
+    const spec = compileRecipe(stored(['y'])) as Record<string, any>
+    expect(spec.resolve).toEqual({ scale: { y: 'independent' } })
+    expect(spec.layer[1].encoding.y.axis).toEqual({ orient: 'right' })
+    expect(spec.layer[0].encoding.y.axis).toBeUndefined()
+    expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+    /* One view has nothing to resolve. */
+    const single = compileRecipe(recipe({ independentScales: ['y'], layers: [bars()] })) as Record<string, any>
+    expect(single.resolve).toBeUndefined()
+  })
+
+  describe('reference lines and bands (#1304)', () => {
+    const zones = [
+      { kind: 'band', from: '0', to: '1.8', color: '#1E88E514', label: 'feucht' },
+      { kind: 'band', from: '1.8', to: '3', color: '#43A04714', label: 'optimal', labelAt: 'end' },
+      { kind: 'line', from: '4.2', color: '#E53935', dash: '4,2', label: 'Grenze', behind: false },
+    ]
+    const line = { mark: 'line', encodings: [
+      { channel: 'x', field: 'category', type: 'nominal' },
+      { channel: 'y', field: 'amount', type: 'quantitative' },
+    ] }
+
+    it('draws bands behind and a line in front of the layers, each from one constant row', () => {
+      const spec = compileRecipe(recipe({ references: zones, params: [{ name: 'pick', kind: 'point' }], layers: [line] })) as Record<string, any>
+      expect(spec.layer.map((l: any) => l.mark.type)).toEqual(['rect', 'text', 'rect', 'text', 'line', 'rule', 'text'])
+      expect(spec.layer[0]).toEqual({
+        data: { values: [{}] },
+        mark: { type: 'rect', color: '#1E88E514' },
+        encoding: { y: { datum: 0, type: 'quantitative' }, y2: { datum: 1.8 }, x: { value: 0 }, x2: { value: 'width' } },
+      })
+      expect(spec.layer[1].encoding.y).toEqual({ datum: 0.9, type: 'quantitative' })
+      expect(spec.layer[5].mark).toEqual({ type: 'rule', color: '#E53935', strokeDash: [4, 2] })
+      /* The selection stays with the layer of the data. */
+      expect(spec.layer[4].params).toEqual([{ name: 'pick', select: { type: 'point' } }])
+      expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+    })
+
+    it('draws an upright line at a point in time', () => {
+      const spec = compileRecipe(recipe({
+        references: [{ kind: 'line', channel: 'x', type: 'temporal', from: '2026-11-05T12:00:00Z', label: 'Messung' }],
+        layers: [{ mark: 'line', encodings: [{ channel: 'x', field: 'at', type: 'temporal' }, { channel: 'y', field: 'amount', type: 'quantitative' }] }],
+      })) as Record<string, any>
+      expect(spec.layer[0].encoding.x.datum).toEqual({ utc: true, year: 2026, month: 11, date: 5, hours: 12, minutes: 0, seconds: 0 })
+      const rows = [{ at: '2026-11-04T00:00:00Z', amount: 1 }, { at: '2026-11-06T00:00:00Z', amount: 2 }]
+      expect(complaintsOf(withDatasets(spec as never, { table: rows }))).toEqual([])
+    })
+
+    it('keeps references with the first layer when the layers have their own scales', () => {
+      const spec = compileRecipe(recipe({ independentScales: ['y'], references: zones.slice(0, 1), layers: [line, { ...line, mark: 'bar' }] })) as Record<string, any>
+      expect(spec.layer[0].layer.map((l: any) => l.mark.type)).toEqual(['rect', 'text', 'line'])
+      expect(spec.layer[1].mark.type).toBe('bar')
+      expect(complaintsOf(withDatasets(spec as never, sampleDatasets()))).toEqual([])
+    })
+
+    it('leaves out a reference that is not filled in, and small multiples', () => {
+      const unfilled = compileRecipe(recipe({ references: [{ kind: 'band', from: '1' }, { kind: 'line' }], layers: [line] })) as Record<string, any>
+      expect(unfilled.layer).toBeUndefined()
+      const faceted = compileRecipe(recipe({ facet: { column: 'category' }, references: zones, layers: [line] })) as Record<string, any>
+      expect(JSON.stringify(faceted)).not.toContain('"datum"')
+    })
   })
 })

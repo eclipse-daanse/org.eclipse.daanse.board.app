@@ -22,7 +22,11 @@ import { BasicEObject } from '@emfts/core';
 import { createContainmentEList } from '@emfts/core';
 import type { EClass, EStructuralFeature, EList, EReference } from '@emfts/core';
 import type { ModelInstance } from './ModelInstance.js';
-import type { ModelRule } from './ModelRule.js';
+import type { Transform } from 'org.eclipse.daanse.board.app.lib.datasource.base';
+import type { SizeEncoding } from './SizeEncoding.js';
+import type { ColorEncoding } from './ColorEncoding.js';
+import type { ModelEncoding } from './ModelEncoding.js';
+import type { PartEncoding } from './PartEncoding.js';
 import type { ModelLayer } from './ModelLayer.js';
 import { MaplibrePackage } from './MaplibrePackage.js';
 
@@ -40,14 +44,13 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
   static readonly SCALE: number = 5;
   static readonly ROTATION: number = 6;
   static readonly ALTITUDE_OFFSET: number = 7;
-  static readonly COLOR: number = 8;
-  static readonly TRUNK_COLOR: number = 9;
-  static readonly INSTANCES: number = 10;
-  static readonly DATASOURCE_ID: number = 11;
-  static readonly HEIGHT_PROPERTY: number = 12;
-  static readonly DEFAULT_HEIGHT: number = 13;
-  static readonly WIDTH_PROPERTY: number = 14;
-  static readonly RULES: number = 15;
+  static readonly INSTANCES: number = 8;
+  static readonly DATASOURCE_ID: number = 9;
+  static readonly TRANSFORMS: number = 10;
+  static readonly SIZE: number = 11;
+  static readonly COLOR: number = 12;
+  static readonly MODEL_BY: number = 13;
+  static readonly PARTS: number = 14;
 
   // Private fields
   private _id?: string;
@@ -58,14 +61,13 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
   private _scale: number = 1;
   private _rotation: number = 0;
   private _altitudeOffset: number = 0;
-  private _color: string = "";
-  private _trunkColor: string = "";
   private _instances!: EList<ModelInstance>;
   private _datasourceId: string = "";
-  private _heightProperty: string = "";
-  private _defaultHeight: number = 0;
-  private _widthProperty: string = "";
-  private _rules!: EList<ModelRule>;
+  private _transforms!: EList<Transform>;
+  private _size?: SizeEncoding;
+  private _color?: ColorEncoding;
+  private _modelBy?: ModelEncoding;
+  private _parts!: EList<PartEncoding>;
 
   /**
    * Returns the EClass of this object
@@ -267,54 +269,6 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
     }
   }
 
-  get color(): string {
-    return this._color!;
-  }
-
-  set color(value: string) {
-    const oldValue = this._color;
-    this._color = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.COLOR),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ModelLayerImpl.COLOR,
-        merge: () => false
-      });
-    }
-  }
-
-  get trunkColor(): string {
-    return this._trunkColor!;
-  }
-
-  set trunkColor(value: string) {
-    const oldValue = this._trunkColor;
-    this._trunkColor = value;
-    if (this.eDeliver()) {
-      this.eNotify({
-        getNotifier: () => this,
-        getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.TRUNK_COLOR),
-        getOldValue: () => oldValue,
-        getNewValue: () => value,
-        getPosition: () => -1,
-        wasSet: () => true,
-        isTouch: () => false,
-        isReset: () => false,
-        getFeatureID: () => ModelLayerImpl.TRUNK_COLOR,
-        merge: () => false
-      });
-    }
-  }
-
   get instances(): EList<ModelInstance> {
     if (!this._instances) {
       this._instances = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('instances') as EReference);
@@ -346,83 +300,144 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
     }
   }
 
-  get heightProperty(): string {
-    return this._heightProperty!;
+  get transforms(): EList<Transform> {
+    if (!this._transforms) {
+      this._transforms = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('transforms') as EReference);
+    }
+    return this._transforms;
   }
 
-  set heightProperty(value: string) {
-    const oldValue = this._heightProperty;
-    this._heightProperty = value;
+  get size(): SizeEncoding {
+    return this._size!;
+  }
+
+  set size(value: SizeEncoding) {
+    const oldValue = this._size;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('size'));
+      }
+    }
+    this._size = value;
     if (this.eDeliver()) {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.HEIGHT_PROPERTY),
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.SIZE),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => ModelLayerImpl.HEIGHT_PROPERTY,
+        getFeatureID: () => ModelLayerImpl.SIZE,
         merge: () => false
       });
     }
   }
 
-  get defaultHeight(): number {
-    return this._defaultHeight!;
+  get color(): ColorEncoding {
+    return this._color!;
   }
 
-  set defaultHeight(value: number) {
-    const oldValue = this._defaultHeight;
-    this._defaultHeight = value;
+  set color(value: ColorEncoding) {
+    const oldValue = this._color;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('color'));
+      }
+    }
+    this._color = value;
     if (this.eDeliver()) {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.DEFAULT_HEIGHT),
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.COLOR),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => ModelLayerImpl.DEFAULT_HEIGHT,
+        getFeatureID: () => ModelLayerImpl.COLOR,
         merge: () => false
       });
     }
   }
 
-  get widthProperty(): string {
-    return this._widthProperty!;
+  get modelBy(): ModelEncoding {
+    return this._modelBy!;
   }
 
-  set widthProperty(value: string) {
-    const oldValue = this._widthProperty;
-    this._widthProperty = value;
+  set modelBy(value: ModelEncoding) {
+    const oldValue = this._modelBy;
+    if (oldValue !== value) {
+      // containment: the owner becomes the container of the value (#61)
+      if (oldValue) {
+        (oldValue as any).eSetContainer?.(null, null);
+      }
+      if (value) {
+        this.removeFromPreviousContainer(value);
+        (value as any).eSetContainer?.(this, this.eClass().getEStructuralFeature('modelBy'));
+      }
+    }
+    this._modelBy = value;
     if (this.eDeliver()) {
       this.eNotify({
         getNotifier: () => this,
         getEventType: () => 1, // SET
-        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.WIDTH_PROPERTY),
+        getFeature: () => this.eClass().getEStructuralFeature(ModelLayerImpl.MODEL_BY),
         getOldValue: () => oldValue,
         getNewValue: () => value,
         getPosition: () => -1,
         wasSet: () => true,
         isTouch: () => false,
         isReset: () => false,
-        getFeatureID: () => ModelLayerImpl.WIDTH_PROPERTY,
+        getFeatureID: () => ModelLayerImpl.MODEL_BY,
         merge: () => false
       });
     }
   }
 
-  get rules(): EList<ModelRule> {
-    if (!this._rules) {
-      this._rules = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('rules') as EReference);
+  get parts(): EList<PartEncoding> {
+    if (!this._parts) {
+      this._parts = createContainmentEList<any>(this, this.eClass().getEStructuralFeature('parts') as EReference);
     }
-    return this._rules;
+    return this._parts;
+  }
+
+  /**
+   * Remove a value from its previous container before it is contained here,
+   * like Java EMF's eInverseRemove on the old container (#61)
+   */
+  private removeFromPreviousContainer(value: unknown): void {
+    const v = value as any;
+    const oldContainer = v?.eContainer?.();
+    if (!oldContainer || oldContainer === this) {
+      return;
+    }
+    const oldFeature = v.eContainmentFeature?.();
+    if (!oldFeature) {
+      return;
+    }
+    if (oldFeature.isMany()) {
+      const list = oldContainer.eGet(oldFeature);
+      if (list && typeof list.remove === 'function') {
+        list.remove(v);
+      }
+    } else {
+      oldContainer.eUnset(oldFeature);
+    }
   }
 
   // Reflective API
@@ -449,22 +464,20 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         return this.rotation;
       case ModelLayerImpl.ALTITUDE_OFFSET:
         return this.altitudeOffset;
-      case ModelLayerImpl.COLOR:
-        return this.color;
-      case ModelLayerImpl.TRUNK_COLOR:
-        return this.trunkColor;
       case ModelLayerImpl.INSTANCES:
         return this.instances;
       case ModelLayerImpl.DATASOURCE_ID:
         return this.datasourceId;
-      case ModelLayerImpl.HEIGHT_PROPERTY:
-        return this.heightProperty;
-      case ModelLayerImpl.DEFAULT_HEIGHT:
-        return this.defaultHeight;
-      case ModelLayerImpl.WIDTH_PROPERTY:
-        return this.widthProperty;
-      case ModelLayerImpl.RULES:
-        return this.rules;
+      case ModelLayerImpl.TRANSFORMS:
+        return this.transforms;
+      case ModelLayerImpl.SIZE:
+        return this.size;
+      case ModelLayerImpl.COLOR:
+        return this.color;
+      case ModelLayerImpl.MODEL_BY:
+        return this.modelBy;
+      case ModelLayerImpl.PARTS:
+        return this.parts;
       default:
         return super.eGet(feature);
     }
@@ -508,14 +521,6 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         this.altitudeOffset = newValue as number;
         super.eSet(feature, newValue);
         break;
-      case ModelLayerImpl.COLOR:
-        this.color = newValue as string;
-        super.eSet(feature, newValue);
-        break;
-      case ModelLayerImpl.TRUNK_COLOR:
-        this.trunkColor = newValue as string;
-        super.eSet(feature, newValue);
-        break;
       case ModelLayerImpl.INSTANCES:
         this.instances.clear();
         this.instances.addAll(newValue as any[]);
@@ -525,21 +530,26 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         this.datasourceId = newValue as string;
         super.eSet(feature, newValue);
         break;
-      case ModelLayerImpl.HEIGHT_PROPERTY:
-        this.heightProperty = newValue as string;
+      case ModelLayerImpl.TRANSFORMS:
+        this.transforms.clear();
+        this.transforms.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
-      case ModelLayerImpl.DEFAULT_HEIGHT:
-        this.defaultHeight = newValue as number;
+      case ModelLayerImpl.SIZE:
+        this.size = newValue as SizeEncoding;
         super.eSet(feature, newValue);
         break;
-      case ModelLayerImpl.WIDTH_PROPERTY:
-        this.widthProperty = newValue as string;
+      case ModelLayerImpl.COLOR:
+        this.color = newValue as ColorEncoding;
         super.eSet(feature, newValue);
         break;
-      case ModelLayerImpl.RULES:
-        this.rules.clear();
-        this.rules.addAll(newValue as any[]);
+      case ModelLayerImpl.MODEL_BY:
+        this.modelBy = newValue as ModelEncoding;
+        super.eSet(feature, newValue);
+        break;
+      case ModelLayerImpl.PARTS:
+        this.parts.clear();
+        this.parts.addAll(newValue as any[]);
         super.eSet(feature, newValue);
         break;
       default:
@@ -569,22 +579,20 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
         return this._rotation !== 0;
       case ModelLayerImpl.ALTITUDE_OFFSET:
         return this._altitudeOffset !== 0;
-      case ModelLayerImpl.COLOR:
-        return this._color !== "";
-      case ModelLayerImpl.TRUNK_COLOR:
-        return this._trunkColor !== "";
       case ModelLayerImpl.INSTANCES:
         return this._instances !== undefined && !this._instances.isEmpty();
       case ModelLayerImpl.DATASOURCE_ID:
         return this._datasourceId !== "";
-      case ModelLayerImpl.HEIGHT_PROPERTY:
-        return this._heightProperty !== "";
-      case ModelLayerImpl.DEFAULT_HEIGHT:
-        return this._defaultHeight !== 0;
-      case ModelLayerImpl.WIDTH_PROPERTY:
-        return this._widthProperty !== "";
-      case ModelLayerImpl.RULES:
-        return this._rules !== undefined && !this._rules.isEmpty();
+      case ModelLayerImpl.TRANSFORMS:
+        return this._transforms !== undefined && !this._transforms.isEmpty();
+      case ModelLayerImpl.SIZE:
+        return this._size !== undefined;
+      case ModelLayerImpl.COLOR:
+        return this._color !== undefined;
+      case ModelLayerImpl.MODEL_BY:
+        return this._modelBy !== undefined;
+      case ModelLayerImpl.PARTS:
+        return this._parts !== undefined && !this._parts.isEmpty();
       default:
         return super.eIsSet(feature);
     }
@@ -620,29 +628,29 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
       case ModelLayerImpl.ALTITUDE_OFFSET:
         this._altitudeOffset = 0;
         return;
-      case ModelLayerImpl.COLOR:
-        this._color = "";
-        return;
-      case ModelLayerImpl.TRUNK_COLOR:
-        this._trunkColor = "";
-        return;
       case ModelLayerImpl.INSTANCES:
         if (this._instances) this._instances.clear();
         return;
       case ModelLayerImpl.DATASOURCE_ID:
         this._datasourceId = "";
         return;
-      case ModelLayerImpl.HEIGHT_PROPERTY:
-        this._heightProperty = "";
+      case ModelLayerImpl.TRANSFORMS:
+        if (this._transforms) this._transforms.clear();
         return;
-      case ModelLayerImpl.DEFAULT_HEIGHT:
-        this._defaultHeight = 0;
+      case ModelLayerImpl.SIZE:
+        if (this._size) (this._size as any).eSetContainer?.(null, null);
+        this._size = undefined;
         return;
-      case ModelLayerImpl.WIDTH_PROPERTY:
-        this._widthProperty = "";
+      case ModelLayerImpl.COLOR:
+        if (this._color) (this._color as any).eSetContainer?.(null, null);
+        this._color = undefined;
         return;
-      case ModelLayerImpl.RULES:
-        if (this._rules) this._rules.clear();
+      case ModelLayerImpl.MODEL_BY:
+        if (this._modelBy) (this._modelBy as any).eSetContainer?.(null, null);
+        this._modelBy = undefined;
+        return;
+      case ModelLayerImpl.PARTS:
+        if (this._parts) this._parts.clear();
         return;
       default:
         super.eUnset(feature);
@@ -667,14 +675,13 @@ export class ModelLayerImpl extends BasicEObject implements ModelLayer {
       scale: this.scale,
       rotation: this.rotation,
       altitudeOffset: this.altitudeOffset,
-      color: this.color,
-      trunkColor: this.trunkColor,
       instances: this.instances?.toArray?.() ?? this.instances,
       datasourceId: this.datasourceId,
-      heightProperty: this.heightProperty,
-      defaultHeight: this.defaultHeight,
-      widthProperty: this.widthProperty,
-      rules: this.rules?.toArray?.() ?? this.rules,
+      transforms: this.transforms?.toArray?.() ?? this.transforms,
+      size: this.size,
+      color: this.color,
+      modelBy: this.modelBy,
+      parts: this.parts?.toArray?.() ?? this.parts,
     };
   }
 }

@@ -31,7 +31,14 @@ vi.mock('@vue-leaflet/vue-leaflet', () => ({
     template: '<div class="l-geojson" />',
   },
 }))
-vi.mock('leaflet', () => ({ default: { latLngBounds: () => ({}) } }))
+/* The Leaflet vue-leaflet draws with, handed over when the test says so (#1302). */
+const leafletModule = { circleMarker: vi.fn((latlng: unknown, options: unknown) => ({ latlng, options })) }
+let releaseLeaflet: (() => void) | undefined
+let leafletAtOnce = true
+vi.mock('../leaflet', () => ({
+  loadLeaflet: () =>
+    leafletAtOnce ? Promise.resolve(leafletModule) : new Promise((resolve) => (releaseLeaflet = () => resolve(leafletModule))),
+}))
 vi.mock('leaflet/dist/leaflet.css', () => ({}))
 
 /* Without a translator the keys stand for themselves, which is what the
@@ -104,5 +111,42 @@ describe('GeoFeatureMap', () => {
     }
     expect(drawn.features).toHaveLength(1)
     expect(wrapper.findAll('.geomap__kind').map((each) => each.text()).join(' ')).not.toContain('Foo')
+  })
+
+  it('makes its point markers with the Leaflet the map is drawn with (#1302)', async () => {
+    const wrapper = show({ data: { type: 'Point', coordinates: [7, 51] } })
+    await flushPromises()
+    const options = wrapper.findComponent({ name: 'LGeoJson' }).props('options') as {
+      pointToLayer: (feature: unknown, latlng: unknown) => unknown
+    }
+    const marker = options.pointToLayer({}, { lat: 51, lng: 7 })
+    expect(leafletModule.circleMarker).toHaveBeenCalledWith({ lat: 51, lng: 7 }, expect.objectContaining({ radius: 5 }))
+    expect(marker).toMatchObject({ latlng: { lat: 51, lng: 7 } })
+  })
+
+  it('mounts no map once it is gone before Leaflet is there (#1302)', async () => {
+    leafletAtOnce = false
+    try {
+      const wrapper = show({ data: { type: 'Point', coordinates: [7, 51] } })
+      await flushPromises()
+      expect(wrapper.find('.l-map').exists()).toBe(false)
+      const vm = wrapper.vm as unknown as { leaflet?: unknown }
+      wrapper.unmount()
+      releaseLeaflet?.()
+      await flushPromises()
+      expect(vm.leaflet ?? null).toBeNull()
+    } finally {
+      leafletAtOnce = true
+    }
+  })
+})
+
+describe('loadLeaflet', () => {
+  it('is the ES module build that vue-leaflet imports, the same module each time', async () => {
+    const { loadLeaflet } = await vi.importActual<typeof import('../leaflet')>('../leaflet')
+    const first = await loadLeaflet()
+    const second = await import('leaflet/dist/leaflet-src.esm')
+    expect(first).toBe(second)
+    expect(typeof first.circleMarker).toBe('function')
   })
 })

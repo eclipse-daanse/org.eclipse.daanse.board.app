@@ -169,6 +169,8 @@ export default defineConfig(({ mode }) => ({
     rewriteSharedImportsInChunks(),
     tsmPlugin({
       manifest: resolve(__dirname, 'manifest.json'),
+      /* The shared transform form is a model file of lib.datasource.base (#1296). */
+      boundary: { allow: ['../../../../lib/datasource/base/model'] },
       components: 'derive',
       sharedModules,
       // Cast: tsm links its own vite copy, whose Plugin type is nominally

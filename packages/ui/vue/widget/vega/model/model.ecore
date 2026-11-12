@@ -174,22 +174,6 @@ they are.
         <eLiterals name="point" literal="point" value="8"/>
     </eClassifiers>
 
-    <eClassifiers xsi:type="ecore:EEnum" name="FilterOp">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="The comparison a filter makes. oneOf takes a comma-separated list, range takes two comma-separated bounds, valid keeps rows with a value, param keeps what a selection holds."/>
-        </eAnnotations>
-        <eLiterals name="eq" literal="eq"/>
-        <eLiterals name="neq" literal="neq" value="1"/>
-        <eLiterals name="lt" literal="lt" value="2"/>
-        <eLiterals name="lte" literal="lte" value="3"/>
-        <eLiterals name="gt" literal="gt" value="4"/>
-        <eLiterals name="gte" literal="gte" value="5"/>
-        <eLiterals name="oneOf" literal="oneOf" value="6"/>
-        <eLiterals name="range" literal="range" value="7"/>
-        <eLiterals name="valid" literal="valid" value="8"/>
-        <eLiterals name="param" literal="param" value="9"/>
-    </eClassifiers>
-
     <eClassifiers xsi:type="ecore:EEnum" name="ParamKind">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="What a parameter is: a selection of single marks (point), a selection of a range (interval), or a plain value (value)."/>
@@ -206,6 +190,24 @@ they are.
         <eLiterals name="none" literal="none"/>
         <eLiterals name="legend" literal="legend" value="1"/>
         <eLiterals name="scales" literal="scales" value="2"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="StarterChart">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A chart to start from (#1292): a recipe of layers, encodings and selections filled with columns of the data the chart reads - the first text, number and date columns it finds. The fields can be changed afterwards like any other."/>
+        </eAnnotations>
+        <eLiterals name="none" literal="none"/>
+        <eLiterals name="bar" literal="bar" value="1"/>
+        <eLiterals name="stackedBar" literal="stackedBar" value="2"/>
+        <eLiterals name="groupedBar" literal="groupedBar" value="3"/>
+        <eLiterals name="line" literal="line" value="4"/>
+        <eLiterals name="area" literal="area" value="5"/>
+        <eLiterals name="scatter" literal="scatter" value="6"/>
+        <eLiterals name="heatmap" literal="heatmap" value="7"/>
+        <eLiterals name="histogram" literal="histogram" value="8"/>
+        <eLiterals name="boxplot" literal="boxplot" value="9"/>
+        <eLiterals name="donut" literal="donut" value="10"/>
+        <eLiterals name="brush" literal="brush" value="11"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="VegaWidgetSettings">
@@ -245,6 +247,63 @@ they are.
         <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1" eType="#//Param" containment="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Selections and values the chart holds: what is picked or brushed, and values other settings refer to by name."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1" eType="#//DatasetBinding" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The data the chart draws, by name. Without an entry the data source of the widget is the dataset table; an entry named table without a source of its own says how to read that one."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="specOverlay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What an advanced reader added to the spec beyond the form (#1291): a JSON object merged into the compiled Vega-Lite spec - objects key by key, arrays by position - where it wins over the recipe. Only the difference to the compiled spec is kept, so the form still decides everything the overlay does not say. Edited in the Spec tab, which only readers who turned on advanced editing see; a stored overlay applies for everyone. URLs, links, data of its own and another schema are taken out."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="starter" eType="#//StarterChart" lowerBound="0" defaultValueLiteral="none">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Picking a starter chart replaces the layers, selections and small multiples with that chart, filled with columns of the data; then this field is empty again. Discarding the settings brings the chart back as it was."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="independentScales" eType="#//Channel" upperBound="-1" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The channels whose scale each layer has for itself (#1304): y gives every layer its own y axis - a temperature on the left, a precipitation on the right. Only read with more than one layer or with small multiples."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1" eType="#//Reference" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Constant lines and bands drawn with the chart (#1304): limits, targets, zones, a date. They belong to the whole chart and share its scales, so a band from 0 to 1.8 lies where 0 and 1.8 are on the axis. Not drawn in small multiples."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="DatasetBinding">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A named dataset of the chart and the board data source it comes from. A layer draws it by its name; a change of the source shows at once, without drawing the chart anew."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="table">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The name layers use for this dataset. table is the data source of the widget."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasourceId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The board data source the dataset comes from. Empty: the data source of the widget."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shape" eType="#//DatasetShape" lowerBound="0" defaultValueLiteral="table">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The form the dataset is asked for. The data source of the widget itself is always read as a table, so that the part of it the frame selects is what the chart draws."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="For the shape object: where the list of rows is in the answer, as names separated by dots (data.items). Empty: the answer itself."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="columnTypes" upperBound="-1" containment="true">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.datasource.base#//ColumnType"/>
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Columns read as numbers, dates or booleans rather than as they arrive."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>
@@ -308,7 +367,8 @@ they are.
                 <details key="documentation" value="What drives the marks: which field goes to which channel, and how."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="transforms" upperBound="-1" eType="#//Transform" containment="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="transforms" upperBound="-1" containment="true">
+            <eGenericType eClassifier="http://org.eclipse.daanse.board.app.lib.datasource.base#//Transform"/>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Steps applied to the data before the layer draws it, in this order."/>
             </eAnnotations>
@@ -434,71 +494,25 @@ they are.
                 <details key="documentation" value="The value the marks outside the selection take, for example lightgray or 0.2."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="scaleEntries" upperBound="-1" eType="#//ScaleEntry" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Fixed outputs per data value (#1304): each listed value of the field is drawn as its own output - a colour, a shape, a size, an opacity - rather than as the scheme picks. List every value, or none: a value not listed gets no output of its own."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="axisOrient" eType="#//AxisOrient" lowerBound="0" defaultValueLiteral="auto">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The side the axis of this position channel is drawn on. auto: x below, y left."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 
-    <eClassifiers xsi:type="ecore:EEnum" name="TransformKind">
+    <eClassifiers xsi:type="ecore:EEnum" name="DatasetShape">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="What a transform does: keep the rows that pass a comparison or a selection (filter), turn columns into rows (fold), or add a computed field (calculate)."/>
+            <details key="documentation" value="The form a data source answers in, as the widget asks for it: rows with headers (table), any JSON with a list somewhere in it (object), or GeoJSON features (geojson)."/>
         </eAnnotations>
-        <eLiterals name="filter" literal="filter"/>
-        <eLiterals name="fold" literal="fold" value="1"/>
-        <eLiterals name="calculate" literal="calculate" value="2"/>
-    </eClassifiers>
-
-    <eClassifiers xsi:type="ecore:EClass" name="Transform">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="documentation" value="A step applied to the data of a layer before it is drawn. One class for every kind, so a stored chart comes back as it was saved; the kind decides which of the fields below are read."/>
-        </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//TransformKind" lowerBound="0" defaultValueLiteral="filter">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="What the transform does."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="filter: the field compared. Not read by the operation param."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//FilterOp" lowerBound="0" defaultValueLiteral="eq">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="filter: the comparison."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="filter: what the field is compared with; for oneOf a comma-separated list, for range two comma-separated bounds. Numbers are read as numbers."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="param" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="filter: the selection whose content passes, for the operation param."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fields" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" upperBound="-1" lowerBound="0">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="fold: the fields to fold - each becomes a row with the field name as key and its value as value, so several columns become one series per column."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyAs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="key">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="fold: the name of the new field holding the former column name."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueAs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="value">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="fold: the name of the new field holding the value."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="as" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="calculate: the name of the new field."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="calculate: the Vega expression, for example datum.price * datum.amount; datum is the row. Expressions are interpreted, never compiled to code."/>
-            </eAnnotations>
-        </eStructuralFeatures>
+        <eLiterals name="table" literal="table"/>
+        <eLiterals name="object" literal="object" value="1"/>
+        <eLiterals name="geojson" literal="geojson" value="2"/>
     </eClassifiers>
 
     <eClassifiers xsi:type="ecore:EClass" name="Facet">
@@ -554,6 +568,215 @@ they are.
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The initial value, as JSON - for a value parameter its value, for a selection what it holds at the start. Empty starts empty."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="MarkClickPayload" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//Payload">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="What a click on a mark of the chart sends (#1289): the row the mark draws, and which layer it belongs to."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="layer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The position of the layer the mark belongs to, from 0."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="mark" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The kind of mark that was clicked, for example bar or point."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="datum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The row of the data the mark draws, field by field, as the dataset holds it."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SelectionPayload" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//Payload">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="What a selection of the chart sends when it changes (#1289): its name and what it holds now."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="param" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The name of the selection."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the selection holds: for picked marks the values of its fields, for a range its bounds per channel. Empty when nothing is selected."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ParamPayload" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//Payload">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="What a value parameter of the chart sends when it changes (#1289)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="param" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The name of the parameter."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Its new value."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="VegaWidgetInterface" abstract="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//WidgetActionInterface">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The actions a Vega-Lite chart answers to (#1290): set a parameter or a selection, clear a selection, load its data again, save it as an image. A rule on any board event - a click elsewhere, a changed variable (#1288) - calls them."/>
+        </eAnnotations>
+        <eOperations name="setParam">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value='Sets a value parameter of the chart, or what a selection holds, by its name. A selection takes the values of its fields as an object, for example {"category": "B"}.'/>
+            </eAnnotations>
+            <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+                <details key="eventType" value="vega.setParam"/>
+            </eAnnotations>
+            <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" upperBound="1" lowerBound="1">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                    <details key="documentation" value="The name of the parameter or selection."/>
+                </eAnnotations>
+            </eParameters>
+            <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                    <details key="documentation" value="The new value: for a value parameter the value, for a selection an object of field values or a list of them; empty clears a selection."/>
+                </eAnnotations>
+            </eParameters>
+        </eOperations>
+        <eOperations name="clearSelection">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Empties a selection, so every mark is shown as not selected."/>
+            </eAnnotations>
+            <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+                <details key="eventType" value="vega.clearSelection"/>
+            </eAnnotations>
+            <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" upperBound="1" lowerBound="1">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                    <details key="documentation" value="The name of the selection."/>
+                </eAnnotations>
+            </eParameters>
+        </eOperations>
+        <eOperations name="refresh">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Loads the data of the chart again from its board datasources."/>
+            </eAnnotations>
+            <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+                <details key="eventType" value="vega.refresh"/>
+            </eAnnotations>
+        </eOperations>
+        <eOperations name="exportAsImage">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Saves the chart as an image file."/>
+            </eAnnotations>
+            <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+                <details key="eventType" value="vega.exportAsImage"/>
+            </eAnnotations>
+            <eParameters name="format" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="png">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                    <details key="documentation" value="png or svg."/>
+                </eAnnotations>
+            </eParameters>
+        </eOperations>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ScaleEntry">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="One data value and what it is drawn as (#1304)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The value of the field, as it appears in the data. A number may be written as text."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="output" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the value is drawn as: a CSS colour for colour, a shape name (circle, square, triangle-up, ...) for shape, a number for size and opacity."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="AxisOrient">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The side of the chart an axis is drawn on; auto lets Vega-Lite choose."/>
+        </eAnnotations>
+        <eLiterals name="auto" literal="auto"/>
+        <eLiterals name="left" literal="left" value="1"/>
+        <eLiterals name="right" literal="right" value="2"/>
+        <eLiterals name="top" literal="top" value="3"/>
+        <eLiterals name="bottom" literal="bottom" value="4"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="ReferenceKind">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A line at one value, or a band between two."/>
+        </eAnnotations>
+        <eLiterals name="line" literal="line"/>
+        <eLiterals name="band" literal="band" value="1"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EEnum" name="LabelPosition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Where along the line or band its label stands."/>
+        </eAnnotations>
+        <eLiterals name="start" literal="start"/>
+        <eLiterals name="middle" literal="middle" value="1"/>
+        <eLiterals name="end" literal="end" value="2"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="Reference">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A constant line or band of the chart (#1304)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//ReferenceKind" lowerBound="0" defaultValueLiteral="line">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A line at one value, or a band between two."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="channel" eType="#//Channel" lowerBound="0" defaultValueLiteral="y">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="y draws it across the chart at a value of the y axis; x draws it upright at a value of the x axis."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//FieldType" lowerBound="0" defaultValueLiteral="quantitative">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="What the values are: numbers, or points in time on a time axis."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The value of the line; for a band its lower end. A point in time is written as ISO 8601 text (2026-11-07T12:00:00Z)."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Band: the upper end."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A CSS colour, with transparency for a band (#E5393514). Empty: the colour of the theme."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Text drawn at the line or band. Empty: none."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelAt" eType="#//LabelPosition" lowerBound="0" defaultValueLiteral="start">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Where along the line or band the label stands."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="behind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" lowerBound="0" defaultValueLiteral="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether it is drawn behind the layers of the chart, or in front of them."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="dash" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Line: the dash pattern in pixels, comma-separated (4,2). Empty: solid."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A selection or a value of the chart (#1285), known by its name - encodings
+highlight with it, filters keep what it holds.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaParamForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Param"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaParamFormView">
+    <fields xsi:type="uimodel:InputWidget"
+        name="name"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Param/name"
+        label="vega:FormParam.name"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="kind"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Param/kind"
+        label="vega:FormParam.kind">
+      <values>point</values>
+      <values>interval</values>
+      <values>value</values>
+      <optionLabel language="JS" body="({ point: 'vega:Options.paramKind.point', interval: 'vega:Options.paramKind.interval', value: 'vega:Options.paramKind.value' })[option] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="fields"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Param/fields"
+        label="vega:FormParam.fields" multiSelect="true">
+      <visibilityCondition language="JS" body="self.kind !== 'value'"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="encodings"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Param/encodings"
+        label="vega:FormParam.encodings" multiSelect="true">
+      <values>x</values>
+      <values>y</values>
+      <optionLabel language="JS" body="({ x: 'vega:Options.encodings.x', y: 'vega:Options.encodings.y' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="self.kind === 'interval'"/>
+    </fields>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="bind"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Param/bind"
+        label="vega:FormParam.bind">
+      <values>none</values>
+      <values>legend</values>
+      <values>scales</values>
+      <optionLabel language="JS" body="({ none: 'vega:Options.bind.none', legend: 'vega:Options.bind.legend', scales: 'vega:Options.bind.scales' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="self.kind !== 'value'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="value"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Param/value"
+        label="vega:FormParam.value"/>
+  </components>
+</uimodel:UIModel>

@@ -30,6 +30,8 @@ import { EventBusBridge, EVENT_BUS_BRIDGE, EVENT_BUS_BRIDGE_ID } from './bridge/
 import { WidgetAction, ActionParameter, getWidgetActions, type WidgetActionMetadata, type WidgetActionParameter, type ActionParameterMetadata, type ActionParameterKind } from './decorators/WidgetAction';
 import { EcoreMetadataService, ECORE_METADATA_SERVICE, ECORE_METADATA_SERVICE_ID, type EcoreActionMetadata, type EcoreParameterMetadata } from './registry/EcoreMetadataService';
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
+import { SYSTEM_EVENT_SOURCE, SystemEvents } from './registry/SystemEvents';
+import { VariableChangedPayloadImpl } from './gen/VariableChangedPayloadImpl';
 
 // Export Ecore model content for external use
 import SystemActionsEcoreContent from '../model/SystemActions.ecore?raw';
@@ -53,6 +55,8 @@ const ecoreServiceIdentifier = ECORE_METADATA_SERVICE;
 export function activate({ services, log: ausgabe }: ActivationContext) {
   const eventRegistry = new EventRegistry()
   services.register(EVENT_REGISTRY_ID, eventRegistry)
+  /* The board's own events - a changed variable (#1288) - beside the widgets'. */
+  eventRegistry.registerWidget(SYSTEM_EVENT_SOURCE, SystemEvents)
 
   const actionsRegistry = new EventActionsRegistry()
   services.register(EVENT_ACTIONS_REGISTRY_ID, actionsRegistry)
@@ -103,6 +107,9 @@ export {
   EventRegistry,
   EventActionsRegistry,
   EventManager,
+  SystemEvents,
+  SYSTEM_EVENT_SOURCE,
+  VariableChangedPayloadImpl,
   PayloadExpressionError,
   EventBusBridge,
   EcoreMetadataService,

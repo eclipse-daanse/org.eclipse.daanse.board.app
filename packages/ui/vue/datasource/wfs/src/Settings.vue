@@ -14,11 +14,18 @@ Contributors:
  * how the features are asked for. A service that offers no WFS says so in
  * its own words ("Service unknown or not permitted").
  */
-import { computed, ref, watch } from 'vue'
+import { computed, ref, shallowRef, watch } from 'vue'
 import { DButton, DIcon, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
-import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { adopt, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
+import { BaseconnectionFactory } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { WfsstoreFactory, WfsstorePackage } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
+import columnsFormXmi from '../model/ui-columns.xmi?raw'
+import extentFormXmi from '../model/ui-extent.xmi?raw'
+import wfsEcore from 'org.eclipse.daanse.board.app.lib.datasource.wfs/model/WfsDataSourceModel.ecore?raw'
+import columnTypeFormXmi from 'org.eclipse.daanse.board.app.lib.datasource.base/model/ui-column-type.xmi?raw'
 import { useOGCService } from 'org.eclipse.daanse.board.app.ui.vue.common.map'
-import { exceptionOf, getCapabilitiesPath } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
+import { columnTypesOfSchema, describeFeatureTypePath, exceptionOf, getCapabilitiesPath } from 'org.eclipse.daanse.board.app.lib.datasource.wfs'
 
 const { config, connections } = defineProps<{ config: any; dataSources?: any; connections: any[] }>()
 const { t } = useTranslation('datasourceWfs')
@@ -73,6 +80,73 @@ const modes = computed(() => [
 ])
 watch([serviceUrl, featureInfo], () => void readCapabilities(), { immediate: true })
 
+/*
+ * Which area is read, in a generated form (ui-extent.xmi): the box, or the
+ * tiles the maps on the source show, from which zoom and how many features
+ * at most. Like the column types, the form edits a modelled copy; the mode
+ * is copied in, as the tile size is for GetFeatureInfo too.
+ */
+const EXTENT_FIELDS = ['extent', 'tileSize', 'minZoom', 'maxViewportFeatures'] as const
+function extentOf() {
+  const given: Record<string, unknown> = { mode: config.mode || 'wfs' }
+  for (const name of EXTENT_FIELDS) if (config[name] !== undefined && config[name] !== null) given[name] = config[name]
+  return adopt(WfsstoreFactory.eINSTANCE.createIWfsStoreConfiguration(), given)
+}
+const extentModel = shallowRef<any>(extentOf())
+const extentHeld = useEObject(() => extentModel.value)
+watch(extentHeld, (held: any) => {
+  if (!held) return
+  for (const name of EXTENT_FIELDS) (config as Record<string, unknown>)[name] = held[name]
+})
+watch(() => config.mode, (mode) => {
+  if (extentModel.value.mode !== (mode || 'wfs')) extentModel.value.mode = mode || 'wfs'
+})
+const createExtent = () => WfsstoreFactory.eINSTANCE.createIWfsStoreConfiguration()
+
+/* ------------------------------------------------ column types (#1295) */
+
+/*
+ * What the properties are, in the generated form of the shared column type
+ * (ui-column-type.xmi of lib.datasource.base): the form edits a modelled
+ * copy, and each change is written into the configuration as plain data.
+ * In the WFS mode they can be read from DescribeFeatureType; GetFeatureInfo
+ * says nothing about its attributes, so there they are entered.
+ */
+const columnsModel = shallowRef<any>(adopt(WfsstoreFactory.eINSTANCE.createIWfsStoreConfiguration(), { columnTypes: config.columnTypes ?? [] }))
+const columnsHeld = useEObject(() => columnsModel.value)
+watch(columnsHeld, (held: any) => {
+  if (!held) return
+  config.columnTypes = held.columnTypes.toArray().map((each: any) => each.toJSON())
+})
+function setColumns(columns: { column: string; type: string; unit?: string; label?: string }[]) {
+  const list = columnsModel.value.columnTypes
+  list.clear()
+  for (const each of columns) list.add(adopt(BaseconnectionFactory.eINSTANCE.createColumnType(), each))
+}
+const columnEntryForms = [{ xmi: columnTypeFormXmi, uri: '/column-type.ui.xmi' }]
+const createColumns = () => WfsstoreFactory.eINSTANCE.createIWfsStoreConfiguration()
+const describing = ref(false)
+async function readColumnTypes() {
+  if (!connection.value) return
+  describing.value = true
+  error.value = ''
+  try {
+    const answer = await (await fetch(`${connection.value?.config?.url ?? ''}${describeFeatureTypePath({ url: config.url, typeName: config.typeName, version: config.version })}`)).text()
+    const read = columnTypesOfSchema(answer)
+    if (!read.length) {
+      error.value = exceptionOf(answer) ?? t('Settings.noColumns')
+      return
+    }
+    // Units and labels already set stay.
+    const kept = new Map<string, any>(columnsModel.value.columnTypes.toArray().map((each: any) => [each.column, each.toJSON()]))
+    setColumns(read.map((each) => ({ unit: '', label: '', ...kept.get(each.column), ...each })))
+  } catch {
+    error.value = t('Settings.unreachable')
+  } finally {
+    describing.value = false
+  }
+}
+
 /** A number field writes a number; empty writes the default. */
 function setNumber(name: string, value: unknown, fallback: number) {
   const n = Number(value)
@@ -102,14 +176,37 @@ function setNumber(name: string, value: unknown, fallback: number) {
       <DInput v-model="config.srsName" :label="t('Fields.srsName')" placeholder="EPSG:4326" />
     </template>
     <template v-else>
-      <DInput type="number" :model-value="config.tileSize" :label="t('Fields.tileSize')" :hint="t('Hints.tileSize')" :step="0.005"
-        @update:model-value="(v) => setNumber('tileSize', v, 0.01)" />
       <DInput type="number" :model-value="config.pointTolerance" :label="t('Fields.pointTolerance')"
-        @update:model-value="(v) => setNumber('pointTolerance', v, 70)" />
+        @update:model-value="(v) => setNumber('pointTolerance', v, 72)" />
     </template>
+    <SettingsForm
+      v-model="extentModel"
+      :create="createExtent"
+      :ui-model-xmi="extentFormXmi"
+      :domain-package="WfsstorePackage.eINSTANCE"
+      ui-model-uri="/wfs-extent.ui.xmi"
+      :ecore="wfsEcore"
+    />
     <DInput type="number" :model-value="config.maxFeatures" :label="t('Fields.maxFeatures')" :hint="t('Hints.maxFeatures')"
       @update:model-value="(v) => setNumber('maxFeatures', v, 1000)" />
     <DInput v-model="config.bbox" :label="t('Fields.bbox')" placeholder="13.44,52.44,13.46,52.45" :hint="t('Hints.bbox')" />
+    <section class="wfs-settings__columns">
+      <div class="wfs-settings__head">
+        <span>{{ t('Settings.columnTypes') }}</span>
+        <DButton v-if="!featureInfo" intent="quiet" size="sm" :busy="describing" :title="t('Settings.readColumns')" @click="readColumnTypes">
+          <DIcon name="schema" size="sm" />
+        </DButton>
+      </div>
+      <SettingsForm
+        v-model="columnsModel"
+        :create="createColumns"
+        :ui-model-xmi="columnsFormXmi"
+        :domain-package="WfsstorePackage.eINSTANCE"
+        ui-model-uri="/wfs-columns.ui.xmi"
+        :entry-forms="columnEntryForms"
+        :ecore="wfsEcore"
+      />
+    </section>
     <DInput v-if="!featureInfo" v-model="config.filter" :label="t('Fields.filter')" placeholder="gattung_deutsch='Linde'" :hint="t('Hints.filter')" />
   </div>
 </template>
@@ -128,6 +225,23 @@ function setNumber(name: string, value: unknown, fallback: number) {
 }
 
 .wfs-settings__row > :first-child {
+  flex: 1 1 auto;
+}
+
+.wfs-settings__columns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wfs-settings__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.wfs-settings__head > span {
   flex: 1 1 auto;
 }
 

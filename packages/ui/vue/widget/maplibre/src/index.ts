@@ -13,6 +13,7 @@
 
 
 /* The events package first: the payloads and the actions extend its classes. */
+import './referencedPackages'
 import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import type { EventActionsRegistry, EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
@@ -79,5 +80,6 @@ export { MapLibreWidget, MapLibreWidgetSettings, MaplibrePackage }
 export { MapLibreSettingsImpl } from './gen/MapLibreSettingsImpl'
 export type { MapLibreSettings } from './gen/MapLibreSettings'
 
-/* Its texts - collected by lib.i18next, see src/i18n. */
+/* Its texts - collected by lib.i18next, see src/i18n. The hints are read by the generated form under its
+  field (i18n-keys: maplibre:Hints.*). */
 export { MaplibreTranslations } from './i18n'

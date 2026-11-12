@@ -18,24 +18,16 @@
  * @generated
  */
 
-import type { EObject, EList } from '@emfts/core';
-import type { TransformKind } from './TransformKind.js';
-import type { FilterOp } from './FilterOp.js';
+import type { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 
 /**
- * Transform
+ * VegaWidgetInterface
  * @generated
  */
-export interface Transform extends EObject {
-  kind?: TransformKind;
-  field?: string;
-  op?: FilterOp;
-  value?: string;
-  param?: string;
-  fields: EList<string>;
-  keyAs?: string;
-  valueAs?: string;
-  as?: string;
-  expression?: string;
+export interface VegaWidgetInterface extends WidgetActionInterface {
 
+  setParam(name: string, value: unknown): void;
+  clearSelection(name: string): void;
+  refresh(): void;
+  exportAsImage(format: string): void;
 }

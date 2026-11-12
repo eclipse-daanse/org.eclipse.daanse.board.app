@@ -212,12 +212,16 @@ export function useFeatureData(options: { ids: () => string[]; resolve: (datasou
   const answers = new Map<string, unknown>()
   const revision = ref(0)
   const subscriptions = new Map<string, () => void>()
+  /* The last read asked of each source: an older answer that arrives after a newer one is dropped (#1299). */
+  const asked = new Map<string, number>()
   let generation = 0
 
   async function load(id: string, run: number) {
+    const mine = (asked.get(id) ?? 0) + 1
+    asked.set(id, mine)
     try {
       const answer = await options.resolve(id)?.getData('geojson')
-      if (run !== generation) return
+      if (run !== generation || asked.get(id) !== mine) return
       answers.set(id, answer)
       revision.value++
     } catch {

@@ -19,6 +19,7 @@
     "node_modules",
     "vite.bundle.config.ts",
     "dist",
-    "dist-bundle"
+    "dist-bundle",
+    "src/__tests__/SettingsForm.spec.ts"
   ]
 }

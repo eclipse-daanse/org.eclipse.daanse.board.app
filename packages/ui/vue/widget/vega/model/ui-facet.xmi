@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+Small multiples (#1285): one chart per value of a field, in rows, in
+columns, or wrapped after a number of columns.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaFacetForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Facet"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaFacetFormView">
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="row"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Facet/row"
+        label="vega:FormFacet.row"/>
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="column"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Facet/column"
+        label="vega:FormFacet.column"/>
+    <fields xsi:type="uimodel:NumberWidget"
+        name="columns"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//Facet/columns"
+        label="vega:FormFacet.columns" min="0" step="1">
+      <visibilityCondition language="JS" body="!!self.column &amp;&amp; !self.row"/>
+    </fields>
+  </components>
+</uimodel:UIModel>

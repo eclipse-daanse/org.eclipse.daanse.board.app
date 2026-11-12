@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+A named dataset of the chart and the board data source it comes from
+(#1286). Layers draw it by its name.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="VegaDatasetForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//DatasetBinding"/>
+
+  <components xsi:type="uimodel:FormView" name="VegaDatasetFormView">
+    <fields xsi:type="uimodel:InputWidget"
+        name="name"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//DatasetBinding/name"
+        label="vega:FormDataset.name"/>
+    <fields xsi:type="uimodel:ComboboxWidget"
+        name="datasourceId"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//DatasetBinding/datasourceId"
+        label="vega:FormDataset.datasourceId"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="shape"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//DatasetBinding/shape"
+        label="vega:FormDataset.shape">
+      <values>table</values>
+      <values>object</values>
+      <values>geojson</values>
+      <optionLabel language="JS" body="({ table: 'vega:Options.shape.table', object: 'vega:Options.shape.object', geojson: 'vega:Options.shape.geojson' })[option] ?? option"/>
+      <visibilityCondition language="JS" body="!!self.datasourceId"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="path"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//DatasetBinding/path"
+        label="vega:FormDataset.path">
+      <visibilityCondition language="JS" body="!!self.datasourceId &amp;&amp; self.shape === 'object'"/>
+    </fields>
+    <fields xsi:type="uimodel:InputWidget"
+        name="columnTypes"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.vega#//DatasetBinding/columnTypes"
+        label="vega:FormDataset.columnTypes"
+        placeholder="vega:FormDataset.columnTypesHint"/>
+  </components>
+</uimodel:UIModel>

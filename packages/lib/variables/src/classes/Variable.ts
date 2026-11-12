@@ -15,6 +15,7 @@
 import {  RefreshType, VariableEvents } from '..'
 import { type IVariableConfig } from '..'
 import { type PageContextServiceI, identifier as PAGE_CONTEXT_SERVICE } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
+import { VARIABLE_CHANGED_EVENT } from 'org.eclipse.daanse.board.app.lib.api.variable'
 
 enum VariableScope {
   Global = 'global',
@@ -42,9 +43,38 @@ export interface VariableDependencies {
   pageContextService?: PageContextServiceI
 }
 
+/** Whether two values of a variable are the same value: equal, or equal as JSON. */
+function sameValue(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b)) return true
+  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') return false
+  try {
+    return JSON.stringify(a) === JSON.stringify(b)
+  } catch {
+    return false
+  }
+}
+
+/** A value kept as it was, so a later change inside the same object is still a change. */
+function snapshot(value: unknown): unknown {
+  if (!value || typeof value !== 'object') return value
+  try {
+    return structuredClone(value)
+  } catch {
+    return value
+  }
+}
+
 abstract class Variable implements Serializable{
   private subscribers: any[] = []
   private innerValue: any
+  /*
+   * What the board was last told this variable holds (#1288). Quiet while
+   * the variable is set up - a board that loads is not a board whose
+   * variables change - and the value it then holds is where changes count
+   * from.
+   */
+  private announced: { value: unknown } | undefined
+  private settingUp = false
 
   public intervalFn: () => any = () => {}
   public description: string = ''
@@ -72,6 +102,12 @@ abstract class Variable implements Serializable{
   public storage?: any;
 
   public init(name: string, config: IVariableConfig & {scope?: VariableScope, accessMode?: VariableAccessMode, pageId?: string}) {
+    /* A type's own init sets the first value right after this one returns. */
+    this.settingUp = true
+    queueMicrotask(() => {
+      this.settingUp = false
+      this.announced = { value: snapshot(this.currentValue()) }
+    })
     this.name = name;
     this.scope = config.scope || VariableScope.Global;
     this.accessMode = config.accessMode || VariableAccessMode.ExternalWritable;
@@ -131,6 +167,40 @@ abstract class Variable implements Serializable{
     console.log('Value changed')
     console.log(this.subscribers[0])
     this.subscribers.forEach(subscriber => subscriber())
+    this.announceChange()
+  }
+
+  /** The value as it reads now, or undefined where this page may not read it. */
+  private currentValue(): unknown {
+    try {
+      return this.value
+    } catch {
+      return undefined
+    }
+  }
+
+  /**
+   * Tells the board that the variable holds another value (#1288): the
+   * system event variable_changed, which rules map to actions. Once per
+   * actual change - a value written again unchanged, or a notification
+   * that changed nothing, says nothing.
+   */
+  protected announceChange(): void {
+    if (this.settingUp || !this.eventBus) return
+    const value = this.currentValue()
+    const before = this.announced
+    if (before && sameValue(before.value, value)) return
+    this.announced = { value: snapshot(value) }
+    this.eventBus.emit(VARIABLE_CHANGED_EVENT, {
+      payload: {
+        name: this.name,
+        value,
+        previous: before?.value,
+        scope: this.scope,
+        pageId: this.pageId,
+        timestamp: Date.now(),
+      },
+    })
   }
 
   subscribe(subscriber: () => any) {
@@ -148,6 +218,7 @@ abstract class Variable implements Serializable{
   notyfy() {
     this.eventBus?.emit(VariableEvents.VariableUpdated)
     this.subscribers.forEach(subscriber => subscriber())
+    this.announceChange()
   }
 
   forceUpdate() {}

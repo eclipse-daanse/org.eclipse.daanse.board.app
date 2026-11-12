@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The symbol layers of the 3D map (#1296): the list, each layer in ui-model-layer.xmi. The other sections of the map settings are not a form model yet.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="SymbolLayersForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//MapLibreSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="SymbolLayersFormView">
+    <fields xsi:type="uimodel:InputWidget" name="modelLayers" feature="http://org.eclipse.daanse.board.app.ui.vue.widget.maplibre#//MapLibreSettings/modelLayers" label="maplibre:Symbols.MapLibreSettings.modelLayers"/>
+  </components>
+</uimodel:UIModel>

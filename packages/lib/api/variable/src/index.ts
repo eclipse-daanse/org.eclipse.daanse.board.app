@@ -102,3 +102,13 @@ export interface VariableDeffinition {
 
 export const VARIABLE_REPOSITORY = serviceId<VariableRepository>('VariableRepository')
 export const identifier = Symbol.for(VARIABLE_REPOSITORY)
+
+/**
+ * The bus event a board variable sends when it takes another value (#1288).
+ *
+ * A system event in the event framework's naming - system:<source>:<type> -
+ * so a rule in the system context on System:variable_changed hears it. Its
+ * payload is { name, value, previous, scope, pageId }, modelled as
+ * VariableChangedPayload in lib.api.events, which registers it.
+ */
+export const VARIABLE_CHANGED_EVENT = 'system:System:variable_changed'

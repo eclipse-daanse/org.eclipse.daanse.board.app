@@ -18,7 +18,9 @@
  * @generated
  */
 
+import type { EList } from '@emfts/core';
 import type { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
+import type { ColumnType } from 'org.eclipse.daanse.board.app.lib.datasource.base';
 
 /**
  * IWfsStoreConfiguration
@@ -37,5 +39,9 @@ export interface IWfsStoreConfiguration extends IBaseConnectionConfiguration {
   mode?: string;
   tileSize?: number;
   pointTolerance?: number;
+  extent?: string;
+  minZoom?: number;
+  maxViewportFeatures?: number;
+  columnTypes: EList<ColumnType>;
 
 }

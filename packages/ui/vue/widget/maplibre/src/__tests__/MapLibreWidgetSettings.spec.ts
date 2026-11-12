@@ -24,6 +24,10 @@ import { EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { MaplibrePackage } from '../gen/MaplibrePackage'
 import MapLibreWidgetSettings from '../MapLibreWidgetSettings.vue'
 import { modelledSettings } from '../settingsModel'
+import { placing } from '../models/placementMode'
+import { identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import ModelFileField from '../symbols/ModelFileField.vue'
+import ModelInstancesField from '../symbols/ModelInstancesField.vue'
 
 void EventsPackage.eINSTANCE
 void MaplibrePackage.eINSTANCE
@@ -63,5 +67,50 @@ describe('the WMS section of the 3D map settings (#1274)', () => {
       ['stadtplan_sw', stored.services.get(0).id, true],
     ])
     expect(wrapper.find('.wms-layers__item').text()).toContain('Stadtplan (S/W)')
+  })
+})
+
+describe('the symbol layers in the settings of the 3D map (#1296)', () => {
+  it('are a generated form: layer, data, model, encodings, parts and instances, and say whether the model can be read', async () => {
+    const stored = modelledSettings({ modelLayers: [{ id: 'trees', name: 'Bäume', url: 'http://localhost:8080/tree.fbx', size: { height: { field: 'Baumhöhe' } } }] })
+    const wrapper = mount(MapLibreWidgetSettings, { props: { modelValue: stored } })
+    await flushPromises()
+    const section = wrapper.find('[data-section-id="models"]')
+    expect(section.findComponent({ name: 'SettingsForm' }).exists()).toBe(true)
+    // The model file and the place mode are field widgets inside the generated form, not beside it.
+    expect(section.find('.symbol-status').exists()).toBe(false)
+    const file = section.findComponent(ModelFileField)
+    expect(file.exists()).toBe(true)
+    expect(file.find('.file-field__status').text()).toMatch(/Settings\.models\.(loading|ready|errors)/)
+    const instances = section.findComponent(ModelInstancesField)
+    expect(instances.exists()).toBe(true)
+    const place = instances.findAll('button').find((b) => b.text().includes('Settings.models.place'))!
+    await place.trigger('click')
+    expect(placing.value).toEqual({ settings: stored, layerId: 'trees' })
+    expect(instances.text()).toContain('Settings.models.placeHint')
+    // The hand-written fields of before are gone; what the form shows comes from the model.
+    expect(section.text()).not.toContain('Settings.models.heightProperty')
+    expect(section.text()).toContain('maplibre:Symbols.MapLibreSettings.modelLayers')
+    // Closing the dialog ends the place mode.
+    wrapper.unmount()
+    expect(placing.value).toBeNull()
+  })
+
+  it('pick the data source of their points by name', async () => {
+    const stored = modelledSettings({ modelLayers: [{ id: 'trees', name: 'Bäume', datasourceId: 'jena-baeume' }] })
+    const repository = {
+      getDatasources: () => [{ uid: 'jena-baeume', name: 'Jena Bäume' }, { uid: 'sta', name: 'Messstellen' }],
+      getDatasource: () => ({ getData: async () => ({ features: [] }) }),
+    }
+    const wrapper = mount(MapLibreWidgetSettings, { props: { modelValue: stored }, global: { provide: { [identifier as symbol]: repository } } })
+    await flushPromises()
+    const picker = wrapper.findAllComponents({ name: 'DSelect' }).find((select) =>
+      (select.props('options') as { value: string }[] | undefined)?.some((option) => option.value === 'jena-baeume'))!
+    expect(picker.props('options')).toEqual([
+      { value: 'jena-baeume', text: 'Jena Bäume' },
+      { value: 'sta', text: 'Messstellen' },
+    ])
+    expect(picker.props('modelValue')).toBe('jena-baeume')
+    wrapper.unmount()
   })
 })

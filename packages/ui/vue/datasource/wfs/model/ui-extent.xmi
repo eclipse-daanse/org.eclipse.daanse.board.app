@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+Which area a WFS data source reads: the box of the settings, or the tiles
+the maps on it show, from which zoom and how many features at most.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="WfsExtentForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.lib.datasource.wfs#//IWfsStoreConfiguration"/>
+
+  <components xsi:type="uimodel:FormView" name="WfsExtentFormView">
+    <fields xsi:type="uimodel:SelectWidget" name="extent" feature="http://org.eclipse.daanse.board.app.lib.datasource.wfs#//IWfsStoreConfiguration/extent" label="datasourceWfs:Fields.extent">
+      <values>fixed</values>
+      <values>viewport</values>
+      <optionLabel language="JS" body="({ fixed: 'datasourceWfs:Settings.extents.fixed', viewport: 'datasourceWfs:Settings.extents.viewport' })[option || 'fixed'] ?? option"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="tileSize" feature="http://org.eclipse.daanse.board.app.lib.datasource.wfs#//IWfsStoreConfiguration/tileSize" label="datasourceWfs:Fields.tileSize" step="0.005">
+      <visibilityCondition language="JS" body="self.extent === 'viewport' || self.mode === 'getFeatureInfo'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="minZoom" feature="http://org.eclipse.daanse.board.app.lib.datasource.wfs#//IWfsStoreConfiguration/minZoom" label="datasourceWfs:Fields.minZoom">
+      <visibilityCondition language="JS" body="self.extent === 'viewport'"/>
+    </fields>
+    <fields xsi:type="uimodel:NumberWidget" name="maxViewportFeatures" feature="http://org.eclipse.daanse.board.app.lib.datasource.wfs#//IWfsStoreConfiguration/maxViewportFeatures" label="datasourceWfs:Fields.maxViewportFeatures">
+      <visibilityCondition language="JS" body="self.extent === 'viewport'"/>
+    </fields>
+  </components>
+</uimodel:UIModel>

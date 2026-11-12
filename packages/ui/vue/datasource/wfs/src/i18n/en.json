@@ -11,7 +11,10 @@
     "filter": "CQL filter",
     "mode": "Read by",
     "tileSize": "Tile edge (degrees of latitude)",
-    "pointTolerance": "Tolerance (px)"
+    "pointTolerance": "Tolerance (px)",
+    "extent": "Area read",
+    "minZoom": "From zoom level",
+    "maxViewportFeatures": "At most this many features in the view"
   },
   "Hints": {
     "connection": "A REST connection whose address is the service, e.g. https://gdi.berlin.de/services/wfs/baumbestand",
@@ -21,7 +24,12 @@
     "bbox": "west,south,east,north in degrees. Empty: anywhere.",
     "filter": "Where the service supports CQL. Empty: no filter.",
     "mode": "WMS GetFeatureInfo is for a QGIS Server that offers the layer as WMS only; it needs a box and reads it in tiles.",
-    "tileSize": "One request per tile; 0.01 is about 1 km."
+    "IWfsStoreConfiguration": {
+      "extent": "What the map shows: a map on this source sends its view, and only the tiles in it are read, each once. Without a map: no features.",
+      "tileSize": "The edge of a tile in degrees of latitude (longitude in proportion); one request per tile.",
+      "minZoom": "Further out nothing is read; the view would have too many tiles.",
+      "maxViewportFeatures": "At most this many features in the view, those of the tiles near the middle first; 0: no limit."
+    }
   },
   "Settings": {
     "reload": "Read the feature types again",
@@ -31,6 +39,13 @@
     "modes": {
       "wfs": "WFS GetFeature",
       "getFeatureInfo": "WMS GetFeatureInfo (in tiles)"
+    },
+    "columnTypes": "Column types",
+    "readColumns": "Read the column types from the service (DescribeFeatureType)",
+    "noColumns": "The service describes no columns of this feature type.",
+    "extents": {
+      "fixed": "The box below",
+      "viewport": "What the map shows (in tiles)"
     }
   },
   "Preview": {

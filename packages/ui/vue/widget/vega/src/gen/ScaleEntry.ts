@@ -21,13 +21,11 @@
 import type { EObject } from '@emfts/core';
 
 /**
- * ModelRule
+ * ScaleEntry
  * @generated
  */
-export interface ModelRule extends EObject {
-  property?: string;
+export interface ScaleEntry extends EObject {
   value?: string;
-  url?: string;
-  color?: string;
+  output?: string;
 
 }

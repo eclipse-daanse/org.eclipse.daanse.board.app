@@ -32,7 +32,7 @@ Contributors:
  * widget holds a reference to it and would not see a new one.
  */
 import { computed, inject, ref, watch } from 'vue'
-import { evaluateValue } from '@emfts/uimodel-composer'
+import { evaluateValue, trackExpressionTick } from '@emfts/uimodel-composer'
 import type { EObject, EStructuralFeature } from '@emfts/core'
 import {
   identifier as VARIABLE_REPOSITORY,
@@ -47,6 +47,7 @@ import {
 import { describeClass, useEObject, useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { kindOf, labelOf } from './buildForm'
 import { useHelp, useLabel } from './useLabel'
+import { useSuggestions } from './suggestions'
 
 const props = defineProps<{
   eObject?: EObject
@@ -169,6 +170,12 @@ function toggle(value: string | number, on: boolean) {
 /** Reads and writes the plain attribute, for a field with no wrapper. */
 const plain = computed<any>({
   get: () => {
+    /*
+     * Read again on every change the form's model reports: an attribute
+     * written by code - a chart that empties its starter choice once it
+     * applied it (#1292) - showed the value the reader had picked.
+     */
+    trackExpressionTick()
     const held = readHeld()
     return holdsValue(held) ? (held as { value: unknown }).value : held
   },
@@ -273,11 +280,39 @@ const featureDoc = computed(() => {
 })
 
 /*
- * The model's sentence is English; a package that translates the field's
- * label can translate its help beside it (see helpKeyOf), and the sentence
- * stays what is shown where it does not.
+ * The same sentence in the reader's language, where the form's package
+ * has one: `<namespace>:Hints.<Class>.<feature>`, the namespace taken from
+ * the field's label key. The model's documentation is English, and stayed
+ * English under a German label (#1285).
  */
-const modelHint = computed(() => helpFor(props.custom?.rawWidget?.label, featureDoc.value?.documentation))
+/*
+ * Asked whether the text exists before it is asked for: most fields of
+ * most packages have no hint text, and asking for each logged a missing
+ * key for every field of every form opened.
+ */
+const i18n = inject<{ exists?: (key: string) => boolean } | undefined>('i18n', undefined)
+  ?? inject<{ exists?: (key: string) => boolean } | undefined>('I18next', undefined)
+
+const translatedHint = computed(() => {
+  const label = props.custom?.rawWidget?.label
+  const namespace = typeof label === 'string' ? /^([A-Za-z][\w-]*):/.exec(label)?.[1] : undefined
+  const owner = props.feature?.getEContainingClass?.()?.getName?.()
+  const name = props.feature?.getName?.()
+  if (!namespace || !owner || !name) return undefined
+  const key = `${namespace}:Hints.${owner}.${name}`
+  if (typeof i18n?.exists === 'function' && !i18n.exists(key)) return undefined
+  const text = localized(key)
+  return text && text !== key && text !== `Hints.${owner}.${name}` ? text : undefined
+})
+
+/*
+ * The help is also looked up beside the label's own key, as
+ * `<namespace>:<Section>Help.<field>` (see helpKeyOf); a package may carry
+ * either. Where neither has the sentence, the model's English one is shown.
+ */
+const modelHint = computed(
+  () => translatedHint.value ?? helpFor(props.custom?.rawWidget?.label, featureDoc.value?.documentation),
+)
 
 /* Where it is bound, that is the more urgent thing to say. */
 const fieldHint = computed(() => boundHint.value ?? modelHint.value)
@@ -351,15 +386,37 @@ const storesNumber = computed(() => {
   return type === 'EInt' || type === 'EDouble' || type === 'ELong' || type === 'EFloat'
 })
 
+/*
+ * A ComboboxWidget suggests what the form was handed for it (#1285): the
+ * text field offers the values while typing, a set of several shows them
+ * as choices beside the ones already held. A SelectWidget offers them as
+ * its choices, after those its form lists, in the words the suggestion
+ * gives - the name of a data source for its id.
+ */
+const suggesting = computed(() => modelKind.value === 'ComboboxWidget')
+const selecting = computed(() => modelKind.value === 'SelectWidget')
+const { suggestions, labels: suggestedLabels, refresh: refreshSuggestions } = useSuggestions(
+  () => props.eObject,
+  () => props.feature?.getName?.() ?? undefined,
+  () => suggesting.value || selecting.value,
+)
+
 const options = computed<Array<{ value: string | number; text: string }>>(() => {
   const raw = props.custom?.rawWidget
   const values = raw?.values
-  const list: string[] = values && typeof values.map === 'function' ? [...values] : []
+  const listed: string[] = values && typeof values.map === 'function' ? [...values] : []
+  /* A held value the answer does not name stays a choice, so it is not lost - a source not loaded yet, say. */
+  const held = selecting.value && !isMany.value && value.value != null && value.value !== '' ? [String(value.value)] : []
+  const list = suggesting.value
+    ? [...new Set([...listed, ...suggestions.value, ...chosen.value.map(String)])]
+    : selecting.value
+      ? [...new Set([...listed, ...suggestions.value, ...held])]
+      : listed
   const labelExpression = raw?.optionLabel
 
   return list.map((given) => {
     const value = storesNumber.value ? Number(given) : given
-    let text = given
+    let text = suggestedLabels.value[given] ?? given
     if (labelExpression?.body && props.eObject) {
       try {
         const named = evaluateValue(labelExpression, props.eObject, { option: given })
@@ -441,8 +498,10 @@ const kind = computed<
     case 'NumberWidget':
       return 'number'
     case 'SelectWidget':
-    case 'ComboboxWidget':
       return 'choice'
+    /* Free text that suggests - a choice would refuse what it does not list */
+    case 'ComboboxWidget':
+      return 'text'
     case 'InputWidget': {
       /*
        * The metamodel has no colour or date widget; the name is what is
@@ -603,6 +662,8 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         :placeholder="placeholder"
         :hint="fieldHint"
         :disabled="!editable"
+        :suggestions="suggesting && suggestions.length ? suggestions : undefined"
+        @focusin="suggesting && refreshSuggestions()"
       />
     </div>
 

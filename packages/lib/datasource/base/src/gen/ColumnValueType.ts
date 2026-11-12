@@ -19,30 +19,32 @@
  */
 
 /**
- * TransformKind
+ * ColumnValueType
  * @generated
  */
-export const TransformKind = {
-  filter: 'filter',
-  fold: 'fold',
-  calculate: 'calculate'
+export const ColumnValueType = {
+  string: 'string',
+  number: 'number',
+  date: 'date',
+  boolean: 'boolean'
 } as const;
 
-export type TransformKind = typeof TransformKind[keyof typeof TransformKind];
+export type ColumnValueType = typeof ColumnValueType[keyof typeof ColumnValueType];
 
 /**
  * Get enum value by name
  */
-export function getTransformKind(name: string): TransformKind | undefined {
-  return (TransformKind as Record<string, string>)[name] as TransformKind | undefined;
+export function getColumnValueType(name: string): ColumnValueType | undefined {
+  return (ColumnValueType as Record<string, string>)[name] as ColumnValueType | undefined;
 }
 
 /**
  * Get enum value by literal
  */
-export function getTransformKindByLiteral(literal: string): TransformKind | undefined {
-  if (literal === 'filter') return TransformKind.filter;
-  if (literal === 'fold') return TransformKind.fold;
-  if (literal === 'calculate') return TransformKind.calculate;
+export function getColumnValueTypeByLiteral(literal: string): ColumnValueType | undefined {
+  if (literal === 'string') return ColumnValueType.string;
+  if (literal === 'number') return ColumnValueType.number;
+  if (literal === 'date') return ColumnValueType.date;
+  if (literal === 'boolean') return ColumnValueType.boolean;
   return undefined;
 }
