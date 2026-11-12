@@ -10,3 +10,11 @@ Contributors: Smart City Jena
 
 /// <reference types="vite/client" />
 
+
+/** The app the launcher was built as (vite.config.ts, scripts/apps.mjs). */
+declare const __APP__: {
+  /** The frame on every path; null: by path. */
+  frame: string | null
+  /** The bundle ids the build holds; null: every one. */
+  bundles: string[] | null
+}

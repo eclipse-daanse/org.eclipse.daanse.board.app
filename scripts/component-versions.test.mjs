@@ -80,6 +80,18 @@ describe('what a build consists of', () => {
     ])
   })
 
+  /* The workbench app holds the chart's hull, not the map: the map is not missing from it. */
+  it('lists only the bundles of the app it was built as, and names the app', () => {
+    const versions = collectComponentVersions({
+      root,
+      commit: 'abc123',
+      belongs: (id) => id === 'ui.chart',
+      variant: 'workbench',
+    })
+    expect(versions.bundles.map((each) => each.id)).toEqual(['ui.chart'])
+    expect(versions.app.variant).toBe('workbench')
+  })
+
   it('names the versions of the libraries it runs on, where they are installed', () => {
     expect(collect().dependencies).toEqual([{ name: 'vue', version: '3.5.24' }])
   })

@@ -62,12 +62,18 @@ function commitOf(root) {
  * @param {(dir: string) => boolean} [options.included] whether the bundle
  *   in a package directory is part of this build; by default, whether its
  *   output exists
+ * @param {(id: string) => boolean} [options.belongs] whether a bundle is
+ *   one of this app's at all (scripts/apps.mjs); by default, every one is.
+ *   One that is not is left out, rather than listed as missing.
+ * @param {string} [options.variant] which app this build is (VITE_APP)
  * @param {string} [options.commit]
  * @param {Date} [options.builtAt]
  */
 export function collectComponentVersions({
   root,
   included = (dir) => existsSync(join(dir, 'dist-bundle')),
+  belongs = () => true,
+  variant,
   commit = commitOf(root),
   builtAt = new Date(),
 }) {
@@ -98,6 +104,7 @@ export function collectComponentVersions({
         included: included(dir),
       }
     })
+    .filter((bundle) => belongs(bundle.id))
     .sort((a, b) => a.id.localeCompare(b.id))
 
   const dependencies = KEY_DEPENDENCIES.map((name) => {
@@ -106,7 +113,7 @@ export function collectComponentVersions({
   }).filter(Boolean)
 
   return {
-    app: { name: app.name, version: app.version },
+    app: { name: app.name, version: app.version, ...(variant ? { variant } : {}) },
     commit,
     builtAt: builtAt.toISOString(),
     bundles,

@@ -145,3 +145,53 @@ export function isStale(dir) {
 
   return newest > built
 }
+
+/**
+ * The bundles an app is made of: the roots and everything they need, from
+ * the manifests alone.
+ *
+ * A bundle needs
+ *   - the bundles it names under `dependencies`,
+ *   - the bundle that serves each of its `sharedDependencies` (the one
+ *     offering it as a `tsm.library` capability),
+ *   - every bundle that provides a service it asks for under
+ *     `requiresService`, optional ones included: an optional service is
+ *     what the app does with it, not what it can start without.
+ *
+ * @param {string[]} roots bundle ids
+ * @param {Array<{id: string}>} manifests every manifest there is
+ * @returns {Set<string>} the ids, roots included
+ */
+export function bundleHull(roots, manifests) {
+  const byId = new Map(manifests.map((manifest) => [manifest.id, manifest]))
+  const libraries = new Map()
+  const providers = new Map()
+  for (const manifest of manifests) {
+    for (const capability of manifest.capabilities ?? []) {
+      const library = capability?.attributes?.library
+      if (capability?.namespace === 'tsm.library' && library) libraries.set(library, manifest.id)
+    }
+    for (const service of manifest.provides ?? []) {
+      if (!providers.has(service.id)) providers.set(service.id, [])
+      providers.get(service.id).push(manifest.id)
+    }
+  }
+
+  const hull = new Set()
+  const pending = [...roots]
+  while (pending.length) {
+    const id = pending.pop()
+    if (hull.has(id)) continue
+    const manifest = byId.get(id)
+    if (!manifest) throw new Error(`bundle ${id} is needed, and no manifest names it`)
+    hull.add(id)
+    pending.push(...(manifest.dependencies ?? []))
+    for (const shared of manifest.sharedDependencies ?? []) {
+      if (libraries.has(shared.id)) pending.push(libraries.get(shared.id))
+    }
+    for (const service of manifest.requiresService ?? []) {
+      pending.push(...(providers.get(service.id) ?? []))
+    }
+  }
+  return hull
+}
