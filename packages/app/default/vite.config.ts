@@ -250,7 +250,7 @@ function tsmBundles(): Plugin {
 
 
 export default defineConfig({
-  base: './',
+  base: '/',
   esbuild: {
     tsconfigRaw: {
       compilerOptions: {
