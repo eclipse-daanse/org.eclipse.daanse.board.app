@@ -18,6 +18,7 @@ import {
   watch,
   writeFileSync,
 } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { extname, join, normalize } from 'node:path'
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -155,6 +156,17 @@ function tsmBundles(): Plugin {
         join(outDir, 'versions.json'),
         JSON.stringify(collectComponentVersions({ root: REPOSITORY_ROOT }), null, 2),
       )
+
+      const htmlPath = join(outDir, 'index.html')
+      if (existsSync(htmlPath)) {
+        const html = readFileSync(htmlPath, 'utf-8')
+        const m = html.match(/<script type="importmap">([\s\S]*?)<\/script>/)
+        if (m) {
+          const hash = createHash('sha256').update(m[1], 'utf-8').digest('base64')
+          writeFileSync(join(outDir, 'importmap-hash.txt'), hash)
+          console.log(`[tsm-bundles] import map CSP hash: sha256-${hash}`)
+        }
+      }
 
       /*
        * A build that ships may not leave bundles out. The warning above was
