@@ -28,6 +28,20 @@ COPY Docker/profiles /etc/daanse/profiles
 COPY --chown=101:101 Docker/profiles/prod.config.json /usr/share/nginx/html/config.json
 COPY --chmod=755 Docker/40-daanse-config.sh /docker-entrypoint.d/40-daanse-config.sh
 
+# Inject the build-time SHA-256 of the inline import map into the CSP so
+# that the browser allows it without 'unsafe-inline' in script-src.
+USER root
+RUN set -eu; \
+    hash_file=/usr/share/nginx/html/importmap-hash.txt; \
+    if [ -f "$hash_file" ]; then \
+      HASH=$(cat "$hash_file"); \
+      sed -i "s|__IMPORTMAP_HASH__|'sha256-${HASH}'|g" /etc/nginx/nginx.conf; \
+      rm "$hash_file"; \
+    else \
+      sed -i "s| __IMPORTMAP_HASH__||g" /etc/nginx/nginx.conf; \
+    fi
+USER 101
+
 # export port 8080
 EXPOSE 8080
 
