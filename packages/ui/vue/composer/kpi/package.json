@@ -37,7 +37,7 @@
     "org.eclipse.daanse.board.app.ui.vue.common.kpi": "^0.0.1-next.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.16",
+    "@types/lodash": "^4.17.27",
     "@vitejs/plugin-vue": "^5.2.3",
     "typescript": "^5.8.2",
     "vite": "6.4.5",
