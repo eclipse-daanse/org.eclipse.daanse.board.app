@@ -14,9 +14,9 @@ name: Image retention
 #     image leaves of them stays behind, which costs storage and nothing
 #     else.
 #
-# Needs the repository to have the Admin role on the package `board`
-# (package settings, "Manage Actions access"); GITHUB_TOKEN can then list
-# and delete its versions. Docker Hub is not cleaned: main images go there
+# Runs for each image, board and workbench. Needs the repository to have
+# the Admin role on both packages (package settings, "Manage Actions
+# access"); GITHUB_TOKEN can then list and delete their versions. Docker Hub is not cleaned: main images go there
 # under the moving tag `main` only.
 
 on:
@@ -34,14 +34,20 @@ permissions:
 
 jobs:
   clean:
-    name: Delete main images older than 30 days
+    name: Delete main images of ${{ matrix.package }} older than 30 days
     if: startsWith(github.repository, 'eclipse-daanse/')
     runs-on: ubuntu-latest
+    strategy:
+      # A package the repository cannot reach does not keep the other
+      # from being cleaned.
+      fail-fast: false
+      matrix:
+        package: [board, workbench]
     steps:
       - name: Delete
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGE: /orgs/eclipse-daanse/packages/container/board/versions
+          PACKAGE: /orgs/eclipse-daanse/packages/container/${{ matrix.package }}/versions
           # A scheduled run has no inputs, and deletes.
           DRY_RUN: ${{ inputs.dry-run || false }}
         run: |

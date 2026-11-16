@@ -36,7 +36,7 @@ docker pull eclipsedaanse/board
 | Tag | What it is | Kept |
 | --- | --- | --- |
 | `latest` | The newest release | For good |
-| `X.Y.Z` | A release | For good |
+| `X.Y.Z` | A release, from the git tag `board-vX.Y.Z` (or `vX.Y.Z`) | For good |
 | `main` | The newest build of `main` | Moves with every merge |
 | `sha-<commit>` | One build of `main` (ghcr.io only) | 30 days |
 
@@ -66,7 +66,7 @@ docker build -f Docker/Dockerfile -t board .
 docker build -f Docker/Dockerfile --build-arg APP=workbench -t workbench .
 ```
 
-Only the board image is published for now.
+Both are published, as `eclipsedaanse/board` and `eclipsedaanse/workbench` (and the same names under `ghcr.io/eclipse-daanse/`), with the same tags. Every build of `main` makes both. A release is made for one of them: the git tag `board-vX.Y.Z` releases the board, `workbench-vX.Y.Z` the workbench.
 
 ## Configuration Profiles
 
