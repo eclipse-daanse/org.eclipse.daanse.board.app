@@ -23,7 +23,7 @@
   "dependencies": {
     "@eclipse-daanse/tsm": "0.1.0-next.1",
     "@emfts/core": "^0.3.0-next.6",
-    "flatted": "^3.3.3",
+    "flatted": "^3.4.4",
     "org.eclipse.daanse.board.app.lib.model.workspace": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.uimodel": "^0.0.1-next.1",
