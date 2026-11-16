@@ -192,7 +192,11 @@
       "save": "Speichern fehlgeschlagen: {{reason}}",
       "create": "Anlegen fehlgeschlagen: {{reason}}",
       "remove": "Löschen fehlgeschlagen: {{reason}}",
-      "connect": "Der Ordner ließ sich nicht verbinden: {{reason}}"
+      "connect": "Der Ordner ließ sich nicht verbinden: {{reason}}",
+      "import": "Die Datei ließ sich nicht übernehmen: {{reason}}",
+      "openUrl": "Das Board unter {{url}} ließ sich nicht öffnen: {{reason}}",
+      "dismiss": "Meldung schließen",
+      "unkept": "Das Board unter {{url}} wurde nicht geöffnet: Der offene Stand ist nirgends gespeichert und ginge verloren. Speichere ihn und lade die Seite neu."
     },
     "create": {
       "title": "Neuen Stand ablegen",
@@ -240,6 +244,18 @@
       "title": "Stände",
       "emptyWritable": "Lege unten den offenen Arbeitsstand ab, um später zu ihm zurückzukehren.",
       "emptyReadOnly": "An diesem Ort liegt kein Stand, der sich öffnen lässt."
+    },
+    "import": {
+      "title": "Board-Datei importieren",
+      "choose": "Datei wählen …",
+      "hint": "Eine Board-Datei (JSON) von diesem Gerät wird in „{{place}}“ abgelegt. Geöffnet wird sie danach von hier.",
+      "notABoard": "{{file}} enthält kein Board",
+      "unnamed": "Importiertes Board"
+    },
+    "export": {
+      "action": "Exportieren",
+      "hint": "Den geöffneten Stand als Datei (JSON) herunterladen",
+      "unnamed": "board"
     }
   },
   "Editor": {

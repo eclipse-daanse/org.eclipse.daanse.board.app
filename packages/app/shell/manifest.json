@@ -15,6 +15,7 @@
     "lib.api.page",
     "lib.api.persistence",
     "lib.api.route",
+    "lib.api.settings",
     "lib.api.variable",
     "lib.api.widget",
     "lib.events",
@@ -64,6 +65,10 @@
     },
     {
       "id": "ConnectionRepository"
+    },
+    {
+      "id": "SettingsManager",
+      "optional": true
     }
   ],
   "sharedDependencies": [
@@ -101,6 +106,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.api.route",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.settings",
       "versionRange": ">=0.0.1-0"
     },
     {

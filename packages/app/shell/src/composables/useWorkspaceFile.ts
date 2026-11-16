@@ -65,7 +65,12 @@ import {
   type WritableRepository,
   identifier as RepoManagerId,
 } from 'org.eclipse.daanse.board.app.lib.api.persistence'
-import { decodeStored, isResource, readLegacyWorkspace } from './legacyWorkspace'
+import {
+  decodeStored,
+  isResource,
+  isWorkspaceContent,
+  readLegacyWorkspace,
+} from './legacyWorkspace'
 import { useUnsavedChanges } from './unsavedChanges'
 
 /** Where the workspace currently in the app came from, or nothing if it was never stored. */
@@ -190,6 +195,39 @@ export function parseWorkspace(content: unknown): Workspace | undefined {
 }
 
 /**
+ * A board brought in from outside - a file, an address - read, or
+ * undefined when it is none (#1424).
+ *
+ * parseWorkspace makes the best of whatever a place holds; a file someone
+ * picked may be any JSON at all, and opening it would replace the open
+ * board with an empty one.
+ */
+export function readBoardFile(content: unknown): Workspace | undefined {
+  return isWorkspaceContent(decodeStored(content)) ? parseWorkspace(content) : undefined
+}
+
+/**
+ * A workspace as the string a place keeps.
+ *
+ * The one way a state is written, whether it is the one the application
+ * runs or one read from a file to be kept (#1424): a file in an older
+ * shape is stored in the current one, and every place can read it back.
+ */
+export function workspaceToJson(held: Workspace): string {
+  const resource = new JSONResource(URI.createURI(WORKSPACE_URI))
+  resource.getContents().add(held)
+  const text = resource.saveToString(new Map<string, unknown>([[OPTION_INDENT, 2]]))
+
+  /*
+   * Taken out again: the workspace is the caller's, not the resource's,
+   * and leaving it contained there would make the next save move it out
+   * of a resource it is no longer in.
+   */
+  resource.getContents().clear()
+  return text
+}
+
+/**
  * What came of writing the workspace back where it came from.
  *
  * Three different failures used to be one `false`, and the caller could
@@ -241,18 +279,7 @@ export function useWorkspaceFile() {
 
   function serialize(): string {
     collect()
-
-    const resource = new JSONResource(URI.createURI(WORKSPACE_URI))
-    resource.getContents().add(workspace)
-    const text = resource.saveToString(new Map<string, unknown>([[OPTION_INDENT, 2]]))
-
-    /*
-     * Taken out again: the workspace is the application's, not the
-     * resource's, and leaving it contained there would make the next save
-     * move it out of a resource it is no longer in.
-     */
-    resource.getContents().clear()
-    return text
+    return workspaceToJson(workspace)
   }
 
   /**
