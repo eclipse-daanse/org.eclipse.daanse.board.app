@@ -29,6 +29,7 @@ import * as libCore from 'org.eclipse.daanse.board.app.lib.core'
 import { MODULE_LOADER, services } from 'org.eclipse.daanse.board.app.lib.core'
 import { bundles } from './bundles'
 import { loadExtraManifests, type ExtraBundlesConfig } from './extraBundles'
+import { framed } from './app'
 
 const loader = new ModuleLoader({
   serviceRegistry: services,
@@ -65,25 +66,6 @@ function hidePreloader() {
 }
 if (document.readyState === 'complete') hidePreloader()
 else window.addEventListener('load', hidePreloader)
-
-/*
- * Which frame the page shows. The board shell and the MDX workbench both
- * create the Vue application, provide it as 'App' and mount it on #app, so
- * exactly one of them is registered; every other bundle is shared. The
- * workbench answers /workbench - a single segment, since the production
- * build loads its assets relative to the page.
- */
-const FRAMES = ['app.shell', 'app.workbench']
-
-function frameOf(pathname: string): string {
-  const workbench = pathname === '/workbench' || pathname.startsWith('/workbench/')
-  return workbench ? 'app.workbench' : 'app.shell'
-}
-
-function framed(manifests: ModuleManifest[]): ModuleManifest[] {
-  const frame = frameOf(window.location.pathname)
-  return manifests.filter((manifest) => !FRAMES.includes(manifest.id) || manifest.id === frame)
-}
 
 /*
  * What the deployment adds: config.json's `extraBundles` (see extraBundles.ts).
@@ -146,7 +128,9 @@ async function start() {
    * through the import map in index.html pointing at its artefacts.
    */
   const extras = await extraManifests()
-  loader.register(framed([...bundles, ...extras]))
+  loader.register(
+    framed(bundles, extras, window.location.pathname, __APP__),
+  )
   await loader.loadAll()
 
   const all = loader.getManifests()

@@ -12,9 +12,13 @@ on:
     branches:
       - 'main'
     # A release is a tag; it runs the whole pipeline and ends in a GitHub
-    # Release (see the release job).
+    # Release (see the release job). The tag names the app it releases:
+    # board-v1.2.0, workbench-v0.3.0. A plain v1.2.0 is the board, as
+    # before there were two.
     tags:
       - 'v*'
+      - 'board-v*'
+      - 'workbench-v*'
   pull_request:
     branches:
       - 'main'
@@ -36,8 +40,27 @@ jobs:
     name: Build
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.apps.outputs.apps }}
+      version: ${{ steps.apps.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+
+      # Which apps this run builds (scripts/apps.mjs). A release tag builds
+      # the one it names; everything else builds both, since the workbench
+      # is a part of what the board build has made already.
+      - name: Choose the apps
+        id: apps
+        run: |
+          case "$GITHUB_REF_TYPE:$GITHUB_REF_NAME" in
+            tag:workbench-v*) apps='["workbench"]'; version="${GITHUB_REF_NAME#workbench-v}" ;;
+            tag:board-v*)     apps='["board"]';     version="${GITHUB_REF_NAME#board-v}" ;;
+            tag:v*)           apps='["board"]';     version="${GITHUB_REF_NAME#v}" ;;
+            *)                apps='["board","workbench"]'; version= ;;
+          esac
+          echo "apps=$apps" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Building $apps${version:+, version $version}"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
@@ -67,22 +90,43 @@ jobs:
 
       # `yarn build` does not build the tsm bundles, and build:prod only
       # copies what is there. Without this step the image held 4 of 154.
+      # The workbench alone needs only its own; the board needs them all,
+      # and with them the workbench's.
       - name: Build bundles
         run: yarn run bundles --force
+        env:
+          VITE_APP: ${{ steps.apps.outputs.apps == '["workbench"]' && 'workbench' || '' }}
 
-      - name: Build browser
+      - name: Build the board
+        if: contains(fromJSON(steps.apps.outputs.apps), 'board')
         working-directory: ./packages/app/default
         run: yarn run build:prod
         env:
           # A missing bundle fails the build instead of a warning in the log.
           REQUIRE_ALL_BUNDLES: '1'
 
-      - name: Keep the browser build for the image
-        if: github.event_name != 'pull_request'
+      - name: Build the workbench
+        if: contains(fromJSON(steps.apps.outputs.apps), 'workbench')
+        working-directory: ./packages/app/default
+        run: yarn run build:prod:workbench
+        env:
+          REQUIRE_ALL_BUNDLES: '1'
+
+      - name: Keep the board build for its image
+        if: github.event_name != 'pull_request' && contains(fromJSON(steps.apps.outputs.apps), 'board')
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: browser-dist
-          path: ./packages/app/default/dist
+          name: browser-dist-board
+          path: ./packages/app/default/dist-board
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Keep the workbench build for its image
+        if: github.event_name != 'pull_request' && contains(fromJSON(steps.apps.outputs.apps), 'workbench')
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: browser-dist-workbench
+          path: ./packages/app/default/dist-workbench
           retention-days: 7
           if-no-files-found: error
 
@@ -156,14 +200,25 @@ jobs:
   # content name the same commit, and a failed build yields no image. It
   # used to follow CI through workflow_run and a cache that fell back to
   # any earlier build.
+  #
+  # One image per app the build made, each under the app's name:
+  # eclipsedaanse/board and eclipsedaanse/workbench, likewise in ghcr.io.
   image:
-    name: Image
+    name: Image (${{ matrix.app }})
     needs: [build, typecheck, test]
     if: github.event_name != 'pull_request' && startsWith(github.repository, 'eclipse-daanse/')
     runs-on: ubuntu-latest
+    strategy:
+      # The board does not wait for the workbench, nor the other way round.
+      fail-fast: false
+      matrix:
+        app: ${{ fromJSON(needs.build.outputs.apps) }}
     permissions:
       contents: read
       packages: write
+    # A matrix job has one set of outputs, the last leg's. A release tag
+    # builds one app, so there the digest is that app's; the release job
+    # reads it only then.
     outputs:
       digest: ${{ steps.push.outputs.digest }}
     steps:
@@ -172,15 +227,15 @@ jobs:
       - name: Fetch the browser build
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: browser-dist
-          path: ./packages/app/default/dist
+          name: browser-dist-${{ matrix.app }}
+          path: ./packages/app/default/dist-${{ matrix.app }}
 
       - name: Update dockerhub repo description
         uses: peter-evans/dockerhub-description@1b9a80c056b620d92cedb9d9b5a223409c68ddfa # v5.0.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-          repository: eclipsedaanse/board
+          repository: eclipsedaanse/${{ matrix.app }}
           readme-filepath: Docker/README.md
 
       - name: Set up QEMU
@@ -206,8 +261,9 @@ jobs:
 
       # What an image is called.
       #
-      # A release (tag vX.Y.Z) is X.Y.Z, and `latest` unless it is a
-      # prerelease such as v1.2.0-rc.1, in both registries; it stays.
+      # A release (tag <app>-vX.Y.Z, or vX.Y.Z for the board) is X.Y.Z, and
+      # `latest` unless it is a prerelease such as board-v1.2.0-rc.1, in
+      # both registries; it stays.
       #
       # An image of main is `main`, which moves with every build, and
       # `sha-<commit>`, in ghcr.io only, for 30 days (image_retention.yml).
@@ -216,12 +272,15 @@ jobs:
       # only: `main` names what main holds.
       - name: Name the image
         id: names
+        env:
+          APP: ${{ matrix.app }}
+          VERSION: ${{ needs.build.outputs.version }}
         run: |
           {
             echo 'tags<<EOF'
             if [ "$GITHUB_REF_TYPE" = tag ]; then
-              version="${GITHUB_REF_NAME#v}"
-              for registry in docker.io/eclipsedaanse/board ghcr.io/eclipse-daanse/board; do
+              version="$VERSION"
+              for registry in "docker.io/eclipsedaanse/$APP" "ghcr.io/eclipse-daanse/$APP"; do
                 echo "$registry:$version"
                 case "$version" in
                   *-*) ;;
@@ -229,10 +288,10 @@ jobs:
                 esac
               done
             else
-              echo "ghcr.io/eclipse-daanse/board:sha-${GITHUB_SHA::9}"
+              echo "ghcr.io/eclipse-daanse/$APP:sha-${GITHUB_SHA::9}"
               if [ "$GITHUB_REF" = refs/heads/main ]; then
-                echo "ghcr.io/eclipse-daanse/board:main"
-                echo "docker.io/eclipsedaanse/board:main"
+                echo "ghcr.io/eclipse-daanse/$APP:main"
+                echo "docker.io/eclipsedaanse/$APP:main"
               fi
             fi
             echo 'EOF'
@@ -254,6 +313,7 @@ jobs:
           push: true
           sbom: true
           provenance: mode=max
+          build-args: APP=${{ matrix.app }}
           tags: ${{ steps.names.outputs.tags }}
 
   # What a release ships, listed: one SBOM of the sources (every package in
@@ -261,10 +321,13 @@ jobs:
   # served), both CycloneDX 1.6, attached to the GitHub Release. The image
   # SBOM is also attested on the image in ghcr.io, so whoever pulls it can
   # verify what it holds with `gh attestation verify`.
+  #
+  # A release tag builds one app (see the build job), so this is its
+  # release, and its image is the one image this run pushed.
   release:
     name: Release
-    needs: image
-    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    needs: [build, image]
+    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -272,8 +335,9 @@ jobs:
       id-token: write
       attestations: write
     env:
-      IMAGE: ghcr.io/eclipse-daanse/board
+      IMAGE: ghcr.io/eclipse-daanse/${{ fromJSON(needs.build.outputs.apps)[0] }}
       DIGEST: ${{ needs.image.outputs.digest }}
+      VERSION: ${{ needs.build.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -289,7 +353,7 @@ jobs:
           --spec-version 1.6
           --no-install-deps
           --project-name org.eclipse.daanse.board.app
-          --project-version "${GITHUB_REF_NAME#v}"
+          --project-version "$VERSION"
           --output sbom-source.cdx.json
           .
 

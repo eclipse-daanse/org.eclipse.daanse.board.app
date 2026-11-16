@@ -29,15 +29,34 @@ import tailwind from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 import { resolve } from 'path'
 import { collectComponentVersions } from '../../../scripts/component-versions.mjs'
+import { appOf } from '../../../scripts/apps.mjs'
+import { bundleHull } from '../../../scripts/bundle-graph.mjs'
 
 const isDev = process.env.NODE_ENV !== 'production'
 
 const REPOSITORY_ROOT = resolve(__dirname, '../../..')
 
+/** Which app this is built as: VITE_APP, see scripts/apps.mjs. */
+const APP = appOf()
+
 /**
- * Where the separately built tsm bundles live, keyed by module id: every
- * workspace package carrying a vite.bundle.config.ts, discovered at config
- * load. A new bundle package appears here by existing.
+ * The bundles of this app: every one for the board, the hull of its roots
+ * for an app that names some. undefined means every one.
+ */
+const appBundles: Set<string> | undefined = APP.roots
+  ? bundleHull(
+      APP.roots,
+      globSync(resolve(__dirname, '../../**/manifest.json'))
+        .filter((path) => !/\/(node_modules|dist[^/]*)\//.test(path))
+        .map((path) => JSON.parse(readFileSync(path, 'utf-8'))),
+    )
+  : undefined
+const ofThisApp = (id: string) => !appBundles || appBundles.has(id)
+
+/**
+ * Where the separately built tsm bundles of this app live, keyed by module
+ * id: every workspace package carrying a vite.bundle.config.ts, discovered
+ * at config load. A new bundle package appears here by existing.
  */
 const bundleDirs: Record<string, string> = Object.fromEntries(
   globSync(resolve(__dirname, '../../**/vite.bundle.config.ts'))
@@ -46,7 +65,8 @@ const bundleDirs: Record<string, string> = Object.fromEntries(
       const dir = join(configPath, '..')
       const manifest = JSON.parse(readFileSync(join(dir, 'manifest.json'), 'utf-8'))
       return [manifest.id, join(dir, 'dist-bundle')]
-    }),
+    })
+    .filter(([id]) => ofThisApp(id)),
 )
 
 const BUNDLE_TYPES: Record<string, string> = {
@@ -95,7 +115,7 @@ function workspaceImportMapEntries(): Record<string, string> {
     const manifestPath = join(configPath, '..', 'manifest.json')
     if (!existsSync(manifestPath)) continue
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
-    if (!manifest.entry?.startsWith('/bundles/')) continue
+    if (!manifest.entry?.startsWith('/bundles/') || !ofThisApp(manifest.id)) continue
     for (const capability of manifest.capabilities ?? []) {
       const library = capability?.attributes?.library
       if (capability?.namespace === 'tsm.library' && typeof library === 'string'
@@ -105,6 +125,15 @@ function workspaceImportMapEntries(): Record<string, string> {
     }
   }
   return entries
+}
+
+/* What this build holds, for the /about screen (scripts/component-versions.mjs). */
+function versions() {
+  return collectComponentVersions({
+    root: REPOSITORY_ROOT,
+    belongs: ofThisApp,
+    variant: APP.id,
+  })
 }
 
 function tsmBundles(): Plugin {
@@ -117,14 +146,17 @@ function tsmBundles(): Plugin {
      * freshly added library bundle appears on reload.
      */
     transformIndexHtml(html) {
-      return html.replace(
-        /(<script type="importmap">\s*)([\s\S]*?)(\s*<\/script>)/,
-        (_match, open, json, close) => {
-          const map = JSON.parse(json)
-          map.imports = { ...workspaceImportMapEntries(), ...map.imports }
-          return open + JSON.stringify(map, null, 2) + close
-        },
-      )
+      return html
+        .replace(/<title>[^<]*<\/title>/, `<title>${APP.title}</title>`)
+        .replace(/(<link rel="icon" href=")[^"]*(")/, `$1${APP.favicon}$2`)
+        .replace(
+          /(<script type="importmap">\s*)([\s\S]*?)(\s*<\/script>)/,
+          (_match, open, json, close) => {
+            const map = JSON.parse(json)
+            map.imports = { ...workspaceImportMapEntries(), ...map.imports }
+            return open + JSON.stringify(map, null, 2) + close
+          },
+        )
     },
 
     /*
@@ -135,7 +167,7 @@ function tsmBundles(): Plugin {
      * because shared dependencies travel through the __tsm__ runtime.
      */
     closeBundle() {
-      const outDir = resolve(__dirname, 'dist')
+      const outDir = resolve(__dirname, APP.outDir)
       if (!existsSync(outDir)) return
       let copied = 0
       const missing: string[] = []
@@ -148,13 +180,13 @@ function tsmBundles(): Plugin {
         cpSync(dir, join(outDir, 'bundles', id), { recursive: true })
         copied += 1
       }
-      console.log(`[tsm-bundles] ${copied} bundle(s) copied into dist/bundles`)
+      console.log(`[tsm-bundles] ${copied} bundle(s) copied into ${APP.outDir}/bundles`)
 
       /* What this build holds, for the /about screen to set against what
         the loader finds (scripts/component-versions.mjs). */
       writeFileSync(
         join(outDir, 'versions.json'),
-        JSON.stringify(collectComponentVersions({ root: REPOSITORY_ROOT }), null, 2),
+        JSON.stringify(versions(), null, 2),
       )
 
       const htmlPath = join(outDir, 'index.html')
@@ -188,7 +220,7 @@ function tsmBundles(): Plugin {
         bundle counts as part of the build when its output exists now. */
       server.middlewares.use('/versions.json', (_request, response) => {
         response.setHeader('Content-Type', 'application/json')
-        response.end(JSON.stringify(collectComponentVersions({ root: REPOSITORY_ROOT })))
+        response.end(JSON.stringify(versions()))
       })
 
       server.middlewares.use('/bundles', (request, response, next) => {
@@ -251,6 +283,14 @@ function tsmBundles(): Plugin {
 
 export default defineConfig({
   base: './',
+  /* For the launcher (src/app.ts): which frame it shows, and which bundles
+    it may register. */
+  define: {
+    __APP__: JSON.stringify({
+      frame: APP.frame ?? null,
+      bundles: appBundles ? [...appBundles].sort() : null,
+    }),
+  },
   esbuild: {
     tsconfigRaw: {
       compilerOptions: {
@@ -325,6 +365,7 @@ export default defineConfig({
     include: ['highlight.js']
   },
   build: {
+    outDir: APP.outDir,
     minify: false,
     cssMinify: false,
     target: ['chrome90', 'firefox88', 'safari14', 'edge90'],

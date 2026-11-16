@@ -36,7 +36,7 @@ docker pull eclipsedaanse/board
 | Tag | What it is | Kept |
 | --- | --- | --- |
 | `latest` | The newest release | For good |
-| `X.Y.Z` | A release | For good |
+| `X.Y.Z` | A release, from the git tag `board-vX.Y.Z` (or `vX.Y.Z`) | For good |
 | `main` | The newest build of `main` | Moves with every merge |
 | `sha-<commit>` | One build of `main` (ghcr.io only) | 30 days |
 
@@ -50,11 +50,29 @@ docker run -d -p 8080:8080 eclipsedaanse/board
 
 This maps port **8080** of the container to port **8080** on your host machine.
 
+## Board or Workbench
+
+One Dockerfile builds two images, chosen by the build argument `APP`:
+
+| `APP` | Serves | Bundles |
+| --- | --- | --- |
+| `board` (default) | The board at `/`, the MDX workbench at `/workbench` | All of them |
+| `workbench` | The MDX workbench alone, at `/` | Only those the workbench needs |
+
+Each one is built from its own browser build. In `packages/app/default`, `yarn build:prod` writes `dist-board/` and `yarn build:prod:workbench` writes `dist-workbench/`. Run `VITE_APP=workbench yarn bundles` first to build only the workbench's bundles. Then, from the repository root:
+
+```bash
+docker build -f Docker/Dockerfile -t board .
+docker build -f Docker/Dockerfile --build-arg APP=workbench -t workbench .
+```
+
+Both are published, as `eclipsedaanse/board` and `eclipsedaanse/workbench` (and the same names under `ghcr.io/eclipse-daanse/`), with the same tags. Every build of `main` makes both. A release is made for one of them: the git tag `board-vX.Y.Z` releases the board, `workbench-vX.Y.Z` the workbench.
+
 ## Configuration Profiles
 
 The image is built once and configured where it runs. The board reads `/config.json` when it starts, so deployments differ by that file alone.
 
-The image carries three profiles under `/etc/daanse/profiles/`: `dev`, `staging` and `prod`. It serves `prod` unless told otherwise.
+The image carries three profiles under `/etc/daanse/profiles/`: `dev`, `staging` and `prod`. It serves `prod` unless told otherwise. They come from `Docker/profiles/<app>/`. The workbench reads `extraBundles` alone, so its profiles hold nothing else.
 
 | Variable | Effect |
 | --- | --- |

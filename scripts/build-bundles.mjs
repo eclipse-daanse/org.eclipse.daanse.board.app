@@ -22,17 +22,20 @@
  * Builds run in a worker pool (defaults to the number of cores, override with
  * BUNDLE_JOBS=n).
  *
+ * With VITE_APP set (scripts/apps.mjs), only the bundles that app is made of.
+ *
  * Usage: node scripts/build-bundles.mjs [filter...] [--force] [--list]
  *   filter: only build bundles whose path contains one of the terms
  *   --force (or BUNDLE_FORCE=1): build everything, skipping nothing
  *   --list: name what would be built and stop
  */
 import { exec } from 'node:child_process'
-import { renameSync, rmSync } from 'node:fs'
+import { globSync, renameSync, rmSync } from 'node:fs'
 import { availableParallelism } from 'node:os'
 import { join, resolve } from 'node:path'
 import { promisify } from 'node:util'
-import { bundleDirs, isStale } from './bundle-graph.mjs'
+import { appOf } from './apps.mjs'
+import { bundleDirs, bundleHull, isStale, readJson } from './bundle-graph.mjs'
 import { claim, describe } from './bundle-lock.mjs'
 
 const run = promisify(exec)
@@ -60,7 +63,20 @@ if (!list) {
 
 const jobs = Math.max(1, Number(process.env.BUNDLE_JOBS) || availableParallelism())
 
-const all = bundleDirs(filters)
+/* Built as one app (VITE_APP, scripts/apps.mjs), only the bundles it is
+  made of. */
+const app = appOf()
+const idOf = (dir) => readJson(join(dir, 'manifest.json'))?.id
+const hull = app.roots
+  ? bundleHull(
+      app.roots,
+      globSync('packages/**/manifest.json')
+        .filter((file) => !/(^|\/)(node_modules|dist[^/]*)\//.test(file))
+        .map(readJson)
+        .filter(Boolean),
+    )
+  : undefined
+const all = bundleDirs(filters).filter((dir) => !hull || hull.has(idOf(dir)))
 
 /* A staging directory that outlived its build is rubbish, and `git add -A`
   would otherwise commit it. */

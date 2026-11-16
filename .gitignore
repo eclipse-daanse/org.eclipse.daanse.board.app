@@ -48,3 +48,6 @@ package-lock.json
 # of them, and a wide git add would otherwise sweep them in.
 dist-bundle/
 dist-bundle.building/
+# The launcher's builds, one per app (scripts/apps.mjs)
+dist-board/
+dist-workbench/
