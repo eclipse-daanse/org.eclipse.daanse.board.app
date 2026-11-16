@@ -238,3 +238,96 @@ describe('an entry whose content is not read yet', () => {
     wrapper.unmount()
   })
 })
+
+/*
+ * A board file from the device (#1424): the one way onto a phone, where
+ * there is no folder to connect.
+ */
+describe('importing a board file', () => {
+  const WS = 'http://org.eclipse.daanse.board.app.lib.model.workspace#'
+
+  /** A place one can write to, keeping what it is given. */
+  class BrowserPlace {
+    static readonly type: string = 'localRepositories'
+    name = 'BrowserFileRepo'
+    uri = new URL('file://localhost')
+    held: Entity[] = []
+    async findAll() {
+      return [...this.held]
+    }
+    async getEntityByUri(uri: URL) {
+      return this.held.find((each) => String(each.uri) === String(uri)) ?? null
+    }
+    async create(entity: Entity) {
+      this.held.push(entity)
+    }
+  }
+
+  async function pick(wrapper: ReturnType<typeof mountWith>['wrapper'], name: string, text: string) {
+    const input = wrapper.find('input[type="file"]')
+    const file = new File([text], name, { type: 'application/json' })
+    Object.defineProperty(input.element, 'files', { value: [file], configurable: true })
+    await input.trigger('change')
+    await flushPromises()
+  }
+
+  const boardFile = JSON.stringify({
+    eClass: `${WS}//Workspace`,
+    board: { eClass: `${WS}//Board`, id: 'b1', name: 'Smart Home', pages: [] },
+  })
+
+  it('keeps the file in the selected place, under its name and in the current format', async () => {
+    const place = new BrowserPlace()
+    const { wrapper, errors } = mountWith(place as unknown as GitLikePlace)
+    await flushPromises()
+
+    await pick(wrapper, 'smart-home.json', boardFile)
+
+    expect(errors).toEqual([])
+    expect(wrapper.find('.failure').exists()).toBe(false)
+    expect(place.held.map((each) => each.name)).toEqual(['smart-home'])
+    expect((place.held[0]!.uri as URL).pathname).toBe('/smart-home.json')
+    expect(JSON.parse(place.held[0]!.data).eClass).toBe(`${WS}//Workspace`)
+    /* Shown, not opened: what it holds comes first, as with any state. */
+    expect(wrapper.find('.head__name').text()).toContain('smart-home')
+    wrapper.unmount()
+  })
+
+  it('keeps a second file of the same name beside the first', async () => {
+    const place = new BrowserPlace()
+    const { wrapper } = mountWith(place as unknown as GitLikePlace)
+    await flushPromises()
+
+    await pick(wrapper, 'home.json', boardFile)
+    await wrapper.find('.head__back').trigger('click')
+    await pick(wrapper, 'home.json', boardFile)
+
+    expect(place.held.map((each) => each.name)).toEqual(['home', 'home (2)'])
+    wrapper.unmount()
+  })
+
+  it('refuses a file that is no board, and writes nothing', async () => {
+    const place = new BrowserPlace()
+    const { wrapper } = mountWith(place as unknown as GitLikePlace)
+    await flushPromises()
+
+    await pick(wrapper, 'notes.json', '{"shopping":["milk"]}')
+
+    expect(place.held).toEqual([])
+    expect(wrapper.find('.failure').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('is offered only where one can write', async () => {
+    const { wrapper } = mountWith(new PlainPlace())
+    await flushPromises()
+    expect(wrapper.find('input[type="file"]').exists()).toBe(true)
+
+    const readOnly = { ...new BrowserPlace(), create: undefined }
+    const second = mountWith(readOnly as unknown as GitLikePlace)
+    await flushPromises()
+    expect(second.wrapper.find('input[type="file"]').exists()).toBe(false)
+    wrapper.unmount()
+    second.wrapper.unmount()
+  })
+})

@@ -33,6 +33,35 @@ activates. A manifest that cannot be fetched, is not valid (`id`, `version`,
 reported on the console (`extra bundle skipped - ...`) and left out; the board
 starts without it. The shipped `config.json` lists none.
 
+## Deployment: boards to open, in `config.json` or the address
+
+A board can be opened from an address rather than from a place the browser
+holds (#1424) - the way to bring a board the deployment serves onto a phone.
+
+- `?board=<url>` in the app's address opens that board. It wins over what
+  the browser had open.
+- `initWithConfigurationURI` opens a board where nothing is open yet:
+
+  ```json
+  "initWithConfigurationURI": { "enabled": true, "url": "boards/smart-home.json" }
+  ```
+
+A relative address resolves against the site root, where `config.json` is. A board is fetched from the
+page's own origin, or from one listed in `boards.allowedOrigins`, over http(s)
+only - the rule `extraBundles` follows, since a board's formulas run as code:
+
+```json
+"boards": { "allowedOrigins": ["https://boards.example.org"] }
+```
+
+A board opened this way is kept nowhere until it is saved; saving asks where.
+A board that cannot be opened is reported above the screen, and nothing that
+was open is replaced.
+
+The storage dialog takes a board file from the device as well ("Board-Datei
+importieren", in a place one can write to) and gives the open board out as a
+file ("Exportieren").
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).

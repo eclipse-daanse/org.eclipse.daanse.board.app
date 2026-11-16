@@ -192,7 +192,11 @@
       "save": "Saving failed: {{reason}}",
       "create": "Creating failed: {{reason}}",
       "remove": "Deleting failed: {{reason}}",
-      "connect": "The folder could not be connected: {{reason}}"
+      "connect": "The folder could not be connected: {{reason}}",
+      "import": "The file could not be taken in: {{reason}}",
+      "openUrl": "The board at {{url}} could not be opened: {{reason}}",
+      "dismiss": "Dismiss",
+      "unkept": "The board at {{url}} was not opened: the open state is kept nowhere and would be lost. Save it, then reload the page."
     },
     "create": {
       "title": "Store a new workspace",
@@ -240,6 +244,18 @@
       "title": "States",
       "emptyWritable": "Store the workspace you have open below, to come back to it later.",
       "emptyReadOnly": "This place holds no state that can be opened."
+    },
+    "import": {
+      "title": "Import a board file",
+      "choose": "Choose file …",
+      "hint": "A board file (JSON) from this device is kept in “{{place}}”. Open it from here afterwards.",
+      "notABoard": "{{file}} holds no board",
+      "unnamed": "Imported board"
+    },
+    "export": {
+      "action": "Export",
+      "hint": "Download the open state as a file (JSON)",
+      "unnamed": "board"
     }
   },
   "Editor": {

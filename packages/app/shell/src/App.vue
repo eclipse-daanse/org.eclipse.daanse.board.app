@@ -28,7 +28,7 @@ Contributors:
 import Header from './components/common/Header.vue'
 import Rail from './components/common/Rail.vue'
 import WorkspaceStorage from './components/boards/WorkspaceStorage.vue'
-import { DButton, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DButton, DIcon, DModal } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { inject, computed } from 'vue'
 import {
   identifier as WORKSPACE,
@@ -44,6 +44,9 @@ import {
 import { useStorageDialog } from './composables/useStorageDialog'
 import { useRestoreLastOpened } from './composables/useRestoreLastOpened'
 import { useKeepLastOpened } from './composables/useKeepLastOpened'
+import { useOpenBoardFromUrl } from './composables/useOpenBoardFromUrl'
+import { useWorkspaceFile, useWorkspaceOrigin } from './composables/useWorkspaceFile'
+import { boardParameter, downloadJson } from './composables/boardTransfer'
 
 const { isLoading } = useGlobalLoading()
 const { t } = useTranslation('shell')
@@ -69,7 +72,22 @@ const workspace = inject<Workspace>(WORKSPACE)!
  * through inject, which a router guard is not in a position to do.
  */
 const { restoreLastOpened } = useRestoreLastOpened()
-if (!workspace.board) restoreLastOpened()
+const { openAtStart, holdsUnkeptBoard, failure: openFailure } = useOpenBoardFromUrl()
+/* A link replaces what was open - unless that is kept nowhere else; then
+  it stays, and the link waits until it is saved. */
+const linked = boardParameter(window.location.href) !== undefined && !holdsUnkeptBoard()
+if (!workspace.board && !linked) restoreLastOpened()
+
+/*
+ * A board asked for by address - `?board=<url>`, or the deployment's
+ * `initWithConfigurationURI` where nothing is open (#1424). Fetched, so
+ * it arrives after the first screen; then it is the board one is on, and
+ * the address no longer asks for it, so a reload keeps what was changed
+ * since rather than fetching it again.
+ */
+void openAtStart(window.location.href, !workspace.board).then((id) => {
+  if (id) router.replace(`/board/${id}`)
+})
 
 /*
  * And kept in step from here on. It used to be written when a board was
@@ -85,6 +103,17 @@ useKeepLastOpened()
  * every screen reaches the same one.
  */
 const { open: storageOpen, openOn: storageOn, hide: hideStorage } = useStorageDialog()
+
+/*
+ * The open board as a file (#1424): the counterpart of importing one, and
+ * the way to carry a board to a device that has no place in common.
+ */
+const { save } = useWorkspaceFile()
+const origin = useWorkspaceOrigin()
+function exportBoard() {
+  const name = origin.value?.name || (workspace.board?.name as string | undefined)
+  downloadJson(name?.trim() || t('Storage.export.unnamed'), save())
+}
 
 /** A state opened from the dialog is a board opened: go to it, and close. */
 function openRestored() {
@@ -122,6 +151,15 @@ const noBoard = computed(() => {
 
     <Header />
 
+    <p v-if="openFailure" class="open-failure" role="alert">
+      <DIcon name="error" size="sm" />
+      <span v-if="openFailure.kind === 'unkept'">{{ t('Storage.failure.unkept', { url: openFailure.url }) }}</span>
+      <span v-else>{{ t('Storage.failure.openUrl', { url: openFailure.url, reason: openFailure.reason }) }}</span>
+      <DButton intent="quiet" size="sm" :aria-label="t('Storage.failure.dismiss')" @click="openFailure = undefined">
+        <DIcon name="close" size="sm" />
+      </DButton>
+    </p>
+
     <div :class="['shell-body', { 'shell-body--norail': noBoard }]">
       <Rail v-if="!noBoard" />
 
@@ -138,6 +176,9 @@ const noBoard = computed(() => {
         <WorkspaceStorage :on-place="storageOn?.placeUri" :with-name="storageOn?.name" @restored="openRestored" />
       </div>
       <template #actions>
+        <DButton size="sm" :title="t('Storage.export.hint')" @click="exportBoard">
+          <DIcon name="download" size="sm" />{{ t('Storage.export.action') }}
+        </DButton>
         <DButton size="sm" @click="hideStorage">{{ t('Storage.back') }}</DButton>
       </template>
     </DModal>
@@ -171,6 +212,24 @@ const noBoard = computed(() => {
 /* The launcher has no rail, so the content takes the whole width */
 .shell-body--norail {
   grid-template-columns: minmax(0, 1fr);
+}
+
+/* Said once, above everything, until it is put away. */
+.open-failure {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 12px;
+  font-size: var(--text-sm);
+  color: var(--color-err);
+  background: var(--color-pane);
+  border-bottom: 1px solid var(--color-divider);
+}
+.open-failure > span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 /* Storage is a two-pane view; in a dialog it needs a height of its own,

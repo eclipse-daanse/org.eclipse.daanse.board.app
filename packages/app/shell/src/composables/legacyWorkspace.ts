@@ -72,6 +72,23 @@ export function decodeStored(content: unknown): Record<string, any> | undefined 
   }
 }
 
+/**
+ * Whether a decoded object is a stored workspace at all.
+ *
+ * The rule a place lists its entries by (ValidityCheck in
+ * lib.persistence.util): a resource naming the workspace class, or the
+ * shape written before the workspace was modelled, with the keys it
+ * always had - `conections` among them, misspelled since the first board.
+ * Reading takes anything and makes the best of it; something brought in
+ * from outside has to be one of these first (#1424).
+ */
+export function isWorkspaceContent(data: unknown): boolean {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return false
+  const held = data as Record<string, unknown>
+  if (typeof held.eClass === 'string') return held.eClass.includes('#//Workspace')
+  return 'datasources' in held && 'conections' in held
+}
+
 /** Whether a decoded object is a resource rather than the old shape. */
 export function isResource(data: Record<string, any>): boolean {
   return typeof data.eClass === 'string'

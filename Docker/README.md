@@ -78,6 +78,18 @@ docker run -d -p 8080:8080 \
 
 Mounting a finished file straight over `/usr/share/nginx/html/config.json` works as well, as long as neither variable above is set.
 
+## Serving Boards
+
+The image serves whatever lies under `/usr/share/nginx/html`, so boards can be shipped beside the app and opened by address:
+
+```bash
+docker run -d -p 8080:8080 \
+  -v ./boards:/usr/share/nginx/html/boards:ro \
+  eclipsedaanse/board
+```
+
+`http://<host>:8080/?board=boards/smart-home.json` then opens that board. Set `initWithConfigurationURI` in the config to open one wherever nothing is open yet. A board from another origin needs that origin in `boards.allowedOrigins`. See `packages/app/default/README.md`.
+
 ## Software Bill of Materials
 
 Every image carries an SPDX SBOM and its build provenance as registry attestations:

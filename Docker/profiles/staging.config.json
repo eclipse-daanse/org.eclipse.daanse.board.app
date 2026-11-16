@@ -30,6 +30,10 @@
       }
     ]
   },
+  "boards":{
+    "$comment":"Origins other than the page's own that a board may be opened from, by ?board=<url> or initWithConfigurationURI. See packages/app/default/README.md.",
+    "allowedOrigins":[]
+  },
   "extraBundles":{
     "$comment":"Bundles this deployment adds: URLs of manifest.json files (relative to the page) or manifests inline. Same-origin only, unless the origin is listed in allowedOrigins. See packages/app/default/README.md.",
     "manifests":[],

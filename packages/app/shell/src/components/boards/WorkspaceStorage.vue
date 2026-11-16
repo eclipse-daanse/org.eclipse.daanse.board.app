@@ -29,10 +29,14 @@ import { DButton, DIcon, DInput } from 'org.eclipse.daanse.board.app.ui.vue.cont
 import { useTranslation } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import BoardFloorplan from './BoardFloorplan.vue'
 import {
+  entryUriFor,
   parseWorkspace,
+  readBoardFile,
   useWorkspaceFile,
   useWorkspaceOrigin,
+  workspaceToJson,
 } from '../../composables/useWorkspaceFile'
+import { downloadJson, freeName, nameFromFile } from '../../composables/boardTransfer'
 import { summarizePage, type PageSummary } from '../../composables/pageSummary'
 import { useUnsavedChanges } from '../../composables/unsavedChanges'
 import { useLastOpenedState } from '../../composables/useLastOpenedState'
@@ -486,13 +490,50 @@ async function remove(entry: Entity) {
 }
 
 function download(entry: Entity) {
-  const payload = typeof entry.data === 'string' ? entry.data : JSON.stringify(entry.data)
-  const url = URL.createObjectURL(new Blob([payload], { type: 'application/json' }))
-  const anchor = document.createElement('a')
-  anchor.href = url
-  anchor.download = `${label(entry)}.json`
-  anchor.click()
-  URL.revokeObjectURL(url)
+  downloadJson(label(entry), typeof entry.data === 'string' ? entry.data : JSON.stringify(entry.data))
+}
+
+/*
+ * A board file from the device, kept in the selected place (#1424).
+ *
+ * The picker is the browser's own file input, which every browser has -
+ * a phone included, where there is no folder to connect. The file is read
+ * the way a stored state is read, so a file that is no board is refused
+ * before anything is written, and it is kept in the current format, which
+ * every place can read back. It is kept, not opened: what it holds is
+ * shown first, as with any state, and opening it is one click from there.
+ */
+const fileInput = ref<HTMLInputElement>()
+
+function chooseFile() {
+  failure.value = ''
+  fileInput.value?.click()
+}
+
+async function importFile(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  /* Emptied, so that choosing the same file again is a change again. */
+  input.value = ''
+  const place = selectedPlace.value
+  if (!file || !place) return
+  failure.value = ''
+  try {
+    const held = readBoardFile(await file.text())
+    if (!held) throw new Error(t('Storage.import.notABoard', { file: file.name }))
+    const taken = (entriesByPlace.value[key(place)] ?? []).map(label)
+    const name = freeName(nameFromFile(file.name) || t('Storage.import.unnamed'), taken)
+    await (place as WritableRepository).create({
+      name,
+      uri: entryUriFor(place, name),
+      data: workspaceToJson(held),
+    })
+    await readEntries(place)
+    const kept = entriesOf(place).find((each) => label(each) === name)
+    if (kept) selectEntry(place, kept)
+  } catch (error) {
+    failure.value = t('Storage.failure.import', { reason: reason(error) })
+  }
 }
 
 onMounted(loadPlaces)
@@ -745,6 +786,25 @@ watch(() => repoManager, loadPlaces)
                 {{ t('Storage.create.hint', { pages: t('Storage.pages', { count: pending.boards }), widgets: t('Storage.widgets', { count: pending.widgets }) }) }}
               </p>
             </form>
+          </section>
+
+          <section v-if="isWritable(selectedPlace)">
+            <h2 class="section__heading">{{ t('Storage.import.title') }}</h2>
+            <div class="store">
+              <input
+                ref="fileInput"
+                class="store__file"
+                type="file"
+                accept="application/json,.json"
+                tabindex="-1"
+                aria-hidden="true"
+                @change="importFile"
+              />
+              <DButton size="sm" @click="chooseFile">
+                <DIcon name="upload_file" size="sm" />{{ t('Storage.import.choose') }}
+              </DButton>
+              <p class="store__hint">{{ t('Storage.import.hint', { place: selectedPlace.name }) }}</p>
+            </div>
           </section>
         </template>
 
@@ -1233,6 +1293,11 @@ watch(() => repoManager, loadPlaces)
 
 .store__name {
   flex: 0 1 320px;
+}
+
+/* The button opens it; the input itself is not shown. */
+.store__file {
+  display: none;
 }
 
 /* In a row, not a form column: no gap under the field. */
