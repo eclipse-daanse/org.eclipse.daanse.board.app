@@ -38,7 +38,7 @@
     "org.eclipse.daanse.board.app.ui.vue.composables": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.plugins.i18next": "0.0.1-next.1",
-    "three": "^0.187.0"
+    "three": "^0.177.0"
   },
   "devDependencies": {
     "@types/node": "^25.0.8",
