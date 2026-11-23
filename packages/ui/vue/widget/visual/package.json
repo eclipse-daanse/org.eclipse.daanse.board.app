@@ -44,7 +44,7 @@
     "@types/node": "^25.0.8",
     "@types/three": "^0.187.0",
     "@vitejs/plugin-vue": "^5.2.3",
-    "rollup": "^4.36.0",
+    "rollup": "^4.68.7",
     "typescript": "^5.8.2",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
