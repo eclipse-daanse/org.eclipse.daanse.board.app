@@ -14,7 +14,7 @@
     "test:perf": "PIVOT_PERF=1 playwright test perf"
   },
   "dependencies": {
-    "vue": "^3.5.13",
+    "vue": "^3.5.46",
     "reflect-metadata": "~0.2.2",
     "tiny-emitter": "^2.1.0",
     "@emfts/core": "^0.3.0-next.6",
