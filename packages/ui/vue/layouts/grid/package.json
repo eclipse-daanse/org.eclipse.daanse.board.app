@@ -25,7 +25,7 @@
     "vite": "6.4.5",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
-    "vue": "^3.5.13",
+    "vue": "^3.5.46",
     "vue-tsc": "^3.2.2"
   },
   "dependencies": {
@@ -50,6 +50,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "vue": "^3.5.13"
+    "vue": "^3.5.46"
   }
 }

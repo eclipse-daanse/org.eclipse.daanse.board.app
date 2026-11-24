@@ -40,7 +40,7 @@
     "typescript": "^5.8.2",
     "vite": "6.4.5",
     "vite-plugin-dts": "4.5.4",
-    "vue": "^3.5.13",
+    "vue": "^3.5.46",
     "vue-tsc": "^3.2.2"
   },
   "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd",
@@ -48,6 +48,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "vue": "^3.5.13"
+    "vue": "^3.5.46"
   }
 }
